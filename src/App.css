@@ -21,8 +21,8 @@ body {
 /* Fixed Decorative Element at Top Right */
 .top-right-decorative {
   position: fixed;
-  top: 10px;!important;
-  right: 30px;!important;
+  top: 10px !important;
+  right: 30px !important;
   font-family: "Papyrus", cursive, serif;
   font-size: 10rem;   /* Adjust size as needed */
   color: rgba(75, 63, 42, 0.15);  /* Subtle earthy tone (semi-transparent) */
