@@ -1,20 +1,62 @@
-// App.jsx
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import emailjs from "emailjs-com";
 
-// ---------------- EmailJS Configuration ----------------
+// EmailJS Configuration
 const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
-const EMAILJS_USER_ID = "YOUR_USER_ID"; // Public Key
+const EMAILJS_USER_ID = "YOUR_USER_ID";
 
-// Helper function to send a checkout email alert.
+// Pre-defined arrays
+const preUploadedUnits = [
+  "374 CAT mini ex",
+  "304 Peterbilt Dump Truck",
+  "306 int. Dump Truck",
+  "326 Cat D6 Dozer",
+  "329 Cat 950 Loader",
+  "335 Cat 950M Loader",
+  "347 Bobcat Skid Steer",
+  "357 Cat 140M3 Blade",
+  "358 Kubota Mini Ex",
+  "359 Kubota Skid Steer",
+  "365 Terex Light Tower",
+  "372 Allmand Light Tower",
+  "375 Amman Roller",
+  "380 JLG Telehandler",
+  "383 Cat 140M3 Blade",
+  "384 Cat 308 Mini Ex",
+  "385 Cat 336 Excavator",
+  "386 Cat Mini Ex",
+  "387 Cat Skid Steer",
+  "388 Cat Skid Steer",
+  "392 Cat Tik Truck",
+  "393 Cat Tik Truck",
+  "394 Cat Mini Ex"
+];
+
+const preProgrammedJobSites = [
+  "18", "6bar", "Apache Canyon Road", "Apache Screen Site",
+  "Babb Canyon Road", "Babb HQ", "Baylor", "Big Tank HQ",
+  "Chico", "Clock", "Delaware Basin", "DOD", "Fenceline East",
+  "Fenceline West", "Figure 2", "Highline Road", "Hogue Canyon",
+  "Honeycutt HQ", "Honeycutt Rim North", "Houge Pump Jack",
+  "James Cook Hanger", "Lower Puett", "Mule Pasture", "North Baylor",
+  "North VMB HQ", "Old West Town", "Pipeline (East)", "Pipeline (West)",
+  "Prison Camp", "Puckett", "Puett HQ", "Red Pens", "Roberts HQ",
+  "Roberts Quarry", "Rock House", "Roller Coaster Road",
+  "Sanford N Sons", "Shortcut", "Sierra Diablo", "South Baylor",
+  "Space World", "Stockyard", "Victorio Canyon", "VMB",
+  "Wind Tower Road (Bottom)", "Windtower Road (Top)", "Wilson HQ",
+  "Welding Shop"
+];
+
+// Helper function to send a checkout email alert
 const sendCheckoutEmail = (checkoutData) => {
   const templateParams = {
-    to_email: "recipient@example.com", // Change this to your desired recipient
+    to_email: "recipient@example.com",
     unit: checkoutData.unit,
     hoursMiles: checkoutData.hoursMiles,
     checkoutDate: checkoutData.checkoutDate,
@@ -42,10 +84,10 @@ const sendCheckoutEmail = (checkoutData) => {
     );
 };
 
-// Helper function to send a check-in email alert.
+// Helper function to send a check-in email alert
 const sendCheckinEmail = (checkinData) => {
   const templateParams = {
-    to_email: "recipient@example.com", // Change this as needed.
+    to_email: "recipient@example.com",
     unit: checkinData.unit,
     hoursMiles: checkinData.hoursMiles,
     dateTimeReturned: checkinData.dateTimeReturned,
@@ -74,14 +116,10 @@ const sendCheckinEmail = (checkinData) => {
     );
 };
 
-// ---------------- Twilio SMS Configuration ----------------
-// Replace with the URL of your Twilio Function that sends an SMS.
-const TWILIO_FUNCTION_URL = "https://YOUR_TWILIO_FUNCTION_URL";
-
-// Helper function to send an SMS alert via Twilio.
+// Helper function to send an SMS alert via Twilio
 const sendSmsAlert = async (toPhone, message) => {
   try {
-    const response = await fetch(TWILIO_FUNCTION_URL, {
+    const response = await fetch("https://YOUR_TWILIO_FUNCTION_URL", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -98,106 +136,140 @@ const sendSmsAlert = async (toPhone, message) => {
   }
 };
 
-// ---------------- Data Arrays ----------------
-const preUploadedUnits = [
-  "374 CAT mini ex",
-  "304 Peterbilt Dump Truck",
-  "306 int. Dump Truck",
-  "326 Cat D6 Dozer",
-  "329 Cat 950 Loader",
-  "335 Cat 950M Loader",
-  "347 Bobcat Skid Steer",
-  "357 Cat 140M3 Blade",
-  "358 Kubota Mini Ex",
-  "359 Kubota Skid Steer",
-  "365 Terex Light Tower",
-  "372 Allmand Light Tower",
-  "375 Amman Roller",
-  "380 JLG Telehandler",
-  "383 Cat 140M3 Blade",
-  "384 Cat 308 Mini Ex",
-  "385 Cat 336 Excavator",
-  "386 Cat Mini Ex",
-  "387 Cat Skid Steer",
-  "388 Cat Skid Steer",
-  "392 Cat Tik Truck",
-  "393 Cat Tik Truck",
-  "394 Cat Mini Ex"
-];
-
-const preProgrammedJobSites = [
-  "18",
-  "6bar",
-  "Apache Canyon Road",
-  "Apache Screen Site",
-  "Babb Canyon Road",
-  "Babb HQ",
-  "Baylor",
-  "Big Tank HQ",
-  "Chico",
-  "Clock",
-  "Delaware Basin",
-  "DOD",
-  "Fenceline East",
-  "Fenceline West",
-  "Figure 2",
-  "Highline Road",
-  "Hogue Canyon",
-  "Honeycutt HQ",
-  "Honeycutt Rim North",
-  "Houge Pump Jack",
-  "James Cook Hanger",
-  "Lower Puett",
-  "Mule Pasture",
-  "North Baylor",
-  "North VMB HQ",
-  "Old West Town",
-  "Pipeline (East)",
-  "Pipeline (West)",
-  "Prison Camp",
-  "Puckett",
-  "Puett HQ",
-  "Red Pens",
-  "Roberts HQ",
-  "Roberts Quarry",
-  "Rock House",
-  "Roller Coaster Road",
-  "Sanford N Sons",
-  "Shortcut",
-  "Sierra Diablo",
-  "South Baylor",
-  "Space World",
-  "Stockyard",
-  "Victorio Canyon",
-  "VMB",
-  "Wind Tower Road (Bottom)",
-  "Windtower Road (Top)",
-  "Wilson HQ",
-  "Welding Shop"
-];
-
 function App() {
-  // ---------------- Message States ----------------
+  // Message states
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
   const [smsMessage, setSmsMessage] = useState("");
 
-  // ---------------- Checkout Form State ----------------
-  const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
+  // Equipment list state
+  const [equipmentList, setEquipmentList] = useState([]);
+  const [checkinList, setCheckinList] = useState([]);
 
-  // Common fields for checkout:
+  // Checkout form states
   const [selectedUnit, setSelectedUnit] = useState(preUploadedUnits[0]);
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [jobSite, setJobSite] = useState(preProgrammedJobSites[0]);
-
-  // Checkout-specific fields:
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
-  // Function to add a checkout record and send an email alert.
+  // Check-in form states
+  const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
+  const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
+  const [checkinCustomerName, setCheckinCustomerName] = useState("");
+  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
+  const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
+  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
+  const [checkinDateTime, setCheckinDateTime] = useState("");
+  const [checkinDuration, setCheckinDuration] = useState("");
+  const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
+
+  // Active checkouts state
+  const [selectedActiveUnit, setSelectedActiveUnit] = useState("");
+
+  // Helper function to get active unit numbers
+  const getActiveUnitNumbers = () => {
+    const latestCheckout = {};
+    equipmentList.forEach((checkout) => {
+      const unit = checkout.unit;
+      const time = new Date(checkout.createdAt);
+      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+        latestCheckout[unit] = time;
+      }
+    });
+    const activeUnits = [];
+    for (const unit in latestCheckout) {
+      const correspondingCheckin = checkinList.find(
+        (checkin) =>
+          checkin.unit === unit &&
+          checkin.createdAt &&
+          new Date(checkin.createdAt) > latestCheckout[unit]
+      );
+      if (!correspondingCheckin) {
+        activeUnits.push(unit);
+      }
+    }
+    return activeUnits;
+  };
+
+  // Helper function to get the latest checkout by unit
+  const getLatestCheckoutByUnit = (unit) => {
+    let latest = null;
+    equipmentList.forEach((record) => {
+      if (record.unit === unit) {
+        const time = new Date(record.createdAt);
+        if (!latest || time > new Date(latest.createdAt)) {
+          latest = record;
+        }
+      }
+    });
+    return latest;
+  };
+
+  // Effect to fetch checkouts
+  useEffect(() => {
+    const fetchCheckouts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "checkouts"));
+        const checkouts = [];
+        querySnapshot.forEach((doc) => {
+          checkouts.push({ id: doc.id, ...doc.data() });
+        });
+        setEquipmentList(checkouts);
+      } catch (error) {
+        console.error("Error fetching checkouts: ", error);
+      }
+    };
+
+    fetchCheckouts();
+  }, []);
+
+  // Effect to fetch checkins
+  useEffect(() => {
+    const fetchCheckins = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "checkins"));
+        const checkins = [];
+        querySnapshot.forEach((doc) => {
+          checkins.push({ id: doc.id, ...doc.data() });
+        });
+        setCheckinList(checkins);
+      } catch (error) {
+        console.error("Error fetching checkins: ", error);
+      }
+    };
+
+    fetchCheckins();
+  }, []);
+
+  // Effect to compute duration for check-in
+  useEffect(() => {
+    if (checkinDateTime && checkinUnit) {
+      let latestCheckoutTime = null;
+      equipmentList.forEach((record) => {
+        if (record.unit === checkinUnit) {
+          const time = new Date(record.createdAt);
+          if (!latestCheckoutTime || time > latestCheckoutTime) {
+            latestCheckoutTime = time;
+          }
+        }
+      });
+      if (latestCheckoutTime) {
+        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        setCheckinDuration(diffDays > 0 ? diffDays : 0);
+      } else {
+        setCheckinDuration("");
+      }
+    } else {
+      setCheckinDuration("");
+    }
+  }, [checkinDateTime, checkinUnit, equipmentList]);
+
+  // Handle checkout submission
   const addEquipment = async (e) => {
     e.preventDefault();
     if (
@@ -228,7 +300,7 @@ function App() {
         setCheckoutMessage("Checkout successful!");
         sendCheckoutEmail(newCheckout);
 
-        // Reset checkout form fields.
+        // Reset form
         setSelectedUnit(preUploadedUnits[0]);
         setCheckoutHoursMiles("");
         setCheckoutDate("");
@@ -247,65 +319,7 @@ function App() {
     }
   };
 
-  // ---------------- Retrieve Checkout Records ----------------
-  useEffect(() => {
-    const fetchCheckouts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "checkouts"));
-        const checkouts = [];
-        querySnapshot.forEach((doc) => {
-          checkouts.push({ id: doc.id, ...doc.data() });
-        });
-        setEquipmentList(checkouts);
-      } catch (error) {
-        console.error("Error fetching checkouts: ", error);
-      }
-    };
-
-    fetchCheckouts();
-  }, []);
-
-  // ---------------- Check-In Form State ----------------
-  const [checkinList, setCheckinList] = useState([]);
-
-  // Check-in common fields:
-  const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
-  const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
-  const [checkinCustomerName, setCheckinCustomerName] = useState("");
-  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
-  const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
-  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
-
-  // Check-in-specific fields:
-  const [checkinDateTime, setCheckinDateTime] = useState("");
-  const [checkinDuration, setCheckinDuration] = useState("");
-  const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
-
-  // Compute duration for check-in
-  useEffect(() => {
-    if (checkinDateTime && checkinUnit) {
-      let latestCheckoutTime = null;
-      equipmentList.forEach((record) => {
-        if (record.unit === checkinUnit) {
-          const time = new Date(record.createdAt);
-          if (!latestCheckoutTime || time > latestCheckoutTime) {
-            latestCheckoutTime = time;
-          }
-        }
-      });
-      if (latestCheckoutTime) {
-        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        setCheckinDuration(diffDays > 0 ? diffDays : 0);
-      } else {
-        setCheckinDuration("");
-      }
-    } else {
-      setCheckinDuration("");
-    }
-  }, [checkinDateTime, checkinUnit, equipmentList]);
-
-  // Function to add a check-in record and send an email alert.
+  // Handle check-in submission
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -338,7 +352,7 @@ function App() {
         setCheckinList([...checkinList, newCheckin]);
         sendCheckinEmail(newCheckin);
 
-        // Reset check-in form fields.
+        // Reset form
         setCheckinDateTime("");
         setCheckinUnit(preUploadedUnits[0]);
         setCheckinHoursMiles("");
@@ -358,68 +372,7 @@ function App() {
     }
   };
 
-  // ---------------- Retrieve Check-In Records ----------------
-  useEffect(() => {
-    const fetchCheckins = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "checkins"));
-        const checkins = [];
-        querySnapshot.forEach((doc) => {
-          checkins.push({ id: doc.id, ...doc.data() });
-        });
-        setCheckinList(checkins);
-      } catch (error) {
-        console.error("Error fetching checkins: ", error);
-      }
-    };
-
-    fetchCheckins();
-  }, []);
-
-  // ---------------- Active Checkouts ----------------
-  // Function to compute active (currently checked-out) units.
-  const getActiveUnitNumbers = () => {
-    const latestCheckout = {};
-    equipmentList.forEach((checkout) => {
-      const unit = checkout.unit;
-      const time = new Date(checkout.createdAt);
-      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
-        latestCheckout[unit] = time;
-      }
-    });
-    const activeUnits = [];
-    for (const unit in latestCheckout) {
-      const correspondingCheckin = checkinList.find(
-        (checkin) =>
-          checkin.unit === unit &&
-          checkin.createdAt &&
-          new Date(checkin.createdAt) > latestCheckout[unit]
-      );
-      if (!correspondingCheckin) {
-        activeUnits.push(unit);
-      }
-    }
-    return activeUnits;
-  };
-
-  // ---------------- SMS Alert Section ----------------
-  // State for the selected active unit for SMS alerts.
-  const [selectedActiveUnit, setSelectedActiveUnit] = useState("");
-  // Helper: Get the latest checkout record for a given unit.
-  const getLatestCheckoutByUnit = (unit) => {
-    let latest = null;
-    equipmentList.forEach((record) => {
-      if (record.unit === unit) {
-        const time = new Date(record.createdAt);
-        if (!latest || time > new Date(latest.createdAt)) {
-          latest = record;
-        }
-      }
-    });
-    return latest;
-  };
-
-  // Function to handle sending SMS alert.
+  // Handle SMS alert
   const handleSendSmsAlert = () => {
     if (!selectedActiveUnit) {
       alert("Please select an active unit.");
@@ -439,13 +392,10 @@ function App() {
   return (
     <div className="App">
       <header>
-        {/* Optionally, add a company logo here */}
         <h1>Equipment Tracker</h1>
       </header>
 
-      {/* Container for Check-Out and Check-In Sections Side by Side */}
       <div className="forms-row">
-        {/* Check-Out Form Section */}
         <section className="checkout">
           <h2>Equipment Check-Out</h2>
           <form onSubmit={addEquipment}>
@@ -542,7 +492,6 @@ function App() {
           {checkoutMessage && <p className="message">{checkoutMessage}</p>}
         </section>
 
-        {/* Check-In Form Section */}
         <section className="checkin">
           <h2>Equipment Check-In</h2>
           <form onSubmit={addCheckin}>
@@ -646,7 +595,6 @@ function App() {
         </section>
       </div>
 
-      {/* Active Checkouts Section */}
       <section className="active-checkouts">
         <h2>Active Checkouts</h2>
         <label>
@@ -655,6 +603,7 @@ function App() {
             value={selectedActiveUnit}
             onChange={(e) => setSelectedActiveUnit(e.target.value)}
           >
+            <option value="">Select a unit</option>
             {getActiveUnitNumbers().map((unit, index) => (
               <option key={index} value={unit}>
                 {unit}
@@ -667,69 +616,6 @@ function App() {
       </section>
     </div>
   );
-
-  // ---------------- Helper Functions for SMS Alerts ----------------
-  // Function to compute active (currently checked-out) units.
-  // (This uses the state arrays: equipmentList and checkinList.)
-  function getActiveUnitNumbers() {
-    const latestCheckout = {};
-    equipmentList.forEach((checkout) => {
-      const unit = checkout.unit;
-      const time = new Date(checkout.createdAt);
-      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
-        latestCheckout[unit] = time;
-      }
-    });
-    const activeUnits = [];
-    for (const unit in latestCheckout) {
-      const correspondingCheckin = checkinList.find(
-        (checkin) =>
-          checkin.unit === unit &&
-          checkin.createdAt &&
-          new Date(checkin.createdAt) > latestCheckout[unit]
-      );
-      if (!correspondingCheckin) {
-        activeUnits.push(unit);
-      }
-    }
-    return activeUnits;
-  }
-
-  // Function to get the latest checkout record for a given unit.
-  function getLatestCheckoutByUnit(unit) {
-    let latest = null;
-    equipmentList.forEach((record) => {
-      if (record.unit === unit) {
-        const time = new Date(record.createdAt);
-        if (!latest || time > new Date(latest.createdAt)) {
-          latest = record;
-        }
-      }
-    });
-    return latest;
-  }
-
-  // State for the selected active unit for SMS alerts.
-  const [selectedActiveUnit, setSelectedActiveUnit] = useState(
-    getActiveUnitNumbers().length ? getActiveUnitNumbers()[0] : ""
-  );
-
-  // Function to handle sending SMS alert.
-  const handleSendSmsAlert = () => {
-    if (!selectedActiveUnit) {
-      alert("Please select an active unit.");
-      return;
-    }
-    const record = getLatestCheckoutByUnit(selectedActiveUnit);
-    if (record) {
-      const message = `Dear ${record.customerName}, this is a reminder to return the unit "${record.unit}" that you checked out on ${record.checkoutDate} by ${record.returnDate}. Please contact us if you have any questions.`;
-      sendSmsAlert(record.customerPhone, message);
-      setSmsMessage("SMS alert sent!");
-      setTimeout(() => setSmsMessage(""), 3000);
-    } else {
-      alert("No checkout record found for the selected unit.");
-    }
-  };
 }
 
 export default App;
