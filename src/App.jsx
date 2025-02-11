@@ -3,8 +3,70 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
+import emailjs from "emailjs-com"; // Import EmailJS
 
-// Updated list of unit numbers.
+// --- EmailJS Configuration ---
+// Replace the placeholder strings with your actual EmailJS values.
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
+const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
+const EMAILJS_USER_ID = "YOUR_USER_ID"; // also known as Public Key
+
+// --- Helper Functions for Sending Emails ---
+// Function to send checkout email alert
+const sendCheckoutEmail = (checkoutData) => {
+  const templateParams = {
+    to_email: "recipient@example.com", // Change or make dynamic as needed.
+    unit: checkoutData.unit,
+    hoursMiles: checkoutData.hoursMiles,
+    checkoutDate: checkoutData.checkoutDate,
+    returnDate: checkoutData.returnDate,
+    customerName: checkoutData.customerName,
+    customerEmail: checkoutData.customerEmail,
+    customerPhone: checkoutData.customerPhone,
+    jobSite: checkoutData.jobSite,
+  };
+
+  emailjs
+    .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_CHECKOUT, templateParams, EMAILJS_USER_ID)
+    .then(
+      (response) => {
+        console.log("Checkout email sent successfully!", response.status, response.text);
+      },
+      (error) => {
+        console.error("Checkout email sending failed:", error);
+      }
+    );
+};
+
+// Function to send check-in email alert
+const sendCheckinEmail = (checkinData) => {
+  const templateParams = {
+    to_email: "recipient@example.com", // Change or make dynamic as needed.
+    unit: checkinData.unit,
+    hoursMiles: checkinData.hoursMiles,
+    dateTimeReturned: checkinData.dateTimeReturned,
+    duration: checkinData.duration,
+    customerName: checkinData.customerName,
+    customerEmail: checkinData.customerEmail,
+    customerPhone: checkinData.customerPhone,
+    jobSite: checkinData.jobSite,
+    inspectionNotes: checkinData.inspectionNotes,
+  };
+
+  emailjs
+    .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_CHECKIN, templateParams, EMAILJS_USER_ID)
+    .then(
+      (response) => {
+        console.log("Checkin email sent successfully!", response.status, response.text);
+      },
+      (error) => {
+        console.error("Checkin email sending failed:", error);
+      }
+    );
+};
+
+// --- Data Arrays ---
 const preUploadedUnits = [
   "374 CAT mini ex",
   "304 Peterbilt Dump Truck",
@@ -31,7 +93,6 @@ const preUploadedUnits = [
   "394 Cat Mini Ex"
 ];
 
-// Pre-programmed job sites for the drop-down menu (alphabetically sorted)
 const preProgrammedJobSites = [
   "18",
   "6bar",
@@ -84,16 +145,14 @@ const preProgrammedJobSites = [
 ];
 
 function App() {
-  /*** STATE FOR MESSAGES ***/
+  // --- Message States ---
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
-  const [checkinList, setCheckinList] = useState([]);
 
-  /*** CHECKOUT FORM STATE & HANDLERS ***/
-  // List of checkout transactions (fetched from Firestore)
-  const [equipmentList, setEquipmentList] = useState([]);
+  // --- Checkout Form State ---
+  const [equipmentList, setEquipmentList] = useState([]); // from Firestore
 
-  // Common fields for both forms
+  // Common fields for both forms:
   const [selectedUnit, setSelectedUnit] = useState(preUploadedUnits[0]);
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -105,7 +164,7 @@ function App() {
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
-  // Save new checkout record to Firestore and update local state.
+  // --- Function to Add Checkout ---
   const addEquipment = async (e) => {
     e.preventDefault();
     if (
@@ -134,8 +193,9 @@ function App() {
         await addDoc(collection(db, "checkouts"), newCheckout);
         setEquipmentList([...equipmentList, newCheckout]);
         setCheckoutMessage("Checkout successful!");
+        sendCheckoutEmail(newCheckout);
 
-        // Reset checkout form fields.
+        // Reset form fields
         setSelectedUnit(preUploadedUnits[0]);
         setCheckoutHoursMiles("");
         setCheckoutDate("");
@@ -154,7 +214,7 @@ function App() {
     }
   };
 
-  // Retrieve existing checkout records from Firestore on load.
+  // --- Retrieve Checkout Records from Firestore ---
   useEffect(() => {
     const fetchCheckouts = async () => {
       try {
@@ -172,8 +232,10 @@ function App() {
     fetchCheckouts();
   }, []);
 
-  /*** CHECK-IN FORM STATE & HANDLERS ***/
-  // For Check-In, we use separate state variables for common fields.
+  // --- Check-In Form State ---
+  const [checkinList, setCheckinList] = useState([]);
+
+  // Check-in common fields (separate from checkout)
   const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
@@ -183,13 +245,12 @@ function App() {
 
   // Check-in-specific fields:
   const [checkinDateTime, setCheckinDateTime] = useState("");
-  const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
+  const [checkinDuration, setCheckinDuration] = useState("");
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
-  // Automatically compute the duration (in days) for Check-In when date or unit changes.
+  // --- Compute Duration for Check-In ---
   useEffect(() => {
     if (checkinDateTime && checkinUnit) {
-      // Find the latest checkout record for the selected unit.
       let latestCheckoutTime = null;
       equipmentList.forEach((record) => {
         if (record.unit === checkinUnit) {
@@ -211,7 +272,7 @@ function App() {
     }
   }, [checkinDateTime, checkinUnit, equipmentList]);
 
-  // Save new check-in record to Firestore and update local state.
+  // --- Function to Add Check-In ---
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -242,6 +303,7 @@ function App() {
         await addDoc(collection(db, "checkins"), newCheckin);
         setCheckinMessage("Check-in successful!");
         setCheckinList([...checkinList, newCheckin]);
+        sendCheckinEmail(newCheckin);
 
         // Reset check-in form fields.
         setCheckinDateTime("");
@@ -259,11 +321,11 @@ function App() {
         console.error("Error adding checkin document: ", error);
       }
     } else {
-      alert("Please fill in all check‑in fields.");
+      alert("Please fill in all check-in fields.");
     }
   };
 
-  // Retrieve existing check-in records from Firestore on load.
+  // --- Retrieve Check-In Records from Firestore ---
   useEffect(() => {
     const fetchCheckins = async () => {
       try {
@@ -281,7 +343,7 @@ function App() {
     fetchCheckins();
   }, []);
 
-  /*** FUNCTION TO COMPUTE ACTIVE (CURRENTLY CHECKED-OUT) UNITS ***/
+  // --- Function to Compute Active (Currently Checked-Out) Units ---
   const getActiveUnitNumbers = () => {
     const latestCheckout = {};
     equipmentList.forEach((checkout) => {
@@ -321,14 +383,9 @@ function App() {
             <div>
               <label>
                 Unit Number:
-                <select
-                  value={selectedUnit}
-                  onChange={(e) => setSelectedUnit(e.target.value)}
-                >
+                <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>
-                      {unit}
-                    </option>
+                    <option key={index} value={unit}>{unit}</option>
                   ))}
                 </select>
               </label>
@@ -380,14 +437,9 @@ function App() {
             <div>
               <label>
                 Job Site:
-                <select
-                  value={jobSite}
-                  onChange={(e) => setJobSite(e.target.value)}
-                >
+                <select value={jobSite} onChange={(e) => setJobSite(e.target.value)}>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>
-                      {site}
-                    </option>
+                    <option key={index} value={site}>{site}</option>
                   ))}
                 </select>
               </label>
@@ -424,14 +476,9 @@ function App() {
             <div>
               <label>
                 Unit Number:
-                <select
-                  value={checkinUnit}
-                  onChange={(e) => setCheckinUnit(e.target.value)}
-                >
+                <select value={checkinUnit} onChange={(e) => setCheckinUnit(e.target.value)}>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>
-                      {unit}
-                    </option>
+                    <option key={index} value={unit}>{unit}</option>
                   ))}
                 </select>
               </label>
@@ -483,14 +530,9 @@ function App() {
             <div>
               <label>
                 Job Site:
-                <select
-                  value={checkinJobSite}
-                  onChange={(e) => setCheckinJobSite(e.target.value)}
-                >
+                <select value={checkinJobSite} onChange={(e) => setCheckinJobSite(e.target.value)}>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>
-                      {site}
-                    </option>
+                    <option key={index} value={site}>{site}</option>
                   ))}
                 </select>
               </label>
@@ -534,9 +576,7 @@ function App() {
           Currently Checked Out Units:
           <select>
             {getActiveUnitNumbers().map((unit, index) => (
-              <option key={index} value={unit}>
-                {unit}
-              </option>
+              <option key={index} value={unit}>{unit}</option>
             ))}
           </select>
         </label>
@@ -547,6 +587,10 @@ function App() {
 
 // Function to compute active (currently checked-out) units.
 const getActiveUnitNumbers = (equipmentList = [], checkinList = []) => {
+  // For this example, we'll use the state maintained in the component.
+  // If the arrays are empty, we return an empty list.
+  if (!equipmentList.length || !checkinList.length) return [];
+
   const latestCheckout = {};
   equipmentList.forEach((checkout) => {
     const unit = checkout.unit;
