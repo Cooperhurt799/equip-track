@@ -3,20 +3,18 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
-import emailjs from "emailjs-com"; // Import EmailJS
+import emailjs from "emailjs-com";
 
-// --- EmailJS Configuration ---
-// Replace the placeholder strings with your actual EmailJS values.
+// ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
-const EMAILJS_USER_ID = "YOUR_USER_ID"; // also known as Public Key
+const EMAILJS_USER_ID = "YOUR_USER_ID"; // Public Key
 
-// --- Helper Functions for Sending Emails ---
-// Function to send checkout email alert
+// Helper function to send a checkout email alert.
 const sendCheckoutEmail = (checkoutData) => {
   const templateParams = {
-    to_email: "recipient@example.com", // Change or make dynamic as needed.
+    to_email: "recipient@example.com", // Change this to your desired recipient
     unit: checkoutData.unit,
     hoursMiles: checkoutData.hoursMiles,
     checkoutDate: checkoutData.checkoutDate,
@@ -28,7 +26,12 @@ const sendCheckoutEmail = (checkoutData) => {
   };
 
   emailjs
-    .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_CHECKOUT, templateParams, EMAILJS_USER_ID)
+    .send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID_CHECKOUT,
+      templateParams,
+      EMAILJS_USER_ID
+    )
     .then(
       (response) => {
         console.log("Checkout email sent successfully!", response.status, response.text);
@@ -39,10 +42,10 @@ const sendCheckoutEmail = (checkoutData) => {
     );
 };
 
-// Function to send check-in email alert
+// Helper function to send a check-in email alert.
 const sendCheckinEmail = (checkinData) => {
   const templateParams = {
-    to_email: "recipient@example.com", // Change or make dynamic as needed.
+    to_email: "recipient@example.com", // Change this as needed.
     unit: checkinData.unit,
     hoursMiles: checkinData.hoursMiles,
     dateTimeReturned: checkinData.dateTimeReturned,
@@ -55,7 +58,12 @@ const sendCheckinEmail = (checkinData) => {
   };
 
   emailjs
-    .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_CHECKIN, templateParams, EMAILJS_USER_ID)
+    .send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID_CHECKIN,
+      templateParams,
+      EMAILJS_USER_ID
+    )
     .then(
       (response) => {
         console.log("Checkin email sent successfully!", response.status, response.text);
@@ -66,7 +74,31 @@ const sendCheckinEmail = (checkinData) => {
     );
 };
 
-// --- Data Arrays ---
+// ---------------- Twilio SMS Configuration ----------------
+// Replace with the URL of your Twilio Function that sends an SMS.
+const TWILIO_FUNCTION_URL = "https://YOUR_TWILIO_FUNCTION_URL";
+
+// Helper function to send an SMS alert via Twilio.
+const sendSmsAlert = async (toPhone, message) => {
+  try {
+    const response = await fetch(TWILIO_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        toPhone,
+        message
+      })
+    });
+    const data = await response.json();
+    console.log("SMS alert sent successfully:", data);
+  } catch (error) {
+    console.error("Error sending SMS alert:", error);
+  }
+};
+
+// ---------------- Data Arrays ----------------
 const preUploadedUnits = [
   "374 CAT mini ex",
   "304 Peterbilt Dump Truck",
@@ -145,14 +177,15 @@ const preProgrammedJobSites = [
 ];
 
 function App() {
-  // --- Message States ---
+  // ---------------- Message States ----------------
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
+  const [smsMessage, setSmsMessage] = useState("");
 
-  // --- Checkout Form State ---
-  const [equipmentList, setEquipmentList] = useState([]); // from Firestore
+  // ---------------- Checkout Form State ----------------
+  const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
 
-  // Common fields for both forms:
+  // Common fields for checkout:
   const [selectedUnit, setSelectedUnit] = useState(preUploadedUnits[0]);
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -164,7 +197,7 @@ function App() {
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
-  // --- Function to Add Checkout ---
+  // Function to add a checkout record and send an email alert.
   const addEquipment = async (e) => {
     e.preventDefault();
     if (
@@ -195,7 +228,7 @@ function App() {
         setCheckoutMessage("Checkout successful!");
         sendCheckoutEmail(newCheckout);
 
-        // Reset form fields
+        // Reset checkout form fields.
         setSelectedUnit(preUploadedUnits[0]);
         setCheckoutHoursMiles("");
         setCheckoutDate("");
@@ -214,7 +247,7 @@ function App() {
     }
   };
 
-  // --- Retrieve Checkout Records from Firestore ---
+  // ---------------- Retrieve Checkout Records ----------------
   useEffect(() => {
     const fetchCheckouts = async () => {
       try {
@@ -232,10 +265,10 @@ function App() {
     fetchCheckouts();
   }, []);
 
-  // --- Check-In Form State ---
+  // ---------------- Check-In Form State ----------------
   const [checkinList, setCheckinList] = useState([]);
 
-  // Check-in common fields (separate from checkout)
+  // Check-in common fields:
   const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
@@ -248,7 +281,7 @@ function App() {
   const [checkinDuration, setCheckinDuration] = useState("");
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
-  // --- Compute Duration for Check-In ---
+  // Compute duration for check-in
   useEffect(() => {
     if (checkinDateTime && checkinUnit) {
       let latestCheckoutTime = null;
@@ -272,7 +305,7 @@ function App() {
     }
   }, [checkinDateTime, checkinUnit, equipmentList]);
 
-  // --- Function to Add Check-In ---
+  // Function to add a check-in record and send an email alert.
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -325,7 +358,7 @@ function App() {
     }
   };
 
-  // --- Retrieve Check-In Records from Firestore ---
+  // ---------------- Retrieve Check-In Records ----------------
   useEffect(() => {
     const fetchCheckins = async () => {
       try {
@@ -343,7 +376,8 @@ function App() {
     fetchCheckins();
   }, []);
 
-  // --- Function to Compute Active (Currently Checked-Out) Units ---
+  // ---------------- Active Checkouts ----------------
+  // Function to compute active (currently checked-out) units.
   const getActiveUnitNumbers = () => {
     const latestCheckout = {};
     equipmentList.forEach((checkout) => {
@@ -368,9 +402,44 @@ function App() {
     return activeUnits;
   };
 
+  // ---------------- SMS Alert Section ----------------
+  // State for the selected active unit for SMS alerts.
+  const [selectedActiveUnit, setSelectedActiveUnit] = useState("");
+  // Helper: Get the latest checkout record for a given unit.
+  const getLatestCheckoutByUnit = (unit) => {
+    let latest = null;
+    equipmentList.forEach((record) => {
+      if (record.unit === unit) {
+        const time = new Date(record.createdAt);
+        if (!latest || time > new Date(latest.createdAt)) {
+          latest = record;
+        }
+      }
+    });
+    return latest;
+  };
+
+  // Function to handle sending SMS alert.
+  const handleSendSmsAlert = () => {
+    if (!selectedActiveUnit) {
+      alert("Please select an active unit.");
+      return;
+    }
+    const record = getLatestCheckoutByUnit(selectedActiveUnit);
+    if (record) {
+      const message = `Dear ${record.customerName}, this is a reminder to return the unit "${record.unit}" that you checked out on ${record.checkoutDate}. The unit is due back by ${record.returnDate}. Please contact us if you have any questions.`;
+      sendSmsAlert(record.customerPhone, message);
+      setSmsMessage("SMS alert sent!");
+      setTimeout(() => setSmsMessage(""), 3000);
+    } else {
+      alert("No checkout record found for the selected unit.");
+    }
+  };
+
   return (
     <div className="App">
       <header>
+        {/* Optionally, add a company logo here */}
         <h1>Equipment Tracker</h1>
       </header>
 
@@ -385,7 +454,9 @@ function App() {
                 Unit Number:
                 <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>{unit}</option>
+                    <option key={index} value={unit}>
+                      {unit}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -439,7 +510,9 @@ function App() {
                 Job Site:
                 <select value={jobSite} onChange={(e) => setJobSite(e.target.value)}>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>{site}</option>
+                    <option key={index} value={site}>
+                      {site}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -478,7 +551,9 @@ function App() {
                 Unit Number:
                 <select value={checkinUnit} onChange={(e) => setCheckinUnit(e.target.value)}>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>{unit}</option>
+                    <option key={index} value={unit}>
+                      {unit}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -532,7 +607,9 @@ function App() {
                 Job Site:
                 <select value={checkinJobSite} onChange={(e) => setCheckinJobSite(e.target.value)}>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>{site}</option>
+                    <option key={index} value={site}>
+                      {site}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -569,20 +646,90 @@ function App() {
         </section>
       </div>
 
-      {/* Active Checkouts Section (Below the forms row) */}
+      {/* Active Checkouts Section */}
       <section className="active-checkouts">
         <h2>Active Checkouts</h2>
         <label>
           Currently Checked Out Units:
-          <select>
+          <select
+            value={selectedActiveUnit}
+            onChange={(e) => setSelectedActiveUnit(e.target.value)}
+          >
             {getActiveUnitNumbers().map((unit, index) => (
-              <option key={index} value={unit}>{unit}</option>
+              <option key={index} value={unit}>
+                {unit}
+              </option>
             ))}
           </select>
         </label>
+        <button onClick={handleSendSmsAlert}>Send Return Alert</button>
+        {smsMessage && <p className="message">{smsMessage}</p>}
       </section>
     </div>
   );
+
+  // ---------------- Helper Functions for SMS Alerts ----------------
+  // Function to compute active (currently checked-out) units.
+  // (This uses the state arrays: equipmentList and checkinList.)
+  function getActiveUnitNumbers() {
+    const latestCheckout = {};
+    equipmentList.forEach((checkout) => {
+      const unit = checkout.unit;
+      const time = new Date(checkout.createdAt);
+      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+        latestCheckout[unit] = time;
+      }
+    });
+    const activeUnits = [];
+    for (const unit in latestCheckout) {
+      const correspondingCheckin = checkinList.find(
+        (checkin) =>
+          checkin.unit === unit &&
+          checkin.createdAt &&
+          new Date(checkin.createdAt) > latestCheckout[unit]
+      );
+      if (!correspondingCheckin) {
+        activeUnits.push(unit);
+      }
+    }
+    return activeUnits;
+  }
+
+  // Function to get the latest checkout record for a given unit.
+  function getLatestCheckoutByUnit(unit) {
+    let latest = null;
+    equipmentList.forEach((record) => {
+      if (record.unit === unit) {
+        const time = new Date(record.createdAt);
+        if (!latest || time > new Date(latest.createdAt)) {
+          latest = record;
+        }
+      }
+    });
+    return latest;
+  }
+
+  // State for the selected active unit for SMS alerts.
+  const [selectedActiveUnit, setSelectedActiveUnit] = useState(
+    getActiveUnitNumbers().length ? getActiveUnitNumbers()[0] : ""
+  );
+
+  // Function to handle sending SMS alert.
+  const handleSendSmsAlert = () => {
+    if (!selectedActiveUnit) {
+      alert("Please select an active unit.");
+      return;
+    }
+    const record = getLatestCheckoutByUnit(selectedActiveUnit);
+    if (record) {
+      const message = `Dear ${record.customerName}, this is a reminder to return the unit "${record.unit}" that you checked out on ${record.checkoutDate} by ${record.returnDate}. Please contact us if you have any questions.`;
+      sendSmsAlert(record.customerPhone, message);
+      setSmsMessage("SMS alert sent!");
+      setTimeout(() => setSmsMessage(""), 3000);
+    } else {
+      alert("No checkout record found for the selected unit.");
+    }
+  };
 }
 
 export default App;
