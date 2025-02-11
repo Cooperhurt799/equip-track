@@ -585,33 +585,4 @@ function App() {
   );
 }
 
-// Function to compute active (currently checked-out) units.
-const getActiveUnitNumbers = (equipmentList = [], checkinList = []) => {
-  // For this example, we'll use the state maintained in the component.
-  // If the arrays are empty, we return an empty list.
-  if (!equipmentList.length || !checkinList.length) return [];
-
-  const latestCheckout = {};
-  equipmentList.forEach((checkout) => {
-    const unit = checkout.unit;
-    const time = new Date(checkout.createdAt);
-    if (!latestCheckout[unit] || time > latestCheckout[unit]) {
-      latestCheckout[unit] = time;
-    }
-  });
-  const activeUnits = [];
-  for (const unit in latestCheckout) {
-    const correspondingCheckin = checkinList.find(
-      (checkin) =>
-        checkin.unit === unit &&
-        checkin.createdAt &&
-        new Date(checkin.createdAt) > latestCheckout[unit]
-    );
-    if (!correspondingCheckin) {
-      activeUnits.push(unit);
-    }
-  }
-  return activeUnits;
-};
-
 export default App;
