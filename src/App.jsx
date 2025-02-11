@@ -593,36 +593,6 @@ function App() {
   );
 }
 
-// Function to compute active (currently checked-out) units.
-function getActiveUnitNumbers(equipmentList = [], checkinList = []) {
-  // In this example, we assume that the component state for equipmentList
-  // and checkinList is available in scope. Since this function is called during render,
-  // it uses the state values.
-  // If either array is empty, return an empty array.
-  if (!equipmentList.length || !checkinList.length) return [];
-  const latestCheckout = {};
-  equipmentList.forEach((checkout) => {
-    const unit = checkout.unit;
-    const time = new Date(checkout.createdAt);
-    if (!latestCheckout[unit] || time > latestCheckout[unit]) {
-      latestCheckout[unit] = time;
-    }
-  });
-  const activeUnits = [];
-  for (const unit in latestCheckout) {
-    const correspondingCheckin = checkinList.find(
-      (checkin) =>
-        checkin.unit === unit &&
-        checkin.createdAt &&
-        new Date(checkin.createdAt) > latestCheckout[unit]
-    );
-    if (!correspondingCheckin) {
-      activeUnits.push(unit);
-    }
-  }
-  return activeUnits;
-}
-
 export default App;
 import React, { useState, useEffect } from "react";
 import "./App.css";
