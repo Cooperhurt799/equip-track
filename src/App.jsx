@@ -87,6 +87,7 @@ function App() {
   /*** STATE FOR MESSAGES ***/
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
+  const [checkinList, setCheckinList] = useState([]);
 
   /*** CHECKOUT FORM STATE & HANDLERS ***/
   // List of checkout transactions (fetched from Firestore)
