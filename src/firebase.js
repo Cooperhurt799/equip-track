@@ -17,7 +17,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 let analytics = null;
 if (typeof window !== 'undefined' && 'navigator' in window) {
-  analytics = getAnalytics(app);
+  import('firebase/analytics').then(({ isSupported }) => {
+    isSupported().then(supported => {
+      if (supported) {
+        analytics = getAnalytics(app);
+      }
+    });
+  });
 }
 const db = getFirestore(app);
 
