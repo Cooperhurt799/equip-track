@@ -661,31 +661,3 @@ function getActiveUnitNumbers(equipmentList = [], checkinList = []) {
 }
 
 export default App;
-import React, { useState, useEffect } from "react";
-import "./App.css";
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
-import emailjs from "emailjs-com";
-
-// ... [rest of your code]
-
-function App() {
-  // Change the document title
-  useEffect(() => {
-    document.title = "Daugherty Ranches Equipment Tracker";
-  }, []);
-
-  // ... [all your state and functions]
-
-  return (
-    <div className="App">
-      <header>
-        <h1>Daugherty Ranches Equipment Tracker</h1>
-      </header>
-
-      {/* Rest of your component code */}
-    </div>
-  );
-}
-
-export default App;
