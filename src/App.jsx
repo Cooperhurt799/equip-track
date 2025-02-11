@@ -1,62 +1,21 @@
+// App.jsx
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
-import emailjs from "emailjs-com";
+import emailjs from "emailjs-com"; // EmailJS for email alerts
 
-// EmailJS Configuration
+// ---------------- EmailJS Configuration ----------------
+// Replace the placeholder strings with your actual EmailJS values.
 const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
-const EMAILJS_USER_ID = "YOUR_USER_ID";
+const EMAILJS_USER_ID = "YOUR_USER_ID"; // Public Key
 
-// Pre-defined arrays
-const preUploadedUnits = [
-  "374 CAT mini ex",
-  "304 Peterbilt Dump Truck",
-  "306 int. Dump Truck",
-  "326 Cat D6 Dozer",
-  "329 Cat 950 Loader",
-  "335 Cat 950M Loader",
-  "347 Bobcat Skid Steer",
-  "357 Cat 140M3 Blade",
-  "358 Kubota Mini Ex",
-  "359 Kubota Skid Steer",
-  "365 Terex Light Tower",
-  "372 Allmand Light Tower",
-  "375 Amman Roller",
-  "380 JLG Telehandler",
-  "383 Cat 140M3 Blade",
-  "384 Cat 308 Mini Ex",
-  "385 Cat 336 Excavator",
-  "386 Cat Mini Ex",
-  "387 Cat Skid Steer",
-  "388 Cat Skid Steer",
-  "392 Cat Tik Truck",
-  "393 Cat Tik Truck",
-  "394 Cat Mini Ex"
-];
-
-const preProgrammedJobSites = [
-  "18", "6bar", "Apache Canyon Road", "Apache Screen Site",
-  "Babb Canyon Road", "Babb HQ", "Baylor", "Big Tank HQ",
-  "Chico", "Clock", "Delaware Basin", "DOD", "Fenceline East",
-  "Fenceline West", "Figure 2", "Highline Road", "Hogue Canyon",
-  "Honeycutt HQ", "Honeycutt Rim North", "Houge Pump Jack",
-  "James Cook Hanger", "Lower Puett", "Mule Pasture", "North Baylor",
-  "North VMB HQ", "Old West Town", "Pipeline (East)", "Pipeline (West)",
-  "Prison Camp", "Puckett", "Puett HQ", "Red Pens", "Roberts HQ",
-  "Roberts Quarry", "Rock House", "Roller Coaster Road",
-  "Sanford N Sons", "Shortcut", "Sierra Diablo", "South Baylor",
-  "Space World", "Stockyard", "Victorio Canyon", "VMB",
-  "Wind Tower Road (Bottom)", "Windtower Road (Top)", "Wilson HQ",
-  "Welding Shop"
-];
-
-// Helper function to send a checkout email alert
+// Helper function to send a checkout email alert.
 const sendCheckoutEmail = (checkoutData) => {
   const templateParams = {
-    to_email: "recipient@example.com",
+    to_email: "recipient@example.com", // Change this to your desired recipient or make dynamic.
     unit: checkoutData.unit,
     hoursMiles: checkoutData.hoursMiles,
     checkoutDate: checkoutData.checkoutDate,
@@ -84,10 +43,10 @@ const sendCheckoutEmail = (checkoutData) => {
     );
 };
 
-// Helper function to send a check-in email alert
+// Helper function to send a check-in email alert.
 const sendCheckinEmail = (checkinData) => {
   const templateParams = {
-    to_email: "recipient@example.com",
+    to_email: "recipient@example.com", // Change this as needed.
     unit: checkinData.unit,
     hoursMiles: checkinData.hoursMiles,
     dateTimeReturned: checkinData.dateTimeReturned,
@@ -116,160 +75,105 @@ const sendCheckinEmail = (checkinData) => {
     );
 };
 
-// Helper function to send an SMS alert via Twilio
-const sendSmsAlert = async (toPhone, message) => {
-  try {
-    const response = await fetch("https://YOUR_TWILIO_FUNCTION_URL", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        toPhone,
-        message
-      })
-    });
-    const data = await response.json();
-    console.log("SMS alert sent successfully:", data);
-  } catch (error) {
-    console.error("Error sending SMS alert:", error);
-  }
-};
+// ---------------- Data Arrays ----------------
+const preUploadedUnits = [
+  "374 CAT mini ex",
+  "304 Peterbilt Dump Truck",
+  "306 int. Dump Truck",
+  "326 Cat D6 Dozer",
+  "329 Cat 950 Loader",
+  "335 Cat 950M Loader",
+  "347 Bobcat Skid Steer",
+  "357 Cat 140M3 Blade",
+  "358 Kubota Mini Ex",
+  "359 Kubota Skid Steer",
+  "365 Terex Light Tower",
+  "372 Allmand Light Tower",
+  "375 Amman Roller",
+  "380 JLG Telehandler",
+  "383 Cat 140M3 Blade",
+  "384 Cat 308 Mini Ex",
+  "385 Cat 336 Excavator",
+  "386 Cat Mini Ex",
+  "387 Cat Skid Steer",
+  "388 Cat Skid Steer",
+  "392 Cat Tik Truck",
+  "393 Cat Tik Truck",
+  "394 Cat Mini Ex"
+];
+
+const preProgrammedJobSites = [
+  "18",
+  "6bar",
+  "Apache Canyon Road",
+  "Apache Screen Site",
+  "Babb Canyon Road",
+  "Babb HQ",
+  "Baylor",
+  "Big Tank HQ",
+  "Chico",
+  "Clock",
+  "Delaware Basin",
+  "DOD",
+  "Fenceline East",
+  "Fenceline West",
+  "Figure 2",
+  "Highline Road",
+  "Hogue Canyon",
+  "Honeycutt HQ",
+  "Honeycutt Rim North",
+  "Houge Pump Jack",
+  "James Cook Hanger",
+  "Lower Puett",
+  "Mule Pasture",
+  "North Baylor",
+  "North VMB HQ",
+  "Old West Town",
+  "Pipeline (East)",
+  "Pipeline (West)",
+  "Prison Camp",
+  "Puckett",
+  "Puett HQ",
+  "Red Pens",
+  "Roberts HQ",
+  "Roberts Quarry",
+  "Rock House",
+  "Roller Coaster Road",
+  "Sanford N Sons",
+  "Shortcut",
+  "Sierra Diablo",
+  "South Baylor",
+  "Space World",
+  "Stockyard",
+  "Victorio Canyon",
+  "VMB",
+  "Wind Tower Road (Bottom)",
+  "Windtower Road (Top)",
+  "Wilson HQ",
+  "Welding Shop"
+];
 
 function App() {
-  // Message states
+  // ---------------- Message States ----------------
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
-  const [smsMessage, setSmsMessage] = useState("");
 
-  // Equipment list state
-  const [equipmentList, setEquipmentList] = useState([]);
-  const [checkinList, setCheckinList] = useState([]);
+  // ---------------- Checkout Form State ----------------
+  const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
 
-  // Checkout form states
+  // Common fields for checkout:
   const [selectedUnit, setSelectedUnit] = useState(preUploadedUnits[0]);
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [jobSite, setJobSite] = useState(preProgrammedJobSites[0]);
+
+  // Checkout-specific fields:
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
-  // Check-in form states
-  const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
-  const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
-  const [checkinCustomerName, setCheckinCustomerName] = useState("");
-  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
-  const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
-  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
-  const [checkinDateTime, setCheckinDateTime] = useState("");
-  const [checkinDuration, setCheckinDuration] = useState("");
-  const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
-
-  // Active checkouts state
-  const [selectedActiveUnit, setSelectedActiveUnit] = useState("");
-
-  // Helper function to get active unit numbers
-  const getActiveUnitNumbers = () => {
-    const latestCheckout = {};
-    equipmentList.forEach((checkout) => {
-      const unit = checkout.unit;
-      const time = new Date(checkout.createdAt);
-      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
-        latestCheckout[unit] = time;
-      }
-    });
-    const activeUnits = [];
-    for (const unit in latestCheckout) {
-      const correspondingCheckin = checkinList.find(
-        (checkin) =>
-          checkin.unit === unit &&
-          checkin.createdAt &&
-          new Date(checkin.createdAt) > latestCheckout[unit]
-      );
-      if (!correspondingCheckin) {
-        activeUnits.push(unit);
-      }
-    }
-    return activeUnits;
-  };
-
-  // Helper function to get the latest checkout by unit
-  const getLatestCheckoutByUnit = (unit) => {
-    let latest = null;
-    equipmentList.forEach((record) => {
-      if (record.unit === unit) {
-        const time = new Date(record.createdAt);
-        if (!latest || time > new Date(latest.createdAt)) {
-          latest = record;
-        }
-      }
-    });
-    return latest;
-  };
-
-  // Effect to fetch checkouts
-  useEffect(() => {
-    const fetchCheckouts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "checkouts"));
-        const checkouts = [];
-        querySnapshot.forEach((doc) => {
-          checkouts.push({ id: doc.id, ...doc.data() });
-        });
-        setEquipmentList(checkouts);
-      } catch (error) {
-        console.error("Error fetching checkouts: ", error);
-      }
-    };
-
-    fetchCheckouts();
-  }, []);
-
-  // Effect to fetch checkins
-  useEffect(() => {
-    const fetchCheckins = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "checkins"));
-        const checkins = [];
-        querySnapshot.forEach((doc) => {
-          checkins.push({ id: doc.id, ...doc.data() });
-        });
-        setCheckinList(checkins);
-      } catch (error) {
-        console.error("Error fetching checkins: ", error);
-      }
-    };
-
-    fetchCheckins();
-  }, []);
-
-  // Effect to compute duration for check-in
-  useEffect(() => {
-    if (checkinDateTime && checkinUnit) {
-      let latestCheckoutTime = null;
-      equipmentList.forEach((record) => {
-        if (record.unit === checkinUnit) {
-          const time = new Date(record.createdAt);
-          if (!latestCheckoutTime || time > latestCheckoutTime) {
-            latestCheckoutTime = time;
-          }
-        }
-      });
-      if (latestCheckoutTime) {
-        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        setCheckinDuration(diffDays > 0 ? diffDays : 0);
-      } else {
-        setCheckinDuration("");
-      }
-    } else {
-      setCheckinDuration("");
-    }
-  }, [checkinDateTime, checkinUnit, equipmentList]);
-
-  // Handle checkout submission
+  // ---------------- Function to Add a Checkout ----------------
   const addEquipment = async (e) => {
     e.preventDefault();
     if (
@@ -300,7 +204,7 @@ function App() {
         setCheckoutMessage("Checkout successful!");
         sendCheckoutEmail(newCheckout);
 
-        // Reset form
+        // Reset checkout form fields.
         setSelectedUnit(preUploadedUnits[0]);
         setCheckoutHoursMiles("");
         setCheckoutDate("");
@@ -319,7 +223,64 @@ function App() {
     }
   };
 
-  // Handle check-in submission
+  // ---------------- Retrieve Checkout Records ----------------
+  useEffect(() => {
+    const fetchCheckouts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "checkouts"));
+        const checkouts = [];
+        querySnapshot.forEach((doc) => {
+          checkouts.push({ id: doc.id, ...doc.data() });
+        });
+        setEquipmentList(checkouts);
+      } catch (error) {
+        console.error("Error fetching checkouts: ", error);
+      }
+    };
+    fetchCheckouts();
+  }, []);
+
+  // ---------------- Check-In Form State ----------------
+  const [checkinList, setCheckinList] = useState([]);
+
+  // Check-in common fields:
+  const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
+  const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
+  const [checkinCustomerName, setCheckinCustomerName] = useState("");
+  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
+  const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
+  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
+
+  // Check-in-specific fields:
+  const [checkinDateTime, setCheckinDateTime] = useState("");
+  const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
+  const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
+
+  // ---------------- Compute Check-In Duration ----------------
+  useEffect(() => {
+    if (checkinDateTime && checkinUnit) {
+      let latestCheckoutTime = null;
+      equipmentList.forEach((record) => {
+        if (record.unit === checkinUnit) {
+          const time = new Date(record.createdAt);
+          if (!latestCheckoutTime || time > latestCheckoutTime) {
+            latestCheckoutTime = time;
+          }
+        }
+      });
+      if (latestCheckoutTime) {
+        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        setCheckinDuration(diffDays > 0 ? diffDays : 0);
+      } else {
+        setCheckinDuration("");
+      }
+    } else {
+      setCheckinDuration("");
+    }
+  }, [checkinDateTime, checkinUnit, equipmentList]);
+
+  // ---------------- Function to Add a Check-In ----------------
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -352,7 +313,7 @@ function App() {
         setCheckinList([...checkinList, newCheckin]);
         sendCheckinEmail(newCheckin);
 
-        // Reset form
+        // Reset check-in form fields.
         setCheckinDateTime("");
         setCheckinUnit(preUploadedUnits[0]);
         setCheckinHoursMiles("");
@@ -372,21 +333,47 @@ function App() {
     }
   };
 
-  // Handle SMS alert
-  const handleSendSmsAlert = () => {
-    if (!selectedActiveUnit) {
-      alert("Please select an active unit.");
-      return;
+  // ---------------- Retrieve Check-In Records ----------------
+  useEffect(() => {
+    const fetchCheckins = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "checkins"));
+        const checkins = [];
+        querySnapshot.forEach((doc) => {
+          checkins.push({ id: doc.id, ...doc.data() });
+        });
+        setCheckinList(checkins);
+      } catch (error) {
+        console.error("Error fetching checkins: ", error);
+      }
+    };
+    fetchCheckins();
+  }, []);
+
+  // ---------------- Active Checkouts Section ----------------
+  // Function to compute active (currently checked-out) units.
+  const getActiveUnitNumbers = () => {
+    const latestCheckout = {};
+    equipmentList.forEach((checkout) => {
+      const unit = checkout.unit;
+      const time = new Date(checkout.createdAt);
+      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+        latestCheckout[unit] = time;
+      }
+    });
+    const activeUnits = [];
+    for (const unit in latestCheckout) {
+      const correspondingCheckin = checkinList.find(
+        (checkin) =>
+          checkin.unit === unit &&
+          checkin.createdAt &&
+          new Date(checkin.createdAt) > latestCheckout[unit]
+      );
+      if (!correspondingCheckin) {
+        activeUnits.push(unit);
+      }
     }
-    const record = getLatestCheckoutByUnit(selectedActiveUnit);
-    if (record) {
-      const message = `Dear ${record.customerName}, this is a reminder to return the unit "${record.unit}" that you checked out on ${record.checkoutDate}. The unit is due back by ${record.returnDate}. Please contact us if you have any questions.`;
-      sendSmsAlert(record.customerPhone, message);
-      setSmsMessage("SMS alert sent!");
-      setTimeout(() => setSmsMessage(""), 3000);
-    } else {
-      alert("No checkout record found for the selected unit.");
-    }
+    return activeUnits;
   };
 
   return (
@@ -395,7 +382,9 @@ function App() {
         <h1>Equipment Tracker</h1>
       </header>
 
+      {/* Container for Check-Out and Check-In Sections Side by Side */}
       <div className="forms-row">
+        {/* Check-Out Form Section */}
         <section className="checkout">
           <h2>Equipment Check-Out</h2>
           <form onSubmit={addEquipment}>
@@ -404,9 +393,7 @@ function App() {
                 Unit Number:
                 <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>
-                      {unit}
-                    </option>
+                    <option key={index} value={unit}>{unit}</option>
                   ))}
                 </select>
               </label>
@@ -460,9 +447,7 @@ function App() {
                 Job Site:
                 <select value={jobSite} onChange={(e) => setJobSite(e.target.value)}>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>
-                      {site}
-                    </option>
+                    <option key={index} value={site}>{site}</option>
                   ))}
                 </select>
               </label>
@@ -492,6 +477,7 @@ function App() {
           {checkoutMessage && <p className="message">{checkoutMessage}</p>}
         </section>
 
+        {/* Check-In Form Section */}
         <section className="checkin">
           <h2>Equipment Check-In</h2>
           <form onSubmit={addCheckin}>
@@ -500,9 +486,7 @@ function App() {
                 Unit Number:
                 <select value={checkinUnit} onChange={(e) => setCheckinUnit(e.target.value)}>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>
-                      {unit}
-                    </option>
+                    <option key={index} value={unit}>{unit}</option>
                   ))}
                 </select>
               </label>
@@ -556,9 +540,7 @@ function App() {
                 Job Site:
                 <select value={checkinJobSite} onChange={(e) => setCheckinJobSite(e.target.value)}>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>
-                      {site}
-                    </option>
+                    <option key={index} value={site}>{site}</option>
                   ))}
                 </select>
               </label>
@@ -595,25 +577,119 @@ function App() {
         </section>
       </div>
 
+      {/* Active Checkouts Section (Below the forms row) */}
       <section className="active-checkouts">
         <h2>Active Checkouts</h2>
         <label>
           Currently Checked Out Units:
-          <select
-            value={selectedActiveUnit}
-            onChange={(e) => setSelectedActiveUnit(e.target.value)}
-          >
-            <option value="">Select a unit</option>
+          <select>
             {getActiveUnitNumbers().map((unit, index) => (
-              <option key={index} value={unit}>
-                {unit}
-              </option>
+              <option key={index} value={unit}>{unit}</option>
             ))}
           </select>
         </label>
-        <button onClick={handleSendSmsAlert}>Send Return Alert</button>
-        {smsMessage && <p className="message">{smsMessage}</p>}
       </section>
+    </div>
+  );
+}
+
+// Function to compute active (currently checked-out) units.
+function getActiveUnitNumbers(equipmentList = [], checkinList = []) {
+  // In this example, we assume that the component state for equipmentList
+  // and checkinList is available in scope. Since this function is called during render,
+  // it uses the state values.
+  // If either array is empty, return an empty array.
+  if (!equipmentList.length || !checkinList.length) return [];
+  const latestCheckout = {};
+  equipmentList.forEach((checkout) => {
+    const unit = checkout.unit;
+    const time = new Date(checkout.createdAt);
+    if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+      latestCheckout[unit] = time;
+    }
+  });
+  const activeUnits = [];
+  for (const unit in latestCheckout) {
+    const correspondingCheckin = checkinList.find(
+      (checkin) =>
+        checkin.unit === unit &&
+        checkin.createdAt &&
+        new Date(checkin.createdAt) > latestCheckout[unit]
+    );
+    if (!correspondingCheckin) {
+      activeUnits.push(unit);
+    }
+  }
+  return activeUnits;
+}
+
+export default App;
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
+import emailjs from "emailjs-com";
+
+// EmailJS configuration (ensure these are replaced with your actual values)
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
+const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
+const EMAILJS_USER_ID = "YOUR_USER_ID";
+const EMAILJS_DUE_RETURN_TEMPLATE_ID = "YOUR_DUE_RETURN_TEMPLATE_ID"; // New template for due alerts
+
+// ... existing helper functions (sendCheckoutEmail, sendCheckinEmail) ...
+
+// New helper function for sending due return alerts.
+const sendDueReturnAlertEmail = (checkoutData) => {
+  const templateParams = {
+    to_email: checkoutData.customerEmail, // Email the customer directly.
+    unit: checkoutData.unit,
+    hoursMiles: checkoutData.hoursMiles,
+    checkoutDate: checkoutData.checkoutDate,
+    returnDate: checkoutData.returnDate,
+    customerName: checkoutData.customerName,
+    message: `Dear ${checkoutData.customerName}, this is a friendly reminder that the unit "${checkoutData.unit}" you checked out is due for return on ${checkoutData.returnDate}. Please ensure the unit is returned on time.`
+  };
+
+  emailjs
+    .send(EMAILJS_SERVICE_ID, EMAILJS_DUE_RETURN_TEMPLATE_ID, templateParams, EMAILJS_USER_ID)
+    .then(
+      (response) => {
+        console.log("Due return email sent successfully!", response.status, response.text);
+      },
+      (error) => {
+        console.error("Due return email sending failed:", error);
+      }
+    );
+};
+
+function App() {
+  // ... your state and functions for check-out and check-in ...
+
+  // useEffect to check for due return alerts.
+  useEffect(() => {
+    // Check every hour.
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      equipmentList.forEach((checkout) => {
+        const dueDate = new Date(checkout.returnDate);
+        const diffTime = dueDate - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays === 2) {
+          console.log(`Sending due return alert for unit: ${checkout.unit}`);
+          sendDueReturnAlertEmail(checkout);
+        }
+      });
+    }, 3600000);
+
+    return () => clearInterval(intervalId);
+  }, [equipmentList]);
+
+  // ... rest of your component (forms, rendering, etc.) ...
+
+  return (
+    <div className="App">
+      {/* ... your header, forms, active checkouts section, etc. ... */}
     </div>
   );
 }
