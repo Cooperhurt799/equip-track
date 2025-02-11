@@ -3,16 +3,15 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
-import emailjs from "emailjs-com"; // Import EmailJS
+import emailjs from "emailjs-com";
 
 // ---------------- EmailJS Configuration ----------------
-// Replace these placeholder strings with your actual EmailJS values.
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
-const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
-const EMAILJS_USER_ID = "YOUR_USER_ID"; // Your Public Key
+const EMAILJS_SERVICE_ID = "service_fimxodg";
+const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
+const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
+const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 
-// Helper function to send a checkout email alert.
+// ---------------- Helper Functions for Email Alerts ----------------
 const sendCheckoutEmail = (checkoutData) => {
   const templateParams = {
     to_email: "jm.outlaw@icloud.com", // All checkout emails will be sent here.
@@ -43,7 +42,6 @@ const sendCheckoutEmail = (checkoutData) => {
     );
 };
 
-// Helper function to send a check-in email alert.
 const sendCheckinEmail = (checkinData) => {
   const templateParams = {
     to_email: "jm.outlaw@icloud.com", // All check-in emails will be sent here.
@@ -67,10 +65,10 @@ const sendCheckinEmail = (checkinData) => {
     )
     .then(
       (response) => {
-        console.log("Checkin email sent successfully!", response.status, response.text);
+        console.log("Check-in email sent successfully!", response.status, response.text);
       },
       (error) => {
-        console.error("Checkin email sending failed:", error);
+        console.error("Check-in email sending failed:", error);
       }
     );
 };
@@ -154,6 +152,11 @@ const preProgrammedJobSites = [
 ];
 
 function App() {
+  // ---------------- Set Document Title ----------------
+  useEffect(() => {
+    document.title = "Daugherty Ranches Equipment Tracker";
+  }, []);
+
   // ---------------- Message States ----------------
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
@@ -161,7 +164,7 @@ function App() {
   // ---------------- Checkout Form State ----------------
   const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
 
-  // Common fields for checkout (initialized to an empty string so the default option shows "Select"):
+  // Common fields for checkout (initialized to empty so the drop-down shows "Select")
   const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -173,7 +176,6 @@ function App() {
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
-  // ---------------- Function to Add a Checkout ----------------
   const addEquipment = async (e) => {
     e.preventDefault();
     if (
@@ -223,7 +225,6 @@ function App() {
     }
   };
 
-  // ---------------- Retrieve Checkout Records ----------------
   useEffect(() => {
     const fetchCheckouts = async () => {
       try {
@@ -244,7 +245,7 @@ function App() {
   // ---------------- Check-In Form State ----------------
   const [checkinList, setCheckinList] = useState([]);
 
-  // Check-in common fields (initialized to empty strings):
+  // Check-in common fields (initialized to empty)
   const [checkinUnit, setCheckinUnit] = useState("");
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
@@ -254,10 +255,9 @@ function App() {
 
   // Check-in-specific fields:
   const [checkinDateTime, setCheckinDateTime] = useState("");
-  const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
+  const [checkinDuration, setCheckinDuration] = useState("");
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
-  // ---------------- Compute Check-In Duration ----------------
   useEffect(() => {
     if (checkinDateTime && checkinUnit) {
       let latestCheckoutTime = null;
@@ -281,7 +281,6 @@ function App() {
     }
   }, [checkinDateTime, checkinUnit, equipmentList]);
 
-  // ---------------- Function to Add a Check-In ----------------
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -334,7 +333,6 @@ function App() {
     }
   };
 
-  // ---------------- Retrieve Check-In Records ----------------
   useEffect(() => {
     const fetchCheckins = async () => {
       try {
@@ -353,7 +351,6 @@ function App() {
   }, []);
 
   // ---------------- Active Checkouts Section ----------------
-  // Function to compute active (currently checked-out) units.
   const getActiveUnitNumbers = () => {
     const latestCheckout = {};
     equipmentList.forEach((checkout) => {
@@ -380,23 +377,23 @@ function App() {
 
   return (
     <div className="App">
-      <header>
-        <h1>Equipment Tracker</h1>
+      {/* Decorative element: a large Papyrus 2 at the top right of the screen */}
+      <div className="top-right-decorative">2</div>
+
+      <header className="app-header">
+        <h1>Daugherty Ranches Equipment Tracker</h1>
+        <p className="tagline">Your trusted partner for equipment management</p>
       </header>
 
       {/* Container for Check-Out and Check-In Sections Side by Side */}
       <div className="forms-row">
-        {/* Check-Out Form Section */}
         <section className="checkout">
           <h2>Equipment Check-Out</h2>
           <form onSubmit={addEquipment}>
             <div>
               <label>
                 Unit Number:
-                <select
-                  value={selectedUnit}
-                  onChange={(e) => setSelectedUnit(e.target.value)}
-                >
+                <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
                   <option value="" disabled>
                     Select
                   </option>
@@ -455,10 +452,7 @@ function App() {
             <div>
               <label>
                 Job Site:
-                <select
-                  value={jobSite}
-                  onChange={(e) => setJobSite(e.target.value)}
-                >
+                <select value={jobSite} onChange={(e) => setJobSite(e.target.value)}>
                   <option value="" disabled>
                     Select
                   </option>
@@ -495,17 +489,13 @@ function App() {
           {checkoutMessage && <p className="message">{checkoutMessage}</p>}
         </section>
 
-        {/* Check-In Form Section */}
         <section className="checkin">
           <h2>Equipment Check-In</h2>
           <form onSubmit={addCheckin}>
             <div>
               <label>
                 Unit Number:
-                <select
-                  value={checkinUnit}
-                  onChange={(e) => setCheckinUnit(e.target.value)}
-                >
+                <select value={checkinUnit} onChange={(e) => setCheckinUnit(e.target.value)}>
                   <option value="" disabled>
                     Select
                   </option>
@@ -564,10 +554,7 @@ function App() {
             <div>
               <label>
                 Job Site:
-                <select
-                  value={checkinJobSite}
-                  onChange={(e) => setCheckinJobSite(e.target.value)}
-                >
+                <select value={checkinJobSite} onChange={(e) => setCheckinJobSite(e.target.value)}>
                   <option value="" disabled>
                     Select
                   </option>
@@ -611,7 +598,6 @@ function App() {
         </section>
       </div>
 
-      {/* Active Checkouts Section (Below the forms row) */}
       <section className="active-checkouts">
         <h2>Active Checkouts</h2>
         <label>
@@ -634,8 +620,6 @@ function App() {
 
 // Function to compute active (currently checked-out) units.
 function getActiveUnitNumbers(equipmentList = [], checkinList = []) {
-  // For simplicity, we assume that equipmentList and checkinList come from state.
-  // If either is empty, return an empty array.
   if (!equipmentList.length || !checkinList.length) return [];
   const latestCheckout = {};
   equipmentList.forEach((checkout) => {
