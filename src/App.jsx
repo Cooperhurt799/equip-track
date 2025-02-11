@@ -3,19 +3,19 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
-import emailjs from "emailjs-com"; // EmailJS for email alerts
+import emailjs from "emailjs-com"; // Import EmailJS
 
 // ---------------- EmailJS Configuration ----------------
-// Replace the placeholder strings with your actual EmailJS values.
+// Replace these placeholder strings with your actual EmailJS values.
 const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "YOUR_CHECKOUT_TEMPLATE_ID";
 const EMAILJS_TEMPLATE_ID_CHECKIN = "YOUR_CHECKIN_TEMPLATE_ID";
-const EMAILJS_USER_ID = "YOUR_USER_ID"; // Public Key
+const EMAILJS_USER_ID = "YOUR_USER_ID"; // Your Public Key
 
 // Helper function to send a checkout email alert.
 const sendCheckoutEmail = (checkoutData) => {
   const templateParams = {
-    to_email: "recipient@example.com", // Change this to your desired recipient or make dynamic.
+    to_email: "jm.outlaw@icloud.com", // All checkout emails will be sent here.
     unit: checkoutData.unit,
     hoursMiles: checkoutData.hoursMiles,
     checkoutDate: checkoutData.checkoutDate,
@@ -46,7 +46,7 @@ const sendCheckoutEmail = (checkoutData) => {
 // Helper function to send a check-in email alert.
 const sendCheckinEmail = (checkinData) => {
   const templateParams = {
-    to_email: "recipient@example.com", // Change this as needed.
+    to_email: "jm.outlaw@icloud.com", // All check-in emails will be sent here.
     unit: checkinData.unit,
     hoursMiles: checkinData.hoursMiles,
     dateTimeReturned: checkinData.dateTimeReturned,
@@ -161,13 +161,13 @@ function App() {
   // ---------------- Checkout Form State ----------------
   const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
 
-  // Common fields for checkout:
-  const [selectedUnit, setSelectedUnit] = useState(preUploadedUnits[0]);
+  // Common fields for checkout (initialized to an empty string so the default option shows "Select"):
+  const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [jobSite, setJobSite] = useState(preProgrammedJobSites[0]);
+  const [jobSite, setJobSite] = useState("");
 
   // Checkout-specific fields:
   const [checkoutDate, setCheckoutDate] = useState("");
@@ -205,14 +205,14 @@ function App() {
         sendCheckoutEmail(newCheckout);
 
         // Reset checkout form fields.
-        setSelectedUnit(preUploadedUnits[0]);
+        setSelectedUnit("");
         setCheckoutHoursMiles("");
         setCheckoutDate("");
         setReturnDate("");
         setCustomerName("");
         setCustomerEmail("");
         setCustomerPhone("");
-        setJobSite(preProgrammedJobSites[0]);
+        setJobSite("");
 
         setTimeout(() => setCheckoutMessage(""), 3000);
       } catch (error) {
@@ -237,19 +237,20 @@ function App() {
         console.error("Error fetching checkouts: ", error);
       }
     };
+
     fetchCheckouts();
   }, []);
 
   // ---------------- Check-In Form State ----------------
   const [checkinList, setCheckinList] = useState([]);
 
-  // Check-in common fields:
-  const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
+  // Check-in common fields (initialized to empty strings):
+  const [checkinUnit, setCheckinUnit] = useState("");
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
   const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
   const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
-  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
+  const [checkinJobSite, setCheckinJobSite] = useState("");
 
   // Check-in-specific fields:
   const [checkinDateTime, setCheckinDateTime] = useState("");
@@ -315,9 +316,9 @@ function App() {
 
         // Reset check-in form fields.
         setCheckinDateTime("");
-        setCheckinUnit(preUploadedUnits[0]);
+        setCheckinUnit("");
         setCheckinHoursMiles("");
-        setCheckinJobSite(preProgrammedJobSites[0]);
+        setCheckinJobSite("");
         setCheckinDuration("");
         setCheckinCustomerName("");
         setCheckinCustomerEmail("");
@@ -347,6 +348,7 @@ function App() {
         console.error("Error fetching checkins: ", error);
       }
     };
+
     fetchCheckins();
   }, []);
 
@@ -391,9 +393,17 @@ function App() {
             <div>
               <label>
                 Unit Number:
-                <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
+                <select
+                  value={selectedUnit}
+                  onChange={(e) => setSelectedUnit(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>{unit}</option>
+                    <option key={index} value={unit}>
+                      {unit}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -445,9 +455,17 @@ function App() {
             <div>
               <label>
                 Job Site:
-                <select value={jobSite} onChange={(e) => setJobSite(e.target.value)}>
+                <select
+                  value={jobSite}
+                  onChange={(e) => setJobSite(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>{site}</option>
+                    <option key={index} value={site}>
+                      {site}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -484,9 +502,17 @@ function App() {
             <div>
               <label>
                 Unit Number:
-                <select value={checkinUnit} onChange={(e) => setCheckinUnit(e.target.value)}>
+                <select
+                  value={checkinUnit}
+                  onChange={(e) => setCheckinUnit(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
                   {preUploadedUnits.map((unit, index) => (
-                    <option key={index} value={unit}>{unit}</option>
+                    <option key={index} value={unit}>
+                      {unit}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -538,9 +564,17 @@ function App() {
             <div>
               <label>
                 Job Site:
-                <select value={checkinJobSite} onChange={(e) => setCheckinJobSite(e.target.value)}>
+                <select
+                  value={checkinJobSite}
+                  onChange={(e) => setCheckinJobSite(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
                   {preProgrammedJobSites.map((site, index) => (
-                    <option key={index} value={site}>{site}</option>
+                    <option key={index} value={site}>
+                      {site}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -583,12 +617,73 @@ function App() {
         <label>
           Currently Checked Out Units:
           <select>
+            <option value="" disabled>
+              Select
+            </option>
             {getActiveUnitNumbers().map((unit, index) => (
-              <option key={index} value={unit}>{unit}</option>
+              <option key={index} value={unit}>
+                {unit}
+              </option>
             ))}
           </select>
         </label>
       </section>
+    </div>
+  );
+}
+
+// Function to compute active (currently checked-out) units.
+function getActiveUnitNumbers(equipmentList = [], checkinList = []) {
+  // For simplicity, we assume that equipmentList and checkinList come from state.
+  // If either is empty, return an empty array.
+  if (!equipmentList.length || !checkinList.length) return [];
+  const latestCheckout = {};
+  equipmentList.forEach((checkout) => {
+    const unit = checkout.unit;
+    const time = new Date(checkout.createdAt);
+    if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+      latestCheckout[unit] = time;
+    }
+  });
+  const activeUnits = [];
+  for (const unit in latestCheckout) {
+    const correspondingCheckin = checkinList.find(
+      (checkin) =>
+        checkin.unit === unit &&
+        checkin.createdAt &&
+        new Date(checkin.createdAt) > latestCheckout[unit]
+    );
+    if (!correspondingCheckin) {
+      activeUnits.push(unit);
+    }
+  }
+  return activeUnits;
+}
+
+export default App;
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
+import emailjs from "emailjs-com";
+
+// ... [rest of your code]
+
+function App() {
+  // Change the document title
+  useEffect(() => {
+    document.title = "Daugherty Ranches Equipment Tracker";
+  }, []);
+
+  // ... [all your state and functions]
+
+  return (
+    <div className="App">
+      <header>
+        <h1>Daugherty Ranches Equipment Tracker</h1>
+      </header>
+
+      {/* Rest of your component code */}
     </div>
   );
 }

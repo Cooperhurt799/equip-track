@@ -1,9 +1,13 @@
+/* Import the Roboto Slab font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600&display=swap');
+
 /* Global Styles */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #fff7e6;  /* Warm, off-white background */
+  font-family: 'Roboto Slab', serif;
+  background-color: #f2efe4;  /* Light, warm neutral background */
+  color: #4b3f2a;  /* Dark earthy text color */
 }
 
 /* Main Container */
@@ -17,10 +21,14 @@ body {
 header {
   text-align: center;
   margin-bottom: 20px;
+  background-color: #8b6c42;  /* Rich earthy brown */
+  padding: 20px;
+  border-radius: 8px;
 }
 
-h1 {
-  color: #4a2e2e;
+header h1 {
+  color: #fff;
+  margin: 0;
 }
 
 /* Container for Check-Out and Check-In Sections Side by Side */
@@ -33,22 +41,22 @@ h1 {
 
 /* Section Styles */
 section {
-  background-color: #ffffff;
+  background-color: #fffaf0;  /* Very light, warm beige */
   border-radius: 10px;
   padding: 20px;
   flex: 1;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border: 3px solid #e0a899;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: 3px solid #8b6c42;  /* Use the rich brown for borders */
   min-width: 300px;
 }
 
 /* Active Checkouts Section */
 .active-checkouts {
-  background-color: #ffffff;
+  background-color: #fffaf0;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border: 3px solid #e0a899;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: 3px solid #8b6c42;
 }
 
 /* Form Element Styling */
@@ -58,9 +66,9 @@ form div {
 
 label {
   display: block;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 5px;
-  color: #4a2e2e;
+  color: #4b3f2a;
 }
 
 input[type="text"],
@@ -73,7 +81,7 @@ textarea {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border: 2px solid #d1a17a;
+  border: 2px solid #8b6c42;
   border-radius: 6px;
   background-color: #fff;
   box-sizing: border-box;
@@ -88,13 +96,13 @@ input[type="datetime-local"]:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: #a96b50;
-  box-shadow: 0 0 5px rgba(169, 107, 80, 0.5);
+  border-color: #7a5d33;
+  box-shadow: 0 0 5px rgba(122, 93, 51, 0.5);
 }
 
 /* Button Styles */
 button {
-  background-color: #a96b50;
+  background-color: #8b6c42;
   color: #fff;
   border: none;
   padding: 12px 20px;
@@ -105,14 +113,14 @@ button {
 }
 
 button:hover {
-  background-color: #8a593e;
+  background-color: #7a5d33;
 }
 
 /* Message Styles */
 .message {
   margin-top: 10px;
-  font-weight: bold;
-  color: #4a2e2e;
+  font-weight: 600;
+  color: #4b3f2a;
 }
 
 /* List Styling (if needed) */
@@ -122,8 +130,8 @@ ul {
 }
 
 ul li {
-  background-color: #fafafa;
-  border: 2px solid #d1a17a;
+  background-color: #f9f3e8;
+  border: 2px solid #8b6c42;
   padding: 12px;
   border-radius: 6px;
   margin-bottom: 10px;
