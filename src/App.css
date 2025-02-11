@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
-  background-color: #f2f2f2; /* Soft light gray background */
+  background-color: #fff7e6;  /* Warm, off-white background */
 }
 
 /* Main Container */
@@ -20,35 +20,47 @@ header {
 }
 
 h1 {
-  color: #333;
+  color: #4a2e2e;
 }
 
-/* Forms Container */
-.forms {
+/* Container for Check-Out and Check-In Sections Side by Side */
+.forms-row {
   display: flex;
-  flex-wrap: wrap;
   gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-/* Section Styles for Check-Out and Check-In */
+/* Section Styles */
 section {
-  background-color: #fff;
-  border-radius: 8px;
+  background-color: #ffffff;
+  border-radius: 10px;
   padding: 20px;
-  flex: 1 1 500px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  flex: 1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #e0a899;
+  min-width: 300px;
+}
+
+/* Active Checkouts Section */
+.active-checkouts {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #e0a899;
 }
 
 /* Form Element Styling */
 form div {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #4a2e2e;
 }
 
 input[type="text"],
@@ -59,27 +71,51 @@ input[type="datetime-local"],
 select,
 textarea {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #d1a17a;
+  border-radius: 6px;
+  background-color: #fff;
   box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #a96b50;
+  box-shadow: 0 0 5px rgba(169, 107, 80, 0.5);
 }
 
 /* Button Styles */
 button {
-  background-color: #007bff;
+  background-color: #a96b50;
   color: #fff;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #8a593e;
 }
 
-/* List Styling */
+/* Message Styles */
+.message {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #4a2e2e;
+}
+
+/* List Styling (if needed) */
 ul {
   list-style-type: none;
   padding: 0;
@@ -87,8 +123,8 @@ ul {
 
 ul li {
   background-color: #fafafa;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 4px;
+  border: 2px solid #d1a17a;
+  padding: 12px;
+  border-radius: 6px;
   margin-bottom: 10px;
 }

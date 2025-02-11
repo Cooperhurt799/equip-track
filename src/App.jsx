@@ -1,11 +1,35 @@
-// App.js
+// App.jsx
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
-// Pre-uploaded list of unit numbers.
-const preUploadedUnits = ["Unit 101", "Unit 102", "Unit 103", "Unit 104"];
+// Updated list of unit numbers.
+const preUploadedUnits = [
+  "374 CAT mini ex",
+  "304 Peterbilt Dump Truck",
+  "306 int. Dump Truck",
+  "326 Cat D6 Dozer",
+  "329 Cat 950 Loader",
+  "335 Cat 950M Loader",
+  "347 Bobcat Skid Steer",
+  "357 Cat 140M3 Blade",
+  "358 Kubota Mini Ex",
+  "359 Kubota Skid Steer",
+  "365 Terex Light Tower",
+  "372 Allmand Light Tower",
+  "375 Amman Roller",
+  "380 JLG Telehandler",
+  "383 Cat 140M3 Blade",
+  "384 Cat 308 Mini Ex",
+  "385 Cat 336 Excavator",
+  "386 Cat Mini Ex",
+  "387 Cat Skid Steer",
+  "388 Cat Skid Steer",
+  "392 Cat Tik Truck",
+  "393 Cat Tik Truck",
+  "394 Cat Mini Ex"
+];
 
 // Pre-programmed job sites for the drop-down menu (alphabetically sorted)
 const preProgrammedJobSites = [
@@ -60,18 +84,25 @@ const preProgrammedJobSites = [
 ];
 
 function App() {
+  /*** STATE FOR MESSAGES ***/
+  const [checkoutMessage, setCheckoutMessage] = useState("");
+  const [checkinMessage, setCheckinMessage] = useState("");
+
   /*** CHECKOUT FORM STATE & HANDLERS ***/
-  // List of checkout transactions (from Firestore)
+  // List of checkout transactions (fetched from Firestore)
   const [equipmentList, setEquipmentList] = useState([]);
 
-  // Checkout form fields (using Customer instead of Employee)
+  // Common fields for both forms
   const [selectedUnit, setSelectedUnit] = useState(preUploadedUnits[0]);
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
-  const [checkoutDate, setCheckoutDate] = useState("");
-  const [returnDate, setReturnDate] = useState(""); // User-selected return date
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [jobSite, setJobSite] = useState(preProgrammedJobSites[0]);
+
+  // Checkout-specific fields:
+  const [checkoutDate, setCheckoutDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
 
   // Save new checkout record to Firestore and update local state.
   const addEquipment = async (e) => {
@@ -83,6 +114,7 @@ function App() {
       returnDate &&
       customerName &&
       customerEmail &&
+      customerPhone &&
       jobSite
     ) {
       const newCheckout = {
@@ -92,24 +124,27 @@ function App() {
         returnDate,
         customerName,
         customerEmail,
+        customerPhone,
         jobSite,
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       };
 
       try {
-        // Save the new record to the "checkouts" collection in Firestore.
         await addDoc(collection(db, "checkouts"), newCheckout);
-        // Optionally update local state so your UI shows the new record.
         setEquipmentList([...equipmentList, newCheckout]);
+        setCheckoutMessage("Checkout successful!");
 
-        // Reset the checkout form fields.
+        // Reset checkout form fields.
         setSelectedUnit(preUploadedUnits[0]);
         setCheckoutHoursMiles("");
         setCheckoutDate("");
         setReturnDate("");
         setCustomerName("");
         setCustomerEmail("");
+        setCustomerPhone("");
         setJobSite(preProgrammedJobSites[0]);
+
+        setTimeout(() => setCheckoutMessage(""), 3000);
       } catch (error) {
         console.error("Error adding checkout document: ", error);
       }
@@ -136,37 +171,35 @@ function App() {
     fetchCheckouts();
   }, []);
 
-  // Handler to remove a checkout record from local state.
-  // (Note: For full deletion from Firestore, you would use deleteDoc.)
-  const removeEquipment = (id) => {
-    const updatedList = equipmentList.filter((item) => item.id !== id);
-    setEquipmentList(updatedList);
-  };
-
   /*** CHECK-IN FORM STATE & HANDLERS ***/
-  // List of check-in transactions (from Firestore)
-  const [checkinList, setCheckinList] = useState([]);
-
-  // Check-in form fields
-  const [checkinDateTime, setCheckinDateTime] = useState("");
+  // For Check-In, we use separate state variables for common fields.
   const [checkinUnit, setCheckinUnit] = useState(preUploadedUnits[0]);
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
-  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
-  const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
+  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
   const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
+  const [checkinJobSite, setCheckinJobSite] = useState(preProgrammedJobSites[0]);
+
+  // Check-in-specific fields:
+  const [checkinDateTime, setCheckinDateTime] = useState("");
+  const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
-  // Automatically compute the duration (in days) when check-in date or unit changes.
+  // Automatically compute the duration (in days) for Check-In when date or unit changes.
   useEffect(() => {
     if (checkinDateTime && checkinUnit) {
-      // Find the matching checkout record for the selected unit.
-      const checkoutRecord = equipmentList.find(
-        (record) => record.unit === checkinUnit
-      );
-      if (checkoutRecord && checkoutRecord.checkoutDate) {
-        const diffMs =
-          new Date(checkinDateTime) - new Date(checkoutRecord.checkoutDate);
+      // Find the latest checkout record for the selected unit.
+      let latestCheckoutTime = null;
+      equipmentList.forEach((record) => {
+        if (record.unit === checkinUnit) {
+          const time = new Date(record.createdAt);
+          if (!latestCheckoutTime || time > latestCheckoutTime) {
+            latestCheckoutTime = time;
+          }
+        }
+      });
+      if (latestCheckoutTime) {
+        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
         const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
         setCheckinDuration(diffDays > 0 ? diffDays : 0);
       } else {
@@ -185,8 +218,9 @@ function App() {
       checkinUnit &&
       checkinHoursMiles &&
       checkinJobSite &&
-      checkinDuration !== "" && // Ensure duration has been computed
+      checkinDuration !== "" &&
       checkinCustomerName &&
+      checkinCustomerEmail &&
       checkinCustomerPhone &&
       checkinInspectionNotes
     ) {
@@ -197,25 +231,29 @@ function App() {
         jobSite: checkinJobSite,
         duration: checkinDuration,
         customerName: checkinCustomerName,
+        customerEmail: checkinCustomerEmail,
         customerPhone: checkinCustomerPhone,
         inspectionNotes: checkinInspectionNotes,
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       };
 
       try {
-        // Save the new record to the "checkins" collection in Firestore.
         await addDoc(collection(db, "checkins"), newCheckin);
+        setCheckinMessage("Check-in successful!");
         setCheckinList([...checkinList, newCheckin]);
 
-        // Reset the check-in form fields.
+        // Reset check-in form fields.
         setCheckinDateTime("");
         setCheckinUnit(preUploadedUnits[0]);
         setCheckinHoursMiles("");
         setCheckinJobSite(preProgrammedJobSites[0]);
         setCheckinDuration("");
         setCheckinCustomerName("");
+        setCheckinCustomerEmail("");
         setCheckinCustomerPhone("");
         setCheckinInspectionNotes("");
+
+        setTimeout(() => setCheckinMessage(""), 3000);
       } catch (error) {
         console.error("Error adding checkin document: ", error);
       }
@@ -242,10 +280,29 @@ function App() {
     fetchCheckins();
   }, []);
 
-  // Handler to remove a check-in record from local state.
-  const removeCheckin = (id) => {
-    const updatedList = checkinList.filter((item) => item.id !== id);
-    setCheckinList(updatedList);
+  /*** FUNCTION TO COMPUTE ACTIVE (CURRENTLY CHECKED-OUT) UNITS ***/
+  const getActiveUnitNumbers = () => {
+    const latestCheckout = {};
+    equipmentList.forEach((checkout) => {
+      const unit = checkout.unit;
+      const time = new Date(checkout.createdAt);
+      if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+        latestCheckout[unit] = time;
+      }
+    });
+    const activeUnits = [];
+    for (const unit in latestCheckout) {
+      const correspondingCheckin = checkinList.find(
+        (checkin) =>
+          checkin.unit === unit &&
+          checkin.createdAt &&
+          new Date(checkin.createdAt) > latestCheckout[unit]
+      );
+      if (!correspondingCheckin) {
+        activeUnits.push(unit);
+      }
+    }
+    return activeUnits;
   };
 
   return (
@@ -254,9 +311,9 @@ function App() {
         <h1>Equipment Tracker</h1>
       </header>
 
-      {/* Container for both forms */}
-      <div className="forms">
-        {/* Checkout Form Section */}
+      {/* Container for Check-Out and Check-In Sections Side by Side */}
+      <div className="forms-row">
+        {/* Check-Out Form Section */}
         <section className="checkout">
           <h2>Equipment Check-Out</h2>
           <form onSubmit={addEquipment}>
@@ -275,8 +332,6 @@ function App() {
                 </select>
               </label>
             </div>
-
-            {/* Hours/Miles input immediately below Unit Number */}
             <div>
               <label>
                 Hours/Miles:
@@ -288,29 +343,6 @@ function App() {
                 />
               </label>
             </div>
-
-            <div>
-              <label>
-                Checkout Date:
-                <input
-                  type="date"
-                  value={checkoutDate}
-                  onChange={(e) => setCheckoutDate(e.target.value)}
-                />
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Return Date:
-                <input
-                  type="date"
-                  value={returnDate}
-                  onChange={(e) => setReturnDate(e.target.value)}
-                />
-              </label>
-            </div>
-
             <div>
               <label>
                 Customer Name:
@@ -322,7 +354,6 @@ function App() {
                 />
               </label>
             </div>
-
             <div>
               <label>
                 Customer Email:
@@ -334,7 +365,17 @@ function App() {
                 />
               </label>
             </div>
-
+            <div>
+              <label>
+                Customer Phone #:
+                <input
+                  type="text"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  placeholder="Enter customer phone number"
+                />
+              </label>
+            </div>
             <div>
               <label>
                 Job Site:
@@ -350,42 +391,35 @@ function App() {
                 </select>
               </label>
             </div>
-
+            <div>
+              <label>
+                Checkout Date:
+                <input
+                  type="date"
+                  value={checkoutDate}
+                  onChange={(e) => setCheckoutDate(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Return Date:
+                <input
+                  type="date"
+                  value={returnDate}
+                  onChange={(e) => setReturnDate(e.target.value)}
+                />
+              </label>
+            </div>
             <button type="submit">Checkout Equipment</button>
           </form>
-
-          <h3>Checked Out Equipment</h3>
-          <ul>
-            {equipmentList.map((item, index) => (
-              <li key={index}>
-                <strong>Unit:</strong> {item.unit} |{" "}
-                <strong>Hours/Miles:</strong> {item.hoursMiles} |{" "}
-                <strong>Checkout Date:</strong> {item.checkoutDate} |{" "}
-                <strong>Return Date:</strong> {item.returnDate} |{" "}
-                <strong>Customer:</strong> {item.customerName} |{" "}
-                <strong>Customer Email:</strong> {item.customerEmail} |{" "}
-                <strong>Job Site:</strong> {item.jobSite}
-                <button onClick={() => removeEquipment(item.id)}>Remove</button>
-              </li>
-            ))}
-          </ul>
+          {checkoutMessage && <p className="message">{checkoutMessage}</p>}
         </section>
 
         {/* Check-In Form Section */}
         <section className="checkin">
           <h2>Equipment Check-In</h2>
           <form onSubmit={addCheckin}>
-            <div>
-              <label>
-                Date and Time Returned:
-                <input
-                  type="datetime-local"
-                  value={checkinDateTime}
-                  onChange={(e) => setCheckinDateTime(e.target.value)}
-                />
-              </label>
-            </div>
-
             <div>
               <label>
                 Unit Number:
@@ -401,7 +435,6 @@ function App() {
                 </select>
               </label>
             </div>
-
             <div>
               <label>
                 Hours/Miles:
@@ -413,7 +446,39 @@ function App() {
                 />
               </label>
             </div>
-
+            <div>
+              <label>
+                Customer Name:
+                <input
+                  type="text"
+                  value={checkinCustomerName}
+                  onChange={(e) => setCheckinCustomerName(e.target.value)}
+                  placeholder="Enter customer name"
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Customer Email:
+                <input
+                  type="email"
+                  value={checkinCustomerEmail}
+                  onChange={(e) => setCheckinCustomerEmail(e.target.value)}
+                  placeholder="Enter customer email"
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Customer Phone #:
+                <input
+                  type="text"
+                  value={checkinCustomerPhone}
+                  onChange={(e) => setCheckinCustomerPhone(e.target.value)}
+                  placeholder="Enter customer phone number"
+                />
+              </label>
+            </div>
             <div>
               <label>
                 Job Site:
@@ -429,43 +494,22 @@ function App() {
                 </select>
               </label>
             </div>
-
-            {/* Duration is automatically computed and is read-only */}
+            <div>
+              <label>
+                Date and Time Returned:
+                <input
+                  type="datetime-local"
+                  value={checkinDateTime}
+                  onChange={(e) => setCheckinDateTime(e.target.value)}
+                />
+              </label>
+            </div>
             <div>
               <label>
                 Duration (Days checked out):
-                <input
-                  type="number"
-                  value={checkinDuration}
-                  readOnly
-                />
+                <input type="number" value={checkinDuration} readOnly />
               </label>
             </div>
-
-            <div>
-              <label>
-                Customer Name:
-                <input
-                  type="text"
-                  value={checkinCustomerName}
-                  onChange={(e) => setCheckinCustomerName(e.target.value)}
-                  placeholder="Enter customer name"
-                />
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Customer Phone #:
-                <input
-                  type="text"
-                  value={checkinCustomerPhone}
-                  onChange={(e) => setCheckinCustomerPhone(e.target.value)}
-                  placeholder="Enter customer phone number"
-                />
-              </label>
-            </div>
-
             <div>
               <label>
                 Inspection Notes:
@@ -476,30 +520,53 @@ function App() {
                 ></textarea>
               </label>
             </div>
-
             <button type="submit">Check-In Equipment</button>
           </form>
-
-          <h3>Checked In Equipment</h3>
-          <ul>
-            {checkinList.map((item, index) => (
-              <li key={index}>
-                <strong>Date/Time Returned:</strong> {item.dateTimeReturned} |{" "}
-                <strong>Unit:</strong> {item.unit} |{" "}
-                <strong>Hours/Miles:</strong> {item.hoursMiles} |{" "}
-                <strong>Job Site:</strong> {item.jobSite} |{" "}
-                <strong>Duration:</strong> {item.duration} |{" "}
-                <strong>Customer:</strong> {item.customerName} |{" "}
-                <strong>Phone:</strong> {item.customerPhone} |{" "}
-                <strong>Inspection Notes:</strong> {item.inspectionNotes}
-                <button onClick={() => removeCheckin(item.id)}>Remove</button>
-              </li>
-            ))}
-          </ul>
+          {checkinMessage && <p className="message">{checkinMessage}</p>}
         </section>
       </div>
+
+      {/* Active Checkouts Section (Below the forms row) */}
+      <section className="active-checkouts">
+        <h2>Active Checkouts</h2>
+        <label>
+          Currently Checked Out Units:
+          <select>
+            {getActiveUnitNumbers().map((unit, index) => (
+              <option key={index} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+        </label>
+      </section>
     </div>
   );
 }
 
-export default App; 
+// Function to compute active (currently checked-out) units.
+const getActiveUnitNumbers = (equipmentList = [], checkinList = []) => {
+  const latestCheckout = {};
+  equipmentList.forEach((checkout) => {
+    const unit = checkout.unit;
+    const time = new Date(checkout.createdAt);
+    if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+      latestCheckout[unit] = time;
+    }
+  });
+  const activeUnits = [];
+  for (const unit in latestCheckout) {
+    const correspondingCheckin = checkinList.find(
+      (checkin) =>
+        checkin.unit === unit &&
+        checkin.createdAt &&
+        new Date(checkin.createdAt) > latestCheckout[unit]
+    );
+    if (!correspondingCheckin) {
+      activeUnits.push(unit);
+    }
+  }
+  return activeUnits;
+};
+
+export default App;
