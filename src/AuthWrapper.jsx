@@ -1,67 +1,25 @@
-// AuthWrapper.jsx
-import React, { useState, useEffect } from "react";
-import { auth } from "./firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
+import React, { useState } from "react";
 import App from "./App";
 import "./AuthWrapper.css";
 
 function AuthWrapper() {
   const [user, setUser] = useState(null);
-  const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  // State variable to store equipment data
-  const [equipmentList, setEquipmentList] = useState([]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    // Fetch equipment data when the user is authenticated
-    if (user) {
-      fetch("https://your-api-endpoint.com/equipment") // Replace with your actual API endpoint
-        .then((res) => res.json())
-        .then((data) => setEquipmentList(data))
-        .catch((error) => console.error("Error fetching equipment data:", error));
-    }
-  }, [user]); // Run this effect only when the user state changes
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-    if (isRegistering) {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        setUser(userCredential.user);
-      } catch (err) {
-        setError(err.message);
-      }
+    // Basic validation
+    if (email === "admin@example.com" && password === "password") {
+      setUser({ email });
+      setError("");
     } else {
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        setUser(userCredential.user);
-      } catch (err) {
-        setError(err.message);
-      }
+      setError("Invalid credentials");
     }
-    setLoading(false);
   };
 
-  const handleSignOut = async () => {
-    await signOut(auth);
+  const handleSignOut = () => {
     setUser(null);
   };
 
@@ -69,7 +27,7 @@ function AuthWrapper() {
     return (
       <div className="auth-wrapper">
         <div className="auth-container">
-          <h2>{isRegistering ? "Register" : "Sign In"}</h2>
+          <h2>Sign In</h2>
           <form onSubmit={handleSubmit}>
             <div>
               <input
@@ -90,19 +48,8 @@ function AuthWrapper() {
               />
             </div>
             {error && <p className="error">{error}</p>}
-            <button type="submit" disabled={loading}>
-              {loading ? "Loading..." : isRegistering ? "Register" : "Sign In"}
-            </button>
+            <button type="submit">Sign In</button>
           </form>
-          <p>
-            {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
-            <button onClick={() => {
-              setIsRegistering(!isRegistering);
-              setError("");
-            }}>
-              {isRegistering ? "Sign In" : "Register"}
-            </button>
-          </p>
         </div>
       </div>
     );
@@ -113,8 +60,7 @@ function AuthWrapper() {
       <div className="sign-out-container">
         <button onClick={handleSignOut}>Sign Out</button>
       </div>
-      {/* Pass equipmentList as a prop to App */}
-      <App equipmentList={equipmentList} /> 
+      <App />
     </div>
   );
 }

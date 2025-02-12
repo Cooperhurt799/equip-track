@@ -2,8 +2,17 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select"; // Ensure react-select is installed
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
+// Local storage functions
+const saveData = (collection, data) => {
+  const stored = JSON.parse(localStorage.getItem(collection) || '[]');
+  stored.push({ ...data, id: Date.now() });
+  localStorage.setItem(collection, JSON.stringify(stored));
+  return stored;
+};
+
+const getData = (collection) => {
+  return JSON.parse(localStorage.getItem(collection) || '[]');
+};
 import emailjs from "emailjs-com";
 
 // ---------------- EmailJS Configuration ----------------
