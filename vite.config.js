@@ -33,7 +33,8 @@ export default defineConfig({
   // This allows Vite to accept connections from your Replit host.
   server: {
     allowedHosts: [
-      "897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev"
+      "897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev",
+      "equipment-tracker-daughertyranches.replit.app"
     ]
   }
 });
