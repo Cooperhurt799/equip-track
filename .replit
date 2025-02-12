@@ -12,10 +12,10 @@ language = "nodejs"
 [deployment]
 deploymentTarget = "gce"
 build = ["sh", "-c", "npm run build"]
-run = ["sh", "-c", "vite preview --host 0.0.0.0 --port 5173"]
+run = ["sh", "-c", "vite preview --host 0.0.0.0 --port 4173"]
 
 [[ports]]
-localPort = 5173
+localPort = 4173
 externalPort = 80
 
 [[ports]]
