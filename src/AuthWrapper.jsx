@@ -9,10 +9,23 @@ function AuthWrapper() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Hardcoded credentials - you can modify these
+  // Add more usernames/passwords as needed
   const validCredentials = {
-    'admin@daughertyranches.com': 'admin123',
-    'user@daughertyranches.com': 'user123'
+    'operator1': 'ranch2024',
+    'operator2': 'ranch2024',
+    'manager': 'admin2024'
+  };
+
+  // Convert email input to username input
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (validCredentials[email] === password) {
+      setUser({ username: email });
+      setError("");
+    } else {
+      setError("Invalid username or password");
+    }
   };
 
   const handleSubmit = (e) => {
@@ -40,8 +53,8 @@ function AuthWrapper() {
           <form onSubmit={handleSubmit}>
             <div>
               <input
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
