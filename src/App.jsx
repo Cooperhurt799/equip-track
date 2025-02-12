@@ -6,6 +6,7 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import emailjs from "emailjs-com";
 import './reminderService'; // Import the reminder service if used
+import { saveToCSV } from './utils';
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
@@ -253,6 +254,7 @@ function App() {
             EMAILJS_USER_ID
           )
           .catch((err) => console.error("Failed to send email:", err));
+        saveToCSV(newCheckout, 'checkouts'); // Save to CSV after successful checkout
         // Reset checkout form fields.
         setSelectedUnit("");
         setCheckoutHoursMiles("");
@@ -365,6 +367,7 @@ function App() {
             EMAILJS_USER_ID
           )
           .catch((err) => console.error("Failed to send email:", err));
+        saveToCSV(newCheckin, 'checkins'); // Save to CSV after successful check-in
         // Reset check-in form fields.
         setCheckinDateTime("");
         setCheckinUnit("");
@@ -757,5 +760,3 @@ function App() {
 }
 
 export default App;
-
-
