@@ -3,7 +3,21 @@ import App from "./App";
 import "./AuthWrapper.css";
 
 function AuthWrapper() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('authUser');
+    const savedTimestamp = localStorage.getItem('authTimestamp');
+    
+    if (savedUser && savedTimestamp) {
+      const timeElapsed = (Date.now() - parseInt(savedTimestamp)) / 1000 / 60; // Convert to minutes
+      if (timeElapsed < 20) {
+        return JSON.parse(savedUser);
+      } else {
+        localStorage.removeItem('authUser');
+        localStorage.removeItem('authTimestamp');
+      }
+    }
+    return null;
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +30,10 @@ function AuthWrapper() {
     e.preventDefault();
 
     if (validCredentials[email] === password) {
-      setUser({ username: email });
+      const userObj = { username: email };
+      setUser(userObj);
+      localStorage.setItem('authUser', JSON.stringify(userObj));
+      localStorage.setItem('authTimestamp', Date.now().toString());
       setError("");
     } else {
       setError("Invalid username or password");
@@ -27,6 +44,8 @@ function AuthWrapper() {
     setUser(null);
     setEmail("");
     setPassword("");
+    localStorage.removeItem('authUser');
+    localStorage.removeItem('authTimestamp');
   };
 
   if (!user) {
