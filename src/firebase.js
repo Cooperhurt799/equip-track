@@ -4,12 +4,12 @@ import { getFirestore, enableMultiTabIndexedDbPersistence } from "firebase/fires
 import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? '',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ?? '',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID ?? '',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ?? '',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID ?? '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID ?? ''
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -19,11 +19,14 @@ const db = getFirestore(app);
 try {
   enableMultiTabIndexedDbPersistence(db);
 } catch (err) {
-  console.warn('Firebase persistence failed to enable:', err.code);
+  if (err.code !== 'failed-precondition') {
+    console.error('Firebase persistence error:', err);
+  }
 }
 
-setPersistence(auth, browserLocalPersistence).catch((err) => {
-  console.warn('Auth persistence failed to set:', err.message);
-});
+setPersistence(auth, browserLocalPersistence)
+  .catch((err) => {
+    console.error('Auth persistence error:', err);
+  });
 
 export { db, auth };
