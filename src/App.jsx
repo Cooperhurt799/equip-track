@@ -458,6 +458,22 @@ function App() {
           {currentSection === "checkout" ? (
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
+              <div className="section-header">
+                <div className="rental-equipment">
+                  <label>
+                    Rental Equipment (if not in yard):
+                    <Select
+                      options={rentalEquipmentList.map((item) => ({
+                        value: item,
+                        label: item,
+                      }))}
+                      onChange={handleRentalEquipmentSelect}
+                      placeholder="Select Rental Equipment"
+                      styles={customSelectStyles}
+                    />
+                  </label>
+                </div>
+              </div>
               <form onSubmit={addEquipment}>
                 <div>
                   <label>
@@ -586,6 +602,19 @@ function App() {
           ) : (
             <section className="checkin">
               <h2>Equipment Check-In</h2>
+              <div className="section-header">
+                <div className="active-checkouts inline">
+                  <h3>Active Checkouts</h3>
+                  <Select
+                    options={getActiveUnitNumbers().map((unit) => ({
+                      value: unit,
+                      label: unit,
+                    }))}
+                    placeholder="Select Active Checkout"
+                    styles={customSelectStyles}
+                  />
+                </div>
+              </div>
               <form onSubmit={addCheckin}>
                 <div>
                   <label>
@@ -722,34 +751,7 @@ function App() {
               {checkinMessage && <p className="message">{checkinMessage}</p>}
             </section>
           )}
-          {/* Render the bottom section only when a form is visible */}
-          <div className="bottom-section">
-            <section className="active-checkouts">
-              <h2>Active Checkouts</h2>
-              <Select
-                options={getActiveUnitNumbers().map((unit) => ({
-                  value: unit,
-                  label: unit,
-                }))}
-                placeholder="Select Active Checkout"
-                styles={customSelectStyles}
-              />
-            </section>
-            <div className="rental-equipment">
-              <label>
-                Rental Equipment (if not in yard):
-                <Select
-                  options={rentalEquipmentList.map((item) => ({
-                    value: item,
-                    label: item,
-                  }))}
-                  onChange={handleRentalEquipmentSelect}
-                  placeholder="Select Rental Equipment"
-                  styles={customSelectStyles}
-                />
-              </label>
-            </div>
-          </div>
+          
         </div>
       )}
     </div>
