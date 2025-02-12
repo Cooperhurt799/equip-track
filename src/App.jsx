@@ -152,7 +152,6 @@ const preProgrammedJobSites = [
 ];
 
 function App() {
-  // ---------------- Set Document Title ----------------
   useEffect(() => {
     document.title = "Daugherty Ranches Equipment Tracker";
   }, []);
@@ -164,7 +163,7 @@ function App() {
   // ---------------- Checkout Form State ----------------
   const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
 
-  // Common fields for checkout (initialized to empty so the drop-down shows "Select")
+  // Common fields for checkout (initialized to empty so that "Select" shows)
   const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -255,7 +254,7 @@ function App() {
 
   // Check-in-specific fields:
   const [checkinDateTime, setCheckinDateTime] = useState("");
-  const [checkinDuration, setCheckinDuration] = useState("");
+  const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
   useEffect(() => {
@@ -377,12 +376,12 @@ function App() {
 
   return (
     <div className="App">
-      {/* Decorative element: a large Papyrus 2 at the top right of the screen */}
+      {/* Fixed decorative element: a large Papyrus "2" at the top right */}
       <div className="top-right-decorative">2</div>
 
       <header className="app-header">
-        <h1>Daugherty Ranches Equipment Tracker</h1>
-        <p className="tagline">Your trusted partner for equipment management</p>
+        <h1>Daugherty Ranches Equipment Checkout</h1>
+        
       </header>
 
       {/* Container for Check-Out and Check-In Sections Side by Side */}
@@ -393,7 +392,10 @@ function App() {
             <div>
               <label>
                 Unit Number:
-                <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
+                <select
+                  value={selectedUnit}
+                  onChange={(e) => setSelectedUnit(e.target.value)}
+                >
                   <option value="" disabled>
                     Select
                   </option>

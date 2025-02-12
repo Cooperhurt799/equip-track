@@ -6,8 +6,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto Slab', serif;
-  background-color: #f2efe4;  /* Light, warm neutral background */
-  color: #4b3f2a;           /* Dark earthy text color */
+  background-color: #f2efe4;
+  color: #4b3f2a;
 }
 
 /* Main Container */
@@ -21,11 +21,11 @@ body {
 /* Fixed Decorative Element at Top Right */
 .top-right-decorative {
   position: fixed;
-  top: 10px !important;
-  right: 30px !important;
+  top: 10px;
+  right: 60px;
   font-family: "Papyrus", cursive, serif;
-  font-size: 10rem;   /* Adjust size as needed */
-  color: rgba(75, 63, 42, 0.15);  /* Subtle earthy tone (semi-transparent) */
+  font-size: 10rem;  /* Adjust as needed */
+  color: rgba(75, 63, 42, 0.15); /* Subtle, semi-transparent earthy tone */
   z-index: 1000;
 }
 
