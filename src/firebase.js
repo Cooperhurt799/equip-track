@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAoN4CK7zQrKbV0vQbEwlAEQCxnVcFKhzE",
-  authDomain: "equipment-tracker-566c5.firebaseapp.com", 
-  projectId: "equipment-tracker-566c5",
-  storageBucket: "equipment-tracker-566c5.appspot.com",
-  messagingSenderId: "1093661141864",
-  appId: "1:1093661141864:web:5a36f91e5b5d08e1c3483f"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
