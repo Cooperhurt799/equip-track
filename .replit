@@ -24,3 +24,5 @@ externalPort = 80
 
 [workflows]
 runButton = "Run Dev Server"
+run = "npm run preview -- --port $PORT"
+port = 5000
