@@ -86,15 +86,28 @@ const preProgrammedJobSites = [
   "Highline Road",
   "Hogue Canyon",
   "Honeycutt HQ",
-
-const [searchTerm, setSearchTerm] = useState("");
-const [filterStatus, setFilterStatus] = useState("all");
-
-const filteredEquipment = useMemo(() => {
-  return availableUnits.filter(unit => {
+  "Honeycutt Rim North",
+  "Houge Pump Jack",
+  "James Cook Hanger"
+];
 
 const validateForm = (formData) => {
   const errors = {};
+  if (!formData.hoursMiles.match(/^\d+$/)) {
+    errors.hoursMiles = "Please enter a valid number";
+  }
+  if (!formData.customerPhone.match(/^\d{10}$/)) {
+    errors.customerPhone = "Please enter a valid 10-digit phone number";
+  }
+  return errors;
+};
+
+function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  
+  const filteredEquipment = useMemo(() => {
+    return availableUnits.filter(unit => {
   
   if (!formData.hoursMiles.match(/^\d+$/)) {
     errors.hoursMiles = "Please enter a valid number";
