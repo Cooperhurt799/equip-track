@@ -5,7 +5,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  min-height: 100%;  /* Changed from height: 100% to min-height: 100% */
+  min-height: 100%;
   font-family: 'Roboto Slab', serif;
   background-color: #f2efe4;  /* Light, warm neutral background */
   color: #4b3f2a;           /* Dark earthy text color */
@@ -26,8 +26,8 @@ html, body {
   top: 10px;
   right: 10px;
   font-family: "Papyrus", cursive, serif;
-  font-size: 6rem;  /* Adjust as needed */
-  color: rgba(75, 63, 42, 0.15); /* Subtle, semi-transparent earthy tone */
+  font-size: 6rem;
+  color: rgba(75, 63, 42, 0.15);
   z-index: 1000;
 }
 
@@ -64,7 +64,51 @@ html, body {
   color: #f2efe4;
 }
 
-/* Container for the side-by-side forms */
+/* Landing and Section Container */
+.landing, .section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+}
+
+/* Landing Buttons */
+.landing button {
+  width: 80%;
+  max-width: 300px;
+  padding: 15px;
+  margin: 10px;
+  font-size: 1.2rem;
+  background-color: #8b6c42;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.landing button:hover {
+  background-color: #7a5d33;
+}
+
+/* Back Button */
+.back-button {
+  align-self: flex-start;
+  margin: 10px 0;
+  padding: 8px 12px;
+  background-color: #8b6c42;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.back-button:hover {
+  background-color: #7a5d33;
+}
+
+/* Container for the side-by-side forms (not used in landing mode) */
 .forms-row {
   display: flex;
   gap: 20px;
@@ -82,6 +126,7 @@ section {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border: 3px solid #8b6c42;
   min-width: 300px;
+  margin-bottom: 20px;
 }
 
 /* Active Checkouts Section */
@@ -91,6 +136,18 @@ section {
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border: 3px solid #8b6c42;
+  margin-bottom: 20px;
+}
+
+/* Rental Equipment Section (placed under Active Checkouts) */
+.rental-equipment {
+  margin-bottom: 40px;
+}
+
+.rental-equipment label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #4b3f2a;
 }
 
 /* Form Element Styling */
