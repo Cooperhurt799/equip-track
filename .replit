@@ -16,60 +16,11 @@ run = ["sh", "-c", "vite preview --host 0.0.0.0 --port 4173"]
 
 [[ports]]
 localPort = 3000
-externalPort = 4200
-
-[[ports]]
-localPort = 3001
-externalPort = 5000
-
-[[ports]]
-localPort = 3002
-externalPort = 5173
-
-[[ports]]
-localPort = 3003
-externalPort = 6000
-
-[[ports]]
-localPort = 3004
-externalPort = 6800
-
-[[ports]]
-localPort = 3005
-externalPort = 8000
-
-[[ports]]
-localPort = 3006
-externalPort = 8008
-
-[[ports]]
-localPort = 3007
-externalPort = 8080
+externalPort = 3000
 
 [[ports]]
 localPort = 4173
 externalPort = 80
 
-[[ports]]
-localPort = 5174
-externalPort = 3001
-
-[[ports]]
-localPort = 5175
-externalPort = 3002
-
-[[ports]]
-localPort = 5176
-externalPort = 3003
-
-[[ports]]
-localPort = 9005
-externalPort = 3000
-
 [workflows]
 runButton = "Run Dev Server"
-
-[[workflows.workflow]]
-name = "Run Dev Server"
-author = 39571520
-
