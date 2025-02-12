@@ -434,9 +434,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* Fixed decorative element at top right */}
-      <div className="top-right-decorative">2</div>
-
       <header className="app-header">
         <h1>Daugherty Ranches Equipment Tracker</h1>
         <p className="tagline">Sanford and Son</p>
