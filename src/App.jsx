@@ -458,34 +458,35 @@ function App() {
           {currentSection === "checkout" ? (
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
-              <div className="section-header">
-                <div className="rental-equipment">
-                  <label>
-                    Rental Equipment (if not in yard):
-                    <Select
-                      options={rentalEquipmentList.map((item) => ({
-                        value: item,
-                        label: item,
-                      }))}
-                      onChange={handleRentalEquipmentSelect}
-                      placeholder="Select Rental Equipment"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-              </div>
               <form onSubmit={addEquipment}>
                 <div>
                   <label>
-                    Unit Number:
+                    Select Equipment:
                     <Select
-                      options={availableUnits.map((unit) => ({
-                        value: unit,
-                        label: unit,
-                      }))}
+                      options={[
+                        {
+                          label: "Yard Equipment",
+                          options: availableUnits.map((unit) => ({
+                            value: unit,
+                            label: unit,
+                          }))
+                        },
+                        {
+                          label: "Rental Equipment",
+                          options: rentalEquipmentList.map((item) => ({
+                            value: item,
+                            label: item,
+                          }))
+                        }
+                      ]}
                       value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
-                      onChange={(option) => setSelectedUnit(option.value)}
-                      placeholder="Select Unit Number"
+                      onChange={(option) => {
+                        setSelectedUnit(option.value);
+                        if (rentalEquipmentList.includes(option.value)) {
+                          handleRentalEquipmentSelect(option);
+                        }
+                      }}
+                      placeholder="Select Equipment"
                       styles={customSelectStyles}
                     />
                   </label>
