@@ -4,24 +4,16 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'equipment-tracker-566c5',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+  apiKey: "AIzaSyAoN4CK7zQrKbV0vQbEwlAEQCxnVcFKhzE",
+  authDomain: "equipment-tracker-566c5.firebaseapp.com", 
+  projectId: "equipment-tracker-566c5",
+  storageBucket: "equipment-tracker-566c5.appspot.com",
+  messagingSenderId: "1093661141864",
+  appId: "1:1093661141864:web:5a36f91e5b5d08e1c3483f"
 };
 
-let app;
-let auth;
-let db;
-
-try {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-} catch (error) {
-  console.error("Firebase initialization error:", error);
-}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 export { db, auth };
