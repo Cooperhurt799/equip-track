@@ -13,10 +13,10 @@
     "vite": "^6.1.0"
   },
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "NODE_OPTIONS='--es-module-specifier-resolution=node' vite",
+    "dev": "NODE_OPTIONS='--es-module-specifier-resolution=node' vite",
+    "build": "NODE_OPTIONS='--es-module-specifier-resolution=node' vite build",
+    "preview": "NODE_OPTIONS='--es-module-specifier-resolution=node' vite preview"
   },
   "eslintConfig": {
     "extends": [
