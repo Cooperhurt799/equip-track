@@ -245,10 +245,10 @@ function App() {
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
   useEffect(() => {
-    if (checkinDateTime && checkinUnit) {
+    if (checkinDateTime && checkinUnit && checkinList?.length) {
       let latestCheckoutTime = null;
       checkinList.forEach((record) => {
-        if (record.unit === checkinUnit) {
+        if (record?.unit === checkinUnit) {
           const time = new Date(record.createdAt);
           if (!latestCheckoutTime || time > latestCheckoutTime) {
             latestCheckoutTime = time;
@@ -347,11 +347,11 @@ function App() {
 
   // ---------------- Active Checkouts Section ----------------
   const getActiveUnitNumbers = () => {
-    if (!availableUnits.length || !checkinList.length) return [];
+    if (!availableUnits?.length || !checkinList?.length) return [];
     const latestCheckout = {};
     availableUnits.forEach((unit) => {
       equipmentList.forEach((checkout) => {
-        if (checkout.unit === unit) {
+        if (checkout?.unit === unit) {
           const time = new Date(checkout.createdAt);
           if (!latestCheckout[unit] || time > latestCheckout[unit]) {
             latestCheckout[unit] = time;
@@ -363,8 +363,8 @@ function App() {
     for (const unit in latestCheckout) {
       const correspondingCheckin = checkinList.find(
         (checkin) =>
-          checkin.unit === unit &&
-          checkin.createdAt &&
+          checkin?.unit === unit &&
+          checkin?.createdAt &&
           new Date(checkin.createdAt) > latestCheckout[unit]
       );
       if (!correspondingCheckin) {
