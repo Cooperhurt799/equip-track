@@ -466,6 +466,13 @@ function App() {
                     <Select
                       options={[
                         {
+                          label: "Active Checkouts",
+                          options: getActiveUnitNumbers().map((unit) => ({
+                            value: unit,
+                            label: unit,
+                          }))
+                        },
+                        {
                           label: "Ranch Equipment",
                           options: availableUnits.map((unit) => ({
                             value: unit,
