@@ -459,11 +459,10 @@ function App() {
           {currentSection === "checkout" ? (
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
-              <form onSubmit={addEquipment}>
-                <div>
-                  <label>
-                    Select Equipment:
-                    <Select
+              <div className="section-header">
+                <div className="active-checkouts inline">
+                  <h3>Select Equipment</h3>
+                  <Select
                       options={[
                         {
                           label: "Active Checkouts",
@@ -497,8 +496,9 @@ function App() {
                       placeholder="Select Equipment"
                       styles={customSelectStyles}
                     />
-                  </label>
-                </div>
+                  </div>
+              </div>
+              <form onSubmit={addEquipment}>
                 <div>
                   <label>
                     Hours/Miles:
