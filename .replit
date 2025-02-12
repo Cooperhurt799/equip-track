@@ -12,7 +12,7 @@ language = "nodejs"
 [deployment]
 deploymentTarget = "gce"
 build = ["sh", "-c", "npm run build"]
-run = ["sh", "-c", "vite preview --host 0.0.0.0 --port 3000 : 4200"]
+run = ["sh", "-c", "vite preview --host 0.0.0.0 --port 4173"]
 
 [[ports]]
 localPort = 3000
@@ -73,6 +73,3 @@ runButton = "Run Dev Server"
 name = "Run Dev Server"
 author = 39571520
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
