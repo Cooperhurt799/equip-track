@@ -1,5 +1,5 @@
 // App.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import Select from "react-select"; // Ensure react-select is installed
 import { collection, addDoc, getDocs } from "firebase/firestore";
@@ -102,64 +102,6 @@ const validateForm = (formData) => {
   return errors;
 };
 
-function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  
-  const filteredEquipment = useMemo(() => {
-    return availableUnits.filter(unit => {
-  
-  if (!formData.hoursMiles.match(/^\d+$/)) {
-    errors.hoursMiles = "Please enter a valid number";
-  }
-  
-  if (!formData.customerPhone.match(/^\d{10}$/)) {
-    errors.customerPhone = "Please enter a valid 10-digit phone number";
-  }
-  
-  return errors;
-};
-
-    const matchesSearch = unit.toLowerCase().includes(searchTerm.toLowerCase());
-    const isActive = getActiveUnitNumbers().includes(unit);
-    return filterStatus === "all" ? matchesSearch :
-           filterStatus === "active" ? (matchesSearch && isActive) :
-           (matchesSearch && !isActive);
-  });
-}, [availableUnits, searchTerm, filterStatus]);
-
-  "Honeycutt Rim North",
-  "Houge Pump Jack",
-  "James Cook Hanger",
-  "Lower Puett",
-  "Mule Pasture",
-  "North Baylor",
-  "North VMB HQ",
-  "Old West Town",
-  "Pipeline (East)",
-  "Pipeline (West)",
-  "Prison Camp",
-  "Puckett",
-  "Puett HQ",
-  "Red Pens",
-  "Roberts HQ",
-  "Roberts Quarry",
-  "Rock House",
-  "Roller Coaster Road",
-  "Sanford N Sons",
-  "Shortcut",
-  "Sierra Diablo",
-  "South Baylor",
-  "Space World",
-  "Stockyard",
-  "Victorio Canyon",
-  "VMB",
-  "Wind Tower Road (Bottom)",
-  "Windtower Road (Top)",
-  "Wilson HQ",
-  "Welding Shop",
-];
-
 const rentalEquipmentList = ["Excavator X100", "Bulldozer B200", "Crane C300"];
 
 // ---------------- New Data Arrays for Dropdowns ----------------
@@ -250,7 +192,7 @@ function App() {
 
   const addEquipment = async (e) => {
     e.preventDefault();
-    
+
     if (!window.confirm(`Are you sure you want to check out ${selectedUnit}?`)) {
       return;
     }
@@ -478,6 +420,17 @@ function App() {
     return activeUnits;
   };
 
+  const filteredEquipment = useMemo(() => {
+    return availableUnits.filter(unit => {
+      const matchesSearch = unit.toLowerCase().includes(searchTerm.toLowerCase());
+      const isActive = getActiveUnitNumbers().includes(unit);
+      return filterStatus === "all" ? matchesSearch :
+             filterStatus === "active" ? (matchesSearch && isActive) :
+             (matchesSearch && !isActive);
+    });
+  }, [availableUnits, searchTerm, filterStatus]);
+
+
   return (
     <div className="App">
       <header className="app-header">
@@ -527,7 +480,7 @@ function App() {
                       options={[
                         {
                           label: "Ranch Equipment",
-                          options: availableUnits.map((unit) => ({
+                          options: filteredEquipment.map((unit) => ({
                             value: unit,
                             label: unit,
                           }))
@@ -820,7 +773,7 @@ function App() {
               {checkinMessage && <p className="message">{checkinMessage}</p>}
             </section>
           )}
-          
+
         </div>
       )}
     </div>
