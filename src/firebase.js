@@ -12,7 +12,6 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -23,7 +22,6 @@ try {
   console.warn('Firebase persistence failed to enable:', err.code);
 }
 
-// Set auth persistence to local
 setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.warn('Auth persistence failed to set:', err.message);
 });
