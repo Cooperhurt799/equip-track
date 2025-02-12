@@ -1,12 +1,11 @@
-
 import React from "react";
-import { createRoot } from "react-dom/client";
-import AuthWrapper from "./AuthWrapper";
+import ReactDOM from "react-dom";
+import App from "./App";  // Now we import App directly
 import "./App.css";
 
-const root = createRoot(document.getElementById("root"));
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-    <AuthWrapper />
-  </React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
 );

@@ -2,17 +2,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select"; // Ensure react-select is installed
-// Local storage functions
-const saveData = (collection, data) => {
-  const stored = JSON.parse(localStorage.getItem(collection) || '[]');
-  stored.push({ ...data, id: Date.now() });
-  localStorage.setItem(collection, JSON.stringify(stored));
-  return stored;
-};
-
-const getData = (collection) => {
-  return JSON.parse(localStorage.getItem(collection) || '[]');
-};
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
 import emailjs from "emailjs-com";
 
 // ---------------- EmailJS Configuration ----------------
@@ -155,7 +146,6 @@ function App() {
   const [returnDate, setReturnDate] = useState("");
 
   // ---------------- Rental Equipment Drop-Down Handler ----------------
-  // react-select returns an object { value, label }.
   const handleRentalEquipmentSelect = (selectedOption) => {
     const selectedRental = selectedOption.value;
     if (selectedRental && !availableUnits.includes(selectedRental)) {
@@ -191,20 +181,21 @@ function App() {
       try {
         await addDoc(collection(db, "checkouts"), newCheckout);
         setCheckoutMessage("Checkout successful!");
-        // Send checkout email notification
-        emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID_CHECKOUT,
-          {
-            to_email: customerEmail,
-            customer_name: customerName,
-            unit: selectedUnit,
-            checkout_date: checkoutDate,
-            return_date: returnDate,
-            job_site: jobSite
-          },
-          EMAILJS_USER_ID
-        ).catch(err => console.error("Failed to send email:", err));
+        emailjs
+          .send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID_CHECKOUT,
+            {
+              to_email: customerEmail,
+              customer_name: customerName,
+              unit: selectedUnit,
+              checkout_date: checkoutDate,
+              return_date: returnDate,
+              job_site: jobSite,
+            },
+            EMAILJS_USER_ID
+          )
+          .catch((err) => console.error("Failed to send email:", err));
         // Reset checkout form fields.
         setSelectedUnit("");
         setCheckoutHoursMiles("");
@@ -232,7 +223,6 @@ function App() {
         querySnapshot.forEach((doc) => {
           checkouts.push({ id: doc.id, ...doc.data() });
         });
-        // Update equipmentList with fetched checkouts.
         setEquipmentList(checkouts);
       } catch (error) {
         console.error("Error fetching checkouts: ", error);
@@ -254,10 +244,10 @@ function App() {
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
 
   useEffect(() => {
-    if (checkinDateTime && checkinUnit && checkinList?.length) {
+    if (checkinDateTime && checkinUnit) {
       let latestCheckoutTime = null;
       checkinList.forEach((record) => {
-        if (record?.unit === checkinUnit) {
+        if (record.unit === checkinUnit) {
           const time = new Date(record.createdAt);
           if (!latestCheckoutTime || time > latestCheckoutTime) {
             latestCheckoutTime = time;
@@ -305,20 +295,21 @@ function App() {
       try {
         await addDoc(collection(db, "checkins"), newCheckin);
         setCheckinMessage("Check-in successful!");
-        // Send checkin email notification
-        emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID_CHECKIN,
-          {
-            to_email: checkinCustomerEmail,
-            customer_name: checkinCustomerName,
-            unit: checkinUnit,
-            checkin_date: checkinDateTime,
-            job_site: checkinJobSite,
-            inspection_notes: checkinInspectionNotes
-          },
-          EMAILJS_USER_ID
-        ).catch(err => console.error("Failed to send email:", err));
+        emailjs
+          .send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID_CHECKIN,
+            {
+              to_email: checkinCustomerEmail,
+              customer_name: checkinCustomerName,
+              unit: checkinUnit,
+              checkin_date: checkinDateTime,
+              job_site: checkinJobSite,
+              inspection_notes: checkinInspectionNotes,
+            },
+            EMAILJS_USER_ID
+          )
+          .catch((err) => console.error("Failed to send email:", err));
         // Reset check-in form fields.
         setCheckinDateTime("");
         setCheckinUnit("");
@@ -356,11 +347,11 @@ function App() {
 
   // ---------------- Active Checkouts Section ----------------
   const getActiveUnitNumbers = () => {
-    if (!availableUnits?.length || !checkinList?.length) return [];
+    if (!availableUnits.length || !checkinList.length) return [];
     const latestCheckout = {};
     availableUnits.forEach((unit) => {
       equipmentList.forEach((checkout) => {
-        if (checkout?.unit === unit) {
+        if (checkout.unit === unit) {
           const time = new Date(checkout.createdAt);
           if (!latestCheckout[unit] || time > latestCheckout[unit]) {
             latestCheckout[unit] = time;
@@ -372,8 +363,8 @@ function App() {
     for (const unit in latestCheckout) {
       const correspondingCheckin = checkinList.find(
         (checkin) =>
-          checkin?.unit === unit &&
-          checkin?.createdAt &&
+          checkin.unit === unit &&
+          checkin.createdAt &&
           new Date(checkin.createdAt) > latestCheckout[unit]
       );
       if (!correspondingCheckin) {
@@ -590,9 +581,7 @@ function App() {
                         value: site,
                         label: site,
                       }))}
-                      value={
-                        checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null
-                      }
+                      value={checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null}
                       onChange={(option) => setCheckinJobSite(option.value)}
                       placeholder="Select Job Site"
                       styles={customSelectStyles}

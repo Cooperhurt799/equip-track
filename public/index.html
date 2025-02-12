@@ -2,19 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Only one viewport meta tag is needed -->
+    <!-- Ensure proper scaling on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Link to the manifest file -->
-    <link rel="manifest" href="manifest.json" />
-    <!-- Optional: Set a theme color -->
+    <!-- Link to the PWA manifest file -->
+    <link rel="manifest" href="/manifest.json" />
+    <!-- Optional: Set the theme color for the browser UI -->
     <meta name="theme-color" content="#7a5d33" />
+    <!-- Apple Touch Icon for iOS -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>Daugherty Ranches Equipment Tracker</title>
-    <script type="module" crossorigin src="/assets/index-DS1N3M5I.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-4DDBcSUa.css">
-    <!-- The VitePWA plugin will automatically inject the service worker registration script -->
   </head>
   <body>
     <div id="root"></div>
+    <!-- Your bundled JavaScript will be injected by Vite or during the build process -->
   </body>
 </html>
