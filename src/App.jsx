@@ -454,7 +454,7 @@ function App() {
       ) : (
         <div className="section-container">
           <button className="back-button" onClick={() => setCurrentSection(null)}>
-            Back
+            ← Back
           </button>
           {currentSection === "checkout" ? (
             <section className="checkout">

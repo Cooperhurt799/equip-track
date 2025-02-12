@@ -107,8 +107,9 @@ body::before {
 
 /* Back Button */
 .back-button {
-  align-self: flex-start;
-  margin: 10px 0;
+  position: absolute;
+  top: 20px;
+  left: 20px;
   padding: 8px 12px;
   background-color: #34495e;
   color: #fff;
@@ -116,6 +117,7 @@ body::before {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
+  z-index: 1000;
 }
 
 .back-button:hover {
