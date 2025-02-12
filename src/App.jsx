@@ -20,7 +20,7 @@ const customSelectStyles = {
     width: "100%",
     minHeight: "40px",
     fontSize: "16px",
-    border: state.isFocused ? "1px solid #34495e" : "1px solid #e2e8f0",
+    border: state.isFocused ? "2px solid #34495e" : "2px solid #34495e",
     boxShadow: state.isFocused ? "0 0 0 1px #34495e" : null,
     borderRadius: "10px",
     padding: "2px 5px",
