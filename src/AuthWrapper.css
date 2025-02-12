@@ -41,6 +41,10 @@
   width: 100%;
   box-sizing: border-box;
   font-size: 16px;
+  border: 2px solid #34495e;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 15px;
 }
 
 .auth-container button {
