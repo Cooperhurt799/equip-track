@@ -5,6 +5,7 @@ import Select from "react-select"; // Ensure react-select is installed
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import emailjs from "emailjs-com";
+import './reminderService'; // Import the reminder service
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
@@ -654,3 +655,62 @@ function App() {
 }
 
 export default App;
+
+
+// reminderService.js
+import { useEffect } from 'react';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
+import emailjs from 'emailjs-com';
+
+
+const EMAILJS_SERVICE_ID = "service_fimxodg";
+const EMAILJS_TEMPLATE_ID_REMINDER = "template_your_reminder_template_id"; // Replace with your template ID
+const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
+
+
+const sendReminderEmail = async (email, customerName, unit, returnDate) => {
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_REMINDER, {
+      to_email: email,
+      customer_name: customerName,
+      unit: unit,
+      return_date: returnDate,
+    }, EMAILJS_USER_ID);
+    console.log('Reminder email sent successfully!');
+  } catch (error) {
+    console.error('Error sending reminder email:', error);
+  }
+};
+
+const checkForDueReturns = async () => {
+  try {
+    const checkoutsRef = collection(db, 'checkouts');
+    const querySnapshot = await getDocs(checkoutsRef);
+    const today = new Date();
+    const twoDaysFromNow = new Date();
+    twoDaysFromNow.setDate(today.getDate() + 2);
+
+
+    querySnapshot.forEach(doc => {
+      const data = doc.data();
+      const returnDate = new Date(data.returnDate);
+
+      if (returnDate >= today && returnDate <= twoDaysFromNow) {
+        sendReminderEmail(data.customerEmail, data.customerName, data.unit, data.returnDate);
+      }
+    });
+  } catch (error) {
+    console.error('Error checking for due returns:', error);
+  }
+};
+
+
+useEffect(() => {
+  // Run the check once on component mount
+  checkForDueReturns();
+  // Schedule the check to run daily (adjust interval as needed)
+  const intervalId = setInterval(checkForDueReturns, 86400000); // 86400000 milliseconds = 1 day
+
+  return () => clearInterval(intervalId); // Cleanup on unmount
+}, []);
