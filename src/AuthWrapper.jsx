@@ -9,11 +9,8 @@ function AuthWrapper() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Add more usernames/passwords as needed
   const validCredentials = {
-    'operator1': 'ranch2024',
-    'operator2': 'ranch2024',
-    'manager': 'admin2024'
+    'Figure2Ranch': 'Figure1902'
   };
 
   // Convert email input to username input
