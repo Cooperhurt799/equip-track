@@ -10,7 +10,8 @@ export default defineConfig({
     strictPort: true,
     allowedHosts: [
       '897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev',
-      '.replit.dev'
+      '.replit.dev',
+      'equipment-tracker-hurtcooper79.replit.app'
     ]
   },
   preview: {
