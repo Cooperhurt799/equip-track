@@ -616,10 +616,17 @@ function App() {
                         }))
                       },
                       {
-                        label: "All Units",
+                        label: "Ranch Equipment",
                         options: availableUnits.map((unit) => ({
                           value: unit,
                           label: unit,
+                        }))
+                      },
+                      {
+                        label: "Rental Equipment",
+                        options: rentalEquipmentList.map((item) => ({
+                          value: item,
+                          label: item,
                         }))
                       }
                     ]}
