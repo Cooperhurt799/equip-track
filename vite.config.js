@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -6,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // Automatically update the service worker
+      registerType: 'autoUpdate',
       manifest: {
         name: "Daugherty Ranches Equipment Tracker",
         short_name: "EquipTracker",
@@ -30,11 +31,12 @@ export default defineConfig({
       },
     }),
   ],
-  // This allows Vite to accept connections from your Replit host.
   server: {
-    allowedHosts: [
-      "897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev",
-      "equipment-tracker-daughertyranches.replit.app"
-    ]
+    host: '0.0.0.0',
+    port: 5173
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 5173
   }
 });
