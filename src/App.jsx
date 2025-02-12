@@ -461,7 +461,7 @@ function App() {
               <h2>Equipment Check-Out</h2>
               <div className="section-header">
                 <div className="active-checkouts inline">
-                  <h3>Select Equipment</h3>
+                  <h3>Select Equipment to Checkout</h3>
                   <Select
                       options={[
                         {
