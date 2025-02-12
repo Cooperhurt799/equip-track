@@ -144,6 +144,8 @@ function App() {
   // ---------------- Section Navigation State ----------------
   // currentSection: null (landing page), "checkout", or "checkin"
   const [currentSection, setCurrentSection] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   // ---------------- Message States ----------------
   const [checkoutMessage, setCheckoutMessage] = useState("");
