@@ -164,4 +164,8 @@ ul li {
   padding: 12px;
   border-radius: 6px;
   margin-bottom: 10px;
+}@media (max-width: 600px) {
+  .top-right-decorative {
+    display: none;
+  }
 }
