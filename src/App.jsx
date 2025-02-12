@@ -86,6 +86,35 @@ const preProgrammedJobSites = [
   "Highline Road",
   "Hogue Canyon",
   "Honeycutt HQ",
+
+const [searchTerm, setSearchTerm] = useState("");
+const [filterStatus, setFilterStatus] = useState("all");
+
+const filteredEquipment = useMemo(() => {
+  return availableUnits.filter(unit => {
+
+const validateForm = (formData) => {
+  const errors = {};
+  
+  if (!formData.hoursMiles.match(/^\d+$/)) {
+    errors.hoursMiles = "Please enter a valid number";
+  }
+  
+  if (!formData.customerPhone.match(/^\d{10}$/)) {
+    errors.customerPhone = "Please enter a valid 10-digit phone number";
+  }
+  
+  return errors;
+};
+
+    const matchesSearch = unit.toLowerCase().includes(searchTerm.toLowerCase());
+    const isActive = getActiveUnitNumbers().includes(unit);
+    return filterStatus === "all" ? matchesSearch :
+           filterStatus === "active" ? (matchesSearch && isActive) :
+           (matchesSearch && !isActive);
+  });
+}, [availableUnits, searchTerm, filterStatus]);
+
   "Honeycutt Rim North",
   "Houge Pump Jack",
   "James Cook Hanger",
@@ -208,6 +237,10 @@ function App() {
 
   const addEquipment = async (e) => {
     e.preventDefault();
+    
+    if (!window.confirm(`Are you sure you want to check out ${selectedUnit}?`)) {
+      return;
+    }
     if (
       selectedUnit &&
       checkoutHoursMiles &&
@@ -457,6 +490,24 @@ function App() {
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
               <div className="section-header">
+                <div className="search-filter-container">
+                  <input
+                    type="text"
+                    placeholder="Search equipment..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                  />
+                  <select 
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="all">All Equipment</option>
+                    <option value="active">Active Checkouts</option>
+                    <option value="available">Available</option>
+                  </select>
+                </div>
                 <div className="active-checkouts inline">
                   <h3>Select Equipment to Checkout</h3>
                   <Select
