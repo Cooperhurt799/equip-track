@@ -20,7 +20,7 @@ body::before {
   left: 0;
   right: 0;
   height: 100px;
-  background-color: #34495e;
+  background: linear-gradient(135deg, #34495e, #2c3e50);
   z-index: -1;
 }
 
