@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import App from "./App";
 import "./AuthWrapper.css";
@@ -8,19 +9,27 @@ function AuthWrapper() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Hardcoded credentials - you can modify these
+  const validCredentials = {
+    'admin@daughertyranches.com': 'admin123',
+    'user@daughertyranches.com': 'user123'
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Basic validation
-    if (email === "admin@example.com" && password === "password") {
+    
+    if (validCredentials[email] === password) {
       setUser({ email });
       setError("");
     } else {
-      setError("Invalid credentials");
+      setError("Invalid email or password");
     }
   };
 
   const handleSignOut = () => {
     setUser(null);
+    setEmail("");
+    setPassword("");
   };
 
   if (!user) {
