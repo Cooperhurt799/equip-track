@@ -2,12 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600&display=swap');
 
 /* Global Styles */
-body {
+html, body {
   margin: 0;
   padding: 0;
+  min-height: 100%;  /* Changed from height: 100% to min-height: 100% */
   font-family: 'Roboto Slab', serif;
-  background-color: #f2efe4;
-  color: #4b3f2a;
+  background-color: #f2efe4;  /* Light, warm neutral background */
+  color: #4b3f2a;           /* Dark earthy text color */
+  overflow-x: hidden;
 }
 
 /* Main Container */
@@ -22,9 +24,9 @@ body {
 .top-right-decorative {
   position: fixed;
   top: 10px;
-  right: 60px;
+  right: 10px;
   font-family: "Papyrus", cursive, serif;
-  font-size: 10rem;  /* Adjust as needed */
+  font-size: 6rem;  /* Adjust as needed */
   color: rgba(75, 63, 42, 0.15); /* Subtle, semi-transparent earthy tone */
   z-index: 1000;
 }
@@ -73,7 +75,7 @@ body {
 
 /* Section Styling */
 section {
-  background-color: #fffaf0;
+  background-color: #fffaf0;  /* Very light warm beige */
   border-radius: 10px;
   padding: 20px;
   flex: 1;
@@ -164,8 +166,4 @@ ul li {
   padding: 12px;
   border-radius: 6px;
   margin-bottom: 10px;
-}@media (max-width: 600px) {
-  .top-right-decorative {
-    display: none;
-  }
 }

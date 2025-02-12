@@ -12,6 +12,7 @@ const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 
 // ---------------- Helper Functions for Email Alerts ----------------
+
 const sendCheckoutEmail = (checkoutData) => {
   const templateParams = {
     to_email: "jm.outlaw@icloud.com", // All checkout emails will be sent here.
@@ -152,6 +153,7 @@ const preProgrammedJobSites = [
 ];
 
 function App() {
+  // Set the document title.
   useEffect(() => {
     document.title = "Daugherty Ranches Equipment Tracker";
   }, []);
@@ -163,15 +165,13 @@ function App() {
   // ---------------- Checkout Form State ----------------
   const [equipmentList, setEquipmentList] = useState([]); // Fetched from Firestore
 
-  // Common fields for checkout (initialized to empty so that "Select" shows)
+  // Initialize fields to empty strings so that "Select" is displayed.
   const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [jobSite, setJobSite] = useState("");
-
-  // Checkout-specific fields:
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
@@ -244,15 +244,13 @@ function App() {
   // ---------------- Check-In Form State ----------------
   const [checkinList, setCheckinList] = useState([]);
 
-  // Check-in common fields (initialized to empty)
+  // Initialize check-in fields to empty strings.
   const [checkinUnit, setCheckinUnit] = useState("");
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
   const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
   const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
   const [checkinJobSite, setCheckinJobSite] = useState("");
-
-  // Check-in-specific fields:
   const [checkinDateTime, setCheckinDateTime] = useState("");
   const [checkinDuration, setCheckinDuration] = useState(""); // Automatically computed
   const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
@@ -376,12 +374,12 @@ function App() {
 
   return (
     <div className="App">
-      {/* Fixed decorative element: a large Papyrus "2" at the top right */}
+      {/* Fixed decorative element at top right */}
       <div className="top-right-decorative">2</div>
 
       <header className="app-header">
-        <h1>Daugherty Ranches Equipment Checkout</h1>
-        
+        <h1>Daugherty Ranches Equipment Tracker</h1>
+        <p className="tagline">Your trusted partner for equipment management</p>
       </header>
 
       {/* Container for Check-Out and Check-In Sections Side by Side */}
@@ -392,10 +390,7 @@ function App() {
             <div>
               <label>
                 Unit Number:
-                <select
-                  value={selectedUnit}
-                  onChange={(e) => setSelectedUnit(e.target.value)}
-                >
+                <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
                   <option value="" disabled>
                     Select
                   </option>
