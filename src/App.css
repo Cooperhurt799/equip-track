@@ -140,13 +140,14 @@ section {
 
 /* Active Checkouts Section */
 .active-checkouts {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .active-checkouts h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.1rem;
+  margin: 0 0 15px 0;
+  font-size: 1.2rem;
   color: #4b3f2a;
+  text-align: center;
 }
 
 /* Rental Equipment Section */

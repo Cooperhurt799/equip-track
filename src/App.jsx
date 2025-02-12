@@ -604,33 +604,32 @@ function App() {
               <h2>Equipment Check-In</h2>
               <div className="section-header">
                 <div className="active-checkouts inline">
-                  <h3>Active Checkouts</h3>
+                  <h3>Select Equipment to Check In</h3>
                   <Select
-                    options={getActiveUnitNumbers().map((unit) => ({
-                      value: unit,
-                      label: unit,
-                    }))}
-                    placeholder="Select Active Checkout"
+                    options={[
+                      {
+                        label: "Active Checkouts",
+                        options: getActiveUnitNumbers().map((unit) => ({
+                          value: unit,
+                          label: unit,
+                        }))
+                      },
+                      {
+                        label: "All Units",
+                        options: availableUnits.map((unit) => ({
+                          value: unit,
+                          label: unit,
+                        }))
+                      }
+                    ]}
+                    value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
+                    onChange={(option) => setCheckinUnit(option.value)}
+                    placeholder="Select Unit to Check In"
                     styles={customSelectStyles}
                   />
                 </div>
               </div>
               <form onSubmit={addCheckin}>
-                <div>
-                  <label>
-                    Unit Number:
-                    <Select
-                      options={availableUnits.map((unit) => ({
-                        value: unit,
-                        label: unit,
-                      }))}
-                      value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
-                      onChange={(option) => setCheckinUnit(option.value)}
-                      placeholder="Select Unit Number"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
                 <div>
                   <label>
                     Hours/Miles:
