@@ -5,7 +5,7 @@ import Select from "react-select"; // Ensure react-select is installed
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import emailjs from "emailjs-com";
-import './reminderService'; // Import the reminder service
+import './reminderService'; // Import the reminder service if used
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
@@ -119,6 +119,38 @@ const preProgrammedJobSites = [
 
 const rentalEquipmentList = ["Excavator X100", "Bulldozer B200", "Crane C300"];
 
+// ---------------- New Data Arrays for Dropdowns ----------------
+const projectCodes = [
+  "F2CP",
+  "VHN.6BAPT",
+  "VHN.ROCK",
+  "VHN.STKADD'24",
+  "VHN.PCKLBRN",
+  "FIG2.SECCAM",
+  "6BAR.MGRHOUS",
+  "VHN.PUCKRENO",
+  "CORN.GOKART",
+  "CORN.TACOPS",
+  "PUET.LWRHSRENO",
+  "6BAR.WTR"
+];
+
+const departmentIDs = [
+  "General Management",
+  "RM 1100 Administration",
+  "RM 1200 Equine Program",
+  "RM 1400 Construction",
+  "RM 1500 Delaware basin",
+  "RM 1600 Electrical",
+  "RM 1700 Fabrication",
+  "RM 1800 Facilities",
+  "RM 1900 Land Management",
+  "RM 2000 Secruity",
+  "RM 2100 Stockyards",
+  "RM 2200 Vehicle Maintinence",
+  "RM 2300 Wildlife"
+];
+
 function App() {
   useEffect(() => {
     document.title = "Daugherty Ranches Equipment Tracker";
@@ -145,6 +177,24 @@ function App() {
   const [jobSite, setJobSite] = useState("");
   const [checkoutDate, setCheckoutDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
+  // New fields for checkout
+  const [projectCode, setProjectCode] = useState("");
+  const [departmentID, setDepartmentID] = useState("");
+
+  // ---------------- Check-In Form State ----------------
+  const [checkinList, setCheckinList] = useState([]);
+  const [checkinUnit, setCheckinUnit] = useState("");
+  const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
+  const [checkinCustomerName, setCheckinCustomerName] = useState("");
+  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
+  const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
+  const [checkinJobSite, setCheckinJobSite] = useState("");
+  const [checkinDateTime, setCheckinDateTime] = useState("");
+  const [checkinDuration, setCheckinDuration] = useState("");
+  const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
+  // New fields for check-in
+  const [checkinProjectCode, setCheckinProjectCode] = useState("");
+  const [checkinDepartmentID, setCheckinDepartmentID] = useState("");
 
   // ---------------- Rental Equipment Drop-Down Handler ----------------
   const handleRentalEquipmentSelect = (selectedOption) => {
@@ -165,7 +215,9 @@ function App() {
       customerName &&
       customerEmail &&
       customerPhone &&
-      jobSite
+      jobSite &&
+      projectCode &&
+      departmentID
     ) {
       const newCheckout = {
         unit: selectedUnit,
@@ -176,6 +228,8 @@ function App() {
         customerEmail,
         customerPhone,
         jobSite,
+        projectCode,       // new field
+        departmentID,      // new field
         createdAt: new Date().toISOString(),
       };
 
@@ -193,6 +247,8 @@ function App() {
               checkout_date: checkoutDate,
               return_date: returnDate,
               job_site: jobSite,
+              project_code: projectCode,
+              department_id: departmentID,
             },
             EMAILJS_USER_ID
           )
@@ -206,6 +262,8 @@ function App() {
         setCustomerEmail("");
         setCustomerPhone("");
         setJobSite("");
+        setProjectCode("");
+        setDepartmentID("");
         setTimeout(() => setCheckoutMessage(""), 3000);
       } catch (error) {
         console.error("Error adding checkout document: ", error);
@@ -232,22 +290,12 @@ function App() {
     fetchCheckouts();
   }, []);
 
-  // ---------------- Check-In Form State ----------------
-  const [checkinList, setCheckinList] = useState([]);
-  const [checkinUnit, setCheckinUnit] = useState("");
-  const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
-  const [checkinCustomerName, setCheckinCustomerName] = useState("");
-  const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
-  const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
-  const [checkinJobSite, setCheckinJobSite] = useState("");
-  const [checkinDateTime, setCheckinDateTime] = useState("");
-  const [checkinDuration, setCheckinDuration] = useState("");
-  const [checkinInspectionNotes, setCheckinInspectionNotes] = useState("");
-
+  // ---------------- Calculate Check-In Duration ----------------
+  // Use checkout records (equipmentList) to compute the duration.
   useEffect(() => {
     if (checkinDateTime && checkinUnit) {
       let latestCheckoutTime = null;
-      checkinList.forEach((record) => {
+      equipmentList.forEach((record) => {
         if (record.unit === checkinUnit) {
           const time = new Date(record.createdAt);
           if (!latestCheckoutTime || time > latestCheckoutTime) {
@@ -265,7 +313,7 @@ function App() {
     } else {
       setCheckinDuration("");
     }
-  }, [checkinDateTime, checkinUnit, checkinList]);
+  }, [checkinDateTime, checkinUnit, equipmentList]);
 
   const addCheckin = async (e) => {
     e.preventDefault();
@@ -278,7 +326,9 @@ function App() {
       checkinCustomerName &&
       checkinCustomerEmail &&
       checkinCustomerPhone &&
-      checkinInspectionNotes
+      checkinInspectionNotes &&
+      checkinProjectCode &&
+      checkinDepartmentID
     ) {
       const newCheckin = {
         dateTimeReturned: checkinDateTime,
@@ -290,6 +340,8 @@ function App() {
         customerEmail: checkinCustomerEmail,
         customerPhone: checkinCustomerPhone,
         inspectionNotes: checkinInspectionNotes,
+        projectCode: checkinProjectCode,      // new field
+        departmentID: checkinDepartmentID,    // new field
         createdAt: new Date().toISOString(),
       };
 
@@ -307,6 +359,8 @@ function App() {
               checkin_date: checkinDateTime,
               job_site: checkinJobSite,
               inspection_notes: checkinInspectionNotes,
+              project_code: checkinProjectCode,
+              department_id: checkinDepartmentID,
             },
             EMAILJS_USER_ID
           )
@@ -321,6 +375,8 @@ function App() {
         setCheckinCustomerEmail("");
         setCheckinCustomerPhone("");
         setCheckinInspectionNotes("");
+        setCheckinProjectCode("");
+        setCheckinDepartmentID("");
         setTimeout(() => setCheckinMessage(""), 3000);
       } catch (error) {
         console.error("Error adding checkin document: ", error);
@@ -385,7 +441,6 @@ function App() {
         <p className="tagline">Sanford and Son</p>
       </header>
 
-      {/* Landing Page: Show two buttons if no section is selected */}
       {currentSection === null ? (
         <div className="landing">
           <button onClick={() => setCurrentSection("checkout")}>
@@ -397,10 +452,7 @@ function App() {
         </div>
       ) : (
         <div className="section-container">
-          <button
-            className="back-button"
-            onClick={() => setCurrentSection(null)}
-          >
+          <button className="back-button" onClick={() => setCurrentSection(null)}>
             Back
           </button>
           {currentSection === "checkout" ? (
@@ -415,11 +467,7 @@ function App() {
                         value: unit,
                         label: unit,
                       }))}
-                      value={
-                        selectedUnit
-                          ? { value: selectedUnit, label: selectedUnit }
-                          : null
-                      }
+                      value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
                       onChange={(option) => setSelectedUnit(option.value)}
                       placeholder="Select Unit Number"
                       styles={customSelectStyles}
@@ -485,6 +533,32 @@ function App() {
                     />
                   </label>
                 </div>
+                {/* New Project Code Dropdown */}
+                <div>
+                  <label>
+                    Project Code:
+                    <Select
+                      options={projectCodes.map((code) => ({ value: code, label: code }))}
+                      value={projectCode ? { value: projectCode, label: projectCode } : null}
+                      onChange={(option) => setProjectCode(option.value)}
+                      placeholder="Select Project Code"
+                      styles={customSelectStyles}
+                    />
+                  </label>
+                </div>
+                {/* New Department ID Dropdown */}
+                <div>
+                  <label>
+                    Department ID:
+                    <Select
+                      options={departmentIDs.map((dept) => ({ value: dept, label: dept }))}
+                      value={departmentID ? { value: departmentID, label: departmentID } : null}
+                      onChange={(option) => setDepartmentID(option.value)}
+                      placeholder="Select Department ID"
+                      styles={customSelectStyles}
+                    />
+                  </label>
+                </div>
                 <div>
                   <label>
                     Checkout Date:
@@ -521,9 +595,7 @@ function App() {
                         value: unit,
                         label: unit,
                       }))}
-                      value={
-                        checkinUnit ? { value: checkinUnit, label: checkinUnit } : null
-                      }
+                      value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
                       onChange={(option) => setCheckinUnit(option.value)}
                       placeholder="Select Unit Number"
                       styles={customSelectStyles}
@@ -585,6 +657,36 @@ function App() {
                       value={checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null}
                       onChange={(option) => setCheckinJobSite(option.value)}
                       placeholder="Select Job Site"
+                      styles={customSelectStyles}
+                    />
+                  </label>
+                </div>
+                {/* New Project Code Dropdown for Check-In */}
+                <div>
+                  <label>
+                    Project Code:
+                    <Select
+                      options={projectCodes.map((code) => ({ value: code, label: code }))}
+                      value={
+                        checkinProjectCode ? { value: checkinProjectCode, label: checkinProjectCode } : null
+                      }
+                      onChange={(option) => setCheckinProjectCode(option.value)}
+                      placeholder="Select Project Code"
+                      styles={customSelectStyles}
+                    />
+                  </label>
+                </div>
+                {/* New Department ID Dropdown for Check-In */}
+                <div>
+                  <label>
+                    Department ID:
+                    <Select
+                      options={departmentIDs.map((dept) => ({ value: dept, label: dept }))}
+                      value={
+                        checkinDepartmentID ? { value: checkinDepartmentID, label: checkinDepartmentID } : null
+                      }
+                      onChange={(option) => setCheckinDepartmentID(option.value)}
+                      placeholder="Select Department ID"
                       styles={customSelectStyles}
                     />
                   </label>
