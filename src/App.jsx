@@ -381,7 +381,7 @@ function App() {
 
       <header className="app-header">
         <h1>Daugherty Ranches Equipment Tracker</h1>
-        <p className="tagline">Your trusted partner for equipment management</p>
+        <p className="tagline">Sanford and Son</p>
       </header>
 
       {/* Landing Page: Show two buttons if no section is selected */}
