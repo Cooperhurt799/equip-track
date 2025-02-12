@@ -1,0 +1,17 @@
+
+{
+  "name": "Daugherty Ranches Equipment Tracker",
+  "short_name": "EquipTracker",
+  "description": "Track equipment rentals and returns",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2efe4",
+  "theme_color": "#7a5d33",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
