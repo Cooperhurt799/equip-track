@@ -465,7 +465,7 @@ function App() {
                     <Select
                       options={[
                         {
-                          label: "Yard Equipment",
+                          label: "Ranch Equipment",
                           options: availableUnits.map((unit) => ({
                             value: unit,
                             label: unit,
