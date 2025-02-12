@@ -10,10 +10,9 @@ channel = "stable-24_05"
 language = "nodejs"
 
 [deployment]
-deploymentTarget = "static"
+deploymentTarget = "gce"
 build = ["sh", "-c", "npm run build"]
-publicDir = "dist"
-run = ["sh", "-c", "npm run preview"]
+run = ["sh", "-c", "vite preview --port 5173 --host 0.0.0.0"]
 
 [[ports]]
 localPort = 5173
