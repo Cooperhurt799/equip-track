@@ -7,8 +7,8 @@ html, body {
   padding: 0;
   min-height: 100%;
   font-family: 'Roboto Slab', serif;
-  background-color: #f2efe4;  /* Light, warm neutral background */
-  color: #4b3f2a;           /* Dark earthy text color */
+  background-color: #f8f7f4;  /* Soft cream background */
+  color: #2c3e50;           /* Modern dark blue-gray text */
   overflow-x: hidden;
 }
 
@@ -36,12 +36,12 @@ html, body {
   width: 90%;
   margin: 0 auto;
   padding: 30px 20px;
-  background: linear-gradient(135deg, #7a5d33, #8b6c42);
+  background: linear-gradient(135deg, #34495e, #2c3e50);
   color: #fff;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(44, 62, 80, 0.15);
   margin-bottom: 40px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 /* On desktop screens, reduce the header width */
@@ -123,8 +123,8 @@ section {
   border-radius: 16px;
   padding: 24px;
   flex: 1;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.06);
+  border: 1px solid #ecf0f1;
   min-width: 300px;
   margin-bottom: 24px;
 }
@@ -200,7 +200,7 @@ textarea:focus {
 }
 
 button {
-  background-color: #3b82f6;
+  background-color: #34495e;
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -212,9 +212,9 @@ button {
 }
 
 button:hover {
-  background-color: #2563eb;
+  background-color: #2c3e50;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
 }
 
 .message {
