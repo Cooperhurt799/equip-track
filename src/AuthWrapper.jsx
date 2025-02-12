@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import App from "./App";
 import "./AuthWrapper.css";
@@ -13,26 +12,14 @@ function AuthWrapper() {
     'Figure2Ranch': 'Figure1902'
   };
 
-  // Convert email input to username input
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validCredentials[email] === password) {
       setUser({ username: email });
       setError("");
     } else {
       setError("Invalid username or password");
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (validCredentials[email] === password) {
-      setUser({ email });
-      setError("");
-    } else {
-      setError("Invalid email or password");
     }
   };
 
