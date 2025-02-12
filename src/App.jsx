@@ -182,7 +182,20 @@ function App() {
       try {
         await addDoc(collection(db, "checkouts"), newCheckout);
         setCheckoutMessage("Checkout successful!");
-        sendCheckoutEmail(newCheckout);
+        // Send checkout email notification
+        emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID_CHECKOUT,
+          {
+            to_email: customerEmail,
+            customer_name: customerName,
+            unit: selectedUnit,
+            checkout_date: checkoutDate,
+            return_date: returnDate,
+            job_site: jobSite
+          },
+          EMAILJS_USER_ID
+        ).catch(err => console.error("Failed to send email:", err));
         // Reset checkout form fields.
         setSelectedUnit("");
         setCheckoutHoursMiles("");
@@ -283,7 +296,20 @@ function App() {
       try {
         await addDoc(collection(db, "checkins"), newCheckin);
         setCheckinMessage("Check-in successful!");
-        sendCheckinEmail(newCheckin);
+        // Send checkin email notification
+        emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID_CHECKIN,
+          {
+            to_email: checkinCustomerEmail,
+            customer_name: checkinCustomerName,
+            unit: checkinUnit,
+            checkin_date: checkinDateTime,
+            job_site: checkinJobSite,
+            inspection_notes: checkinInspectionNotes
+          },
+          EMAILJS_USER_ID
+        ).catch(err => console.error("Failed to send email:", err));
         // Reset check-in form fields.
         setCheckinDateTime("");
         setCheckinUnit("");
