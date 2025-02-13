@@ -508,12 +508,6 @@ function App() {
           <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'stats' ? null : 'stats')}>
             Equipment Stats
           </button>
-          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'activity' ? null : 'activity')}>
-            Recent Activity
-          </button>
-          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'sites' ? null : 'sites')}>
-            Job Sites
-          </button>
         </div>
         <div className="sidebar-content">
           {activeTab === 'checkouts' && (
@@ -557,29 +551,7 @@ function App() {
               })()}
             </div>
           )}
-          {activeTab === 'activity' && (
-            <div>
-              <h3>Recent Activity</h3>
-              <ul>
-                {getRecentActivity().map((activity, i) => (
-                  <li key={i}>
-                    {activity.type === 'checkout' ? '↗️' : '↙️'} {activity.unit} - {activity.customerName}
-                    <br/>
-                    <small>{new Date(activity.createdAt).toLocaleDateString()}</small>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {activeTab === 'sites' && (
-            <div>
-              <h3>Active Job Sites</h3>
-              <ul>
-                {Object.entries(getJobSiteSummary()).map(([site, count], i) => (
-                  <li key={i}>{site}: {count} unit{count !== 1 ? 's' : ''}</li>
-                ))}
-              </ul>
-            </div>
+          
           )}
         </div>
       </div>
