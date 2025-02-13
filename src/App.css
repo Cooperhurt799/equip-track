@@ -323,11 +323,14 @@ ul li {
 }
 
 /* Sidebar Styles */
-.cake-button {
+.menu-container {
   position: fixed;
   left: 20px;
   top: 20px;
   z-index: 1000;
+}
+
+.cake-button {
   padding: 15px;
   background: white;
   border: 2px solid #8b6c42;
@@ -337,6 +340,48 @@ ul li {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10px;
+}
+
+.dropdown-panels {
+  background: white;
+  border: 2px solid #8b6c42;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.panel-button {
+  padding: 12px;
+  background: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #8b6c42;
+  font-weight: 500;
+}
+
+.panel-button:hover {
+  background-color: #f8f4f0;
+}
+
+.panel-content {
+  max-height: 200px;
+  overflow-y: auto;
+  background: #fff;
+  padding: 10px;
+}
+
+.panel-content ul {
+  margin: 0;
+  padding: 0;
+}
+
+.panel-content li {
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .cake-button:hover {
