@@ -4,49 +4,75 @@ import { db } from './firebase';
 import emailjs from 'emailjs-com';
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_REMINDER_TEMPLATE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_DAILY_SUMMARY_TEMPLATE_ID;
 const EMAILJS_USER_ID = import.meta.env.VITE_EMAILJS_USER_ID;
 
-export async function checkAndSendReminders() {
+export async function sendDailySummary() {
   try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Fetch today's checkouts
     const checkoutsRef = collection(db, "checkouts");
-    const querySnapshot = await getDocs(checkoutsRef);
+    const checkoutsSnapshot = await getDocs(checkoutsRef);
+    const todayCheckouts = [];
     
-    const twoDaysFromNow = new Date();
-    twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
-    
-    querySnapshot.forEach(async (doc) => {
+    checkoutsSnapshot.forEach(doc => {
       const checkout = doc.data();
-      const returnDate = new Date(checkout.returnDate);
+      const checkoutDate = new Date(checkout.createdAt);
+      checkoutDate.setHours(0, 0, 0, 0);
       
-      // Check if return date is in 2 days
-      if (returnDate.toDateString() === twoDaysFromNow.toDateString()) {
-        // Send reminder email
-        const emailParams = {
-          to_email: checkout.customerEmail,
-          customer_name: checkout.customerName,
-          unit: checkout.unit,
-          return_date: checkout.returnDate,
-          job_site: checkout.jobSite
-        };
-
-        try {
-          await emailjs.send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_TEMPLATE_ID,
-            emailParams,
-            EMAILJS_USER_ID
-          );
-          console.log(`Reminder sent to ${checkout.customerEmail}`);
-        } catch (error) {
-          console.error("Error sending reminder:", error);
-        }
+      if (checkoutDate.getTime() === today.getTime()) {
+        todayCheckouts.push(checkout);
       }
     });
+    
+    // Fetch today's checkins
+    const checkinsRef = collection(db, "checkins");
+    const checkinsSnapshot = await getDocs(checkinsRef);
+    const todayCheckins = [];
+    
+    checkinsSnapshot.forEach(doc => {
+      const checkin = doc.data();
+      const checkinDate = new Date(checkin.createdAt);
+      checkinDate.setHours(0, 0, 0, 0);
+      
+      if (checkinDate.getTime() === today.getTime()) {
+        todayCheckins.push(checkin);
+      }
+    });
+    
+    // Format the summary
+    const summaryParams = {
+      date: today.toLocaleDateString(),
+      checkouts: todayCheckouts.map(c => 
+        `Unit: ${c.unit} - Customer: ${c.customerName} - Job Site: ${c.jobSite}`
+      ).join('\n'),
+      checkins: todayCheckins.map(c => 
+        `Unit: ${c.unit} - Hours/Miles: ${c.hoursMiles}`
+      ).join('\n'),
+      total_checkouts: todayCheckouts.length,
+      total_checkins: todayCheckins.length
+    };
+    
+    // Send summary email
+    await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      summaryParams,
+      EMAILJS_USER_ID
+    );
+    
+    console.log('Daily summary sent successfully');
   } catch (error) {
-    console.error("Error checking reminders:", error);
+    console.error("Error sending daily summary:", error);
   }
 }
 
-// Run reminder check every 24 hours
-setInterval(checkAndSendReminders, 24 * 60 * 60 * 1000);
+// Run summary at 11:59 PM every day
+setInterval(() => {
+  const now = new Date();
+  if (now.getHours() === 23 && now.getMinutes() === 59) {
+    sendDailySummary();
+  }
+}, 60000); // Check every minute
