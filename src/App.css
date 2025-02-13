@@ -13,6 +13,10 @@ html, body {
 }
 
 /* Add overscroll color control */
+body {
+  background-color: #34495e !important;
+}
+
 body::before {
   content: '';
   position: fixed;
@@ -20,8 +24,13 @@ body::before {
   left: 0;
   right: 0;
   height: 100px;
-  background: linear-gradient(135deg, #34495e, #2c3e50);
+  background: #34495e;
   z-index: -1;
+}
+
+#root {
+  background-color: #ffffff;
+  min-height: 100vh;
 }
 
 /* Main Container */
