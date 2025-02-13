@@ -72,6 +72,12 @@ body::before {
   z-index: 1000;
   display: flex;
   gap: 10px;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.open ~ .top-buttons {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .overdue-alert-button {
