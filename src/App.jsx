@@ -697,7 +697,7 @@ function App() {
         )}
       </div>
       <header className="app-header">
-        <h1>RanchAsset Tracker</h1>
+        <h1>Ranch Asset Tracker</h1>
         <p className="tagline">Sanford and Son</p>
       </header>
 
