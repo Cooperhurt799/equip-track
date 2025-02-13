@@ -1,4 +1,3 @@
-
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from './firebase';
 import emailjs from 'emailjs-com';
@@ -61,7 +60,7 @@ export async function sendDailySummary() {
       to_email: import.meta.env.VITE_SUMMARY_EMAIL_RECIPIENT,
       subject: `Equipment Daily Summary - ${today.toLocaleDateString()}`
     };
-
+    
     // Send summary email
     await emailjs.send(
       EMAILJS_SERVICE_ID,
