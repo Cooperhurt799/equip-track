@@ -55,11 +55,18 @@ export async function sendDailySummary() {
       total_checkins: todayCheckins.length
     };
     
+    // Add recipient email to the summary parameters
+    const emailParams = {
+      ...summaryParams,
+      to_email: import.meta.env.VITE_SUMMARY_EMAIL_RECIPIENT,
+      subject: `Equipment Daily Summary - ${today.toLocaleDateString()}`
+    };
+
     // Send summary email
     await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
-      summaryParams,
+      emailParams,
       EMAILJS_USER_ID
     );
     
