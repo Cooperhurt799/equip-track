@@ -486,9 +486,6 @@ function App() {
                           </components.Input>
                         )
                       }}
-                            value: item,
-                            label: item,
-                          }))
                         }
                       ]}
                       value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
