@@ -479,7 +479,11 @@ function App() {
         className="cake-button"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
-        🍰
+        <div className="hamburger-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </button>
       <header className="app-header">
         <h1>Daugherty Ranches Equipment Tracker</h1>
