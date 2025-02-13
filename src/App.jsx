@@ -585,20 +585,52 @@ function App() {
           )}
           {activeTab === 'returns' && (
             <div>
-              <h3>Due Returns (Within 7 Days)</h3>
-              <input 
-                type="text" 
-                placeholder="Search by unit or customer..."
-                onChange={(e) => {
-                  const searchTerm = e.target.value.toLowerCase();
-                  const filteredReturns = getDueReturns().filter(item => 
-                    item.unit.toLowerCase().includes(searchTerm) || 
-                    item.customerName.toLowerCase().includes(searchTerm)
-                  );
-                  setFilteredDueReturns(filteredReturns);
-                }}
-                className="search-input"
-              />
+              <h3>Due Returns</h3>
+              <div className="filter-container">
+                <select 
+                  className="days-filter"
+                  onChange={(e) => {
+                    const days = parseInt(e.target.value);
+                    const today = new Date();
+                    const futureDate = new Date();
+                    futureDate.setDate(today.getDate() + days);
+                    
+                    const filteredByDate = equipmentList.filter(checkout => {
+                      const returnDate = new Date(checkout.returnDate);
+                      const hasCheckin = checkinList.find(
+                        checkin => 
+                          checkin.unit === checkout.unit && 
+                          new Date(checkin.createdAt) > new Date(checkout.createdAt)
+                      );
+                      
+                      return !hasCheckin && 
+                             returnDate >= today && 
+                             returnDate <= futureDate;
+                    }).sort((a, b) => new Date(a.returnDate) - new Date(b.returnDate));
+                    
+                    setFilteredDueReturns(filteredByDate);
+                  }}
+                >
+                  <option value="7">Next 7 days</option>
+                  {Array.from({length: 30}, (_, i) => i + 1).map(num => (
+                    <option key={num} value={num}>{num} day{num !== 1 ? 's' : ''}</option>
+                  ))}
+                </select>
+                <input 
+                  type="text" 
+                  placeholder="Search by unit or customer..."
+                  onChange={(e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const currentList = filteredDueReturns || getDueReturns();
+                    const filtered = currentList.filter(item => 
+                      item.unit.toLowerCase().includes(searchTerm) || 
+                      item.customerName.toLowerCase().includes(searchTerm)
+                    );
+                    setFilteredDueReturns(filtered);
+                  }}
+                  className="search-input"
+                />
+              </div>
               <ul>
                 {(filteredDueReturns || getDueReturns()).map((item, i) => (
                   <li key={i}>

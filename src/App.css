@@ -470,10 +470,25 @@ ul li > span { /* Added to target the customer name span */
   font-size: 0.9em;
 }
 
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.days-filter {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
 .search-input {
   width: 100%;
   padding: 8px;
-  margin: 10px 0;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
