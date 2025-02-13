@@ -532,26 +532,3 @@ ul li > span { /* Added to target the customer name span */
   border-radius: 4px;
   font-size: 14px;
 }
-
-.maintenance-item {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-
-.maintenance-item span {
-  display: block;
-  font-weight: bold;
-}
-
-.analytics-section {
-  background: #f8f8f8;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.analytics-section h4 {
-  color: #4b3f2a;
-  margin-bottom: 10px;
-}

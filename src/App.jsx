@@ -557,12 +557,6 @@ function App() {
           <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'returns' ? null : 'returns')}>
             Due Returns
           </button>
-          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'maintenance' ? null : 'maintenance')}>
-            Maintenance Records
-          </button>
-          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'analytics' ? null : 'analytics')}>
-            Equipment Analytics
-          </button>
         </div>
         <div className="sidebar-content">
           {activeTab === 'checkouts' && (
@@ -672,42 +666,6 @@ function App() {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
-          {activeTab === 'maintenance' && (
-            <div>
-              <h3>Maintenance Records</h3>
-              <div className="maintenance-stats">
-                <h4>Next Scheduled Maintenance</h4>
-                {getActiveCheckouts().map((unit, index) => (
-                  <div key={index} className="maintenance-item">
-                    <span>{unit}</span>
-                    <small>Due: {new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}</small>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {activeTab === 'analytics' && (
-            <div>
-              <h3>Equipment Analytics</h3>
-              <div className="analytics-section">
-                <h4>Usage Statistics</h4>
-                {(() => {
-                  const stats = getEquipmentStats();
-                  return (
-                    <div>
-                      <p>Utilization Rate: {((stats.active / stats.total) * 100).toFixed(1)}%</p>
-                      <h4>Most Used Equipment</h4>
-                      <ul>
-                        {stats.mostCheckedOut.map(([unit, count], i) => (
-                          <li key={i}>{unit}: {count} times</li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })()}
-              </div>
             </div>
           )}
         </div>
