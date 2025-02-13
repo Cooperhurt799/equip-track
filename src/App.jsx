@@ -447,11 +447,25 @@ function App() {
 
   return (
     <div className="App">
+      <div className="menu-buttons">
+        <button 
+          className="hamburger-button"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          <div className="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+        <button className="menu-action-button" onClick={() => setActiveTab('checkouts')}>
+          Active Checkouts ({getActiveCheckouts().length})
+        </button>
+        <button className="menu-action-button" onClick={() => setActiveTab('users')}>
+          Active Users ({getActiveUsers().length})
+        </button>
+      </div>
       <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <button onClick={() => setActiveTab('checkouts')}>Active Checkouts</button>
-          <button onClick={() => setActiveTab('users')}>Active Users</button>
-        </div>
         <div className="sidebar-content">
           {activeTab === 'checkouts' && (
             <div>

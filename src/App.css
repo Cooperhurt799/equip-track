@@ -322,12 +322,18 @@ ul li {
   z-index: 1000;
 }
 
-/* Sidebar Styles */
-.hamburger-button {
+/* Menu Buttons Styles */
+.menu-buttons {
   position: fixed;
   left: 20px;
   top: 20px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hamburger-button {
   padding: 15px;
   background: white;
   border: 2px solid #8b6c42;
@@ -337,6 +343,23 @@ ul li {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.menu-action-button {
+  padding: 10px;
+  background: white;
+  border: 2px solid #8b6c42;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #4b3f2a;
+  width: 100%;
+}
+
+.menu-action-button:hover {
+  background: #f8f4f0;
+  transform: translateY(-1px);
 }
 
 .cake-button:hover {
