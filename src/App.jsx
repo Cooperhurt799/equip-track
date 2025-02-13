@@ -142,7 +142,45 @@ function App() {
   }, []);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('checkouts');
+  const [activeTab, setActiveTab] = useState(null);
+  
+  const getEquipmentStats = () => {
+    const total = availableUnits.length;
+    const active = getActiveCheckouts().length;
+    const available = total - active;
+    
+    // Get most checked out equipment
+    const checkoutCounts = {};
+    equipmentList.forEach(checkout => {
+      checkoutCounts[checkout.unit] = (checkoutCounts[checkout.unit] || 0) + 1;
+    });
+    const mostCheckedOut = Object.entries(checkoutCounts)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 3);
+      
+    return { total, active, available, mostCheckedOut };
+  };
+
+  const getRecentActivity = () => {
+    const allActivity = [
+      ...equipmentList.map(item => ({ ...item, type: 'checkout' })),
+      ...checkinList.map(item => ({ ...item, type: 'checkin' }))
+    ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 5);
+    
+    return allActivity;
+  };
+
+  const getJobSiteSummary = () => {
+    const siteCounts = {};
+    getActiveCheckouts().forEach(unit => {
+      const checkout = equipmentList.find(c => c.unit === unit);
+      if (checkout) {
+        siteCounts[checkout.jobSite] = (siteCounts[checkout.jobSite] || 0) + 1;
+      }
+    });
+    return siteCounts;
+  };
   
   const getActiveCheckouts = () => {
     const activeUnits = getActiveUnitNumbers();
@@ -467,6 +505,15 @@ function App() {
           <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'users' ? null : 'users')}>
             Active Users ({getActiveUsers().length})
           </button>
+          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'stats' ? null : 'stats')}>
+            Equipment Stats
+          </button>
+          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'activity' ? null : 'activity')}>
+            Recent Activity
+          </button>
+          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'sites' ? null : 'sites')}>
+            Job Sites
+          </button>
         </div>
         <div className="sidebar-content">
           {activeTab === 'checkouts' && (
@@ -485,6 +532,51 @@ function App() {
               <ul>
                 {getActiveUsers().map((user, index) => (
                   <li key={index}>{user.name} ({user.count} unit{user.count !== 1 ? 's' : ''})</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {activeTab === 'stats' && (
+            <div>
+              <h3>Equipment Statistics</h3>
+              {(() => {
+                const stats = getEquipmentStats();
+                return (
+                  <div>
+                    <p>Total Equipment: {stats.total}</p>
+                    <p>Active: {stats.active}</p>
+                    <p>Available: {stats.available}</p>
+                    <h4>Most Used Equipment:</h4>
+                    <ul>
+                      {stats.mostCheckedOut.map(([unit, count], i) => (
+                        <li key={i}>{unit}: {count} checkouts</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+          {activeTab === 'activity' && (
+            <div>
+              <h3>Recent Activity</h3>
+              <ul>
+                {getRecentActivity().map((activity, i) => (
+                  <li key={i}>
+                    {activity.type === 'checkout' ? '↗️' : '↙️'} {activity.unit} - {activity.customerName}
+                    <br/>
+                    <small>{new Date(activity.createdAt).toLocaleDateString()}</small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {activeTab === 'sites' && (
+            <div>
+              <h3>Active Job Sites</h3>
+              <ul>
+                {Object.entries(getJobSiteSummary()).map(([site, count], i) => (
+                  <li key={i}>{site}: {count} unit{count !== 1 ? 's' : ''}</li>
                 ))}
               </ul>
             </div>
