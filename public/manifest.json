@@ -1,6 +1,6 @@
 
 {
-  "name": "Ranch Asset Tracker",
+  "name": "Ranch Asset Checkout Form",
   "short_name": "RanchAsset",
   "description": "Track equipment rentals and returns",
   "start_url": "/",
