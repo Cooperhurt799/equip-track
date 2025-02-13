@@ -436,7 +436,7 @@ ul li > span { /* Added to target the customer name span */
   display: block;
   height: 2px;
   width: 100%;
-  background: #ffffff;
+  background: #34495e;
   border-radius: 2px;
 }
 
