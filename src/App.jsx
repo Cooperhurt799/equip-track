@@ -145,18 +145,16 @@ function App() {
   const [activeTab, setActiveTab] = useState('checkouts');
   
   const getActiveCheckouts = () => {
-    return getActiveUnitNumbers();
+    const activeUnits = getActiveUnitNumbers();
+    return activeUnits;
   };
 
   const getActiveUsers = () => {
     const activeUsersMap = new Map();
+    const activeUnits = getActiveUnitNumbers();
+    
     equipmentList.forEach(checkout => {
-      const hasCheckin = checkinList.find(
-        checkin => 
-          checkin.unit === checkout.unit && 
-          new Date(checkin.createdAt) > new Date(checkout.createdAt)
-      );
-      if (!hasCheckin) {
+      if (activeUnits.includes(checkout.unit)) {
         const currentCount = activeUsersMap.get(checkout.customerName) || 0;
         activeUsersMap.set(checkout.customerName, currentCount + 1);
       }
