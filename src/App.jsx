@@ -459,6 +459,13 @@ function App() {
                             label: unit,
                           }))
                         },
+                        {
+                          label: "Rental Equipment",
+                          options: rentalEquipmentList.map((item) => ({
+                            value: item,
+                            label: item,
+                          }))
+                        }
                       ]}
                       components={{
                         Input: ({ children, ...props }) => (
@@ -479,9 +486,6 @@ function App() {
                           </components.Input>
                         )
                       }}
-                        {
-                          label: "Rental Equipment",
-                          options: rentalEquipmentList.map((item) => ({
                             value: item,
                             label: item,
                           }))
