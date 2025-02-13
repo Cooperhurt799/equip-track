@@ -141,6 +141,28 @@ function App() {
     document.title = "Daugherty Ranches Equipment Tracker";
   }, []);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('checkouts');
+  
+  const getActiveCheckouts = () => {
+    return getActiveUnitNumbers();
+  };
+
+  const getActiveUsers = () => {
+    const activeUsers = new Set();
+    equipmentList.forEach(checkout => {
+      const hasCheckin = checkinList.find(
+        checkin => 
+          checkin.unit === checkout.unit && 
+          new Date(checkin.createdAt) > new Date(checkout.createdAt)
+      );
+      if (!hasCheckin) {
+        activeUsers.add(checkout.customerName);
+      }
+    });
+    return Array.from(activeUsers);
+  };
+
   // ---------------- Section Navigation State ----------------
   // currentSection: null (landing page), "checkout", or "checkin"
   const [currentSection, setCurrentSection] = useState(null);
@@ -425,6 +447,40 @@ function App() {
 
   return (
     <div className="App">
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <button onClick={() => setActiveTab('checkouts')}>Active Checkouts</button>
+          <button onClick={() => setActiveTab('users')}>Active Users</button>
+        </div>
+        <div className="sidebar-content">
+          {activeTab === 'checkouts' && (
+            <div>
+              <h3>Active Checkouts</h3>
+              <ul>
+                {getActiveCheckouts().map((unit, index) => (
+                  <li key={index}>{unit}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {activeTab === 'users' && (
+            <div>
+              <h3>Active Users</h3>
+              <ul>
+                {getActiveUsers().map((user, index) => (
+                  <li key={index}>{user}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+      <button 
+        className="cake-button"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        🍰
+      </button>
       <header className="app-header">
         <h1>Daugherty Ranches Equipment Tracker</h1>
         <p className="tagline">Sanford and Son</p>

@@ -322,3 +322,83 @@ ul li {
   z-index: 1000;
 }
 
+/* Sidebar Styles */
+.cake-button {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  z-index: 1000;
+  font-size: 24px;
+  padding: 10px 15px;
+  background: white;
+  border: 2px solid #8b6c42;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.cake-button:hover {
+  transform: scale(1.1);
+}
+
+.sidebar {
+  position: fixed;
+  left: -300px;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 999;
+  border-right: 2px solid #8b6c42;
+  overflow-y: auto; /* Added for scrollbar if content exceeds height */
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #8b6c42;
+  display: flex;
+  justify-content: space-between; /* Distribute space between close button and title */
+  align-items: center;             /* Vertically align items */
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  color: #4b3f2a;
+}
+
+.sidebar-header button {
+  padding: 8px;
+  background: #8b6c42;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.sidebar-content {
+  padding: 20px;
+}
+
+.sidebar-content h3 {
+  color: #4b3f2a;
+  margin-bottom: 15px;
+}
+
+.sidebar-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-content li {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #4b3f2a;
+  text-align: left;
+}
