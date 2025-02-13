@@ -420,7 +420,7 @@ function App() {
     return activeUnits;
   };
 
-  
+
 
 
   return (
@@ -486,8 +486,6 @@ function App() {
                           </components.Input>
                         )
                       }}
-                        }
-                      ]}
                       value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
                       onChange={(option) => {
                         setSelectedUnit(option.value);
