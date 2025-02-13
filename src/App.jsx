@@ -1,7 +1,7 @@
 // App.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
-import Select from "react-select"; // Ensure react-select is installed
+import Select, { components } from "react-select"; // Ensure react-select is installed
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import emailjs from "emailjs-com";
@@ -459,6 +459,26 @@ function App() {
                             label: unit,
                           }))
                         },
+                      ]}
+                      components={{
+                        Input: ({ children, ...props }) => (
+                          <components.Input {...props}>
+                            <input 
+                              {...props.innerProps}
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              style={{
+                                border: 'none',
+                                background: 'transparent',
+                                padding: 0,
+                                outline: 'none',
+                                width: '100%'
+                              }}
+                            />
+                            {children}
+                          </components.Input>
+                        )
+                      }}
                         {
                           label: "Rental Equipment",
                           options: rentalEquipmentList.map((item) => ({
