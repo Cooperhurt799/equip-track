@@ -98,7 +98,7 @@ body::before {
 .back-button {
   position: absolute;
   top: 20px;
-  left: 20px;
+  right: 20px;
   padding: 8px 12px;
   background-color: #34495e;
   color: #fff;
