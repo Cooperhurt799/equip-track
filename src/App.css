@@ -322,18 +322,12 @@ ul li {
   z-index: 1000;
 }
 
-/* Menu Buttons Styles */
-.menu-buttons {
+/* Hamburger Button Styles */
+.hamburger-button {
   position: fixed;
   left: 20px;
   top: 20px;
   z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.hamburger-button {
   padding: 15px;
   background: white;
   border: 2px solid #8b6c42;
@@ -345,7 +339,15 @@ ul li {
   justify-content: center;
 }
 
-.menu-action-button {
+/* Sidebar Buttons Styles */
+.sidebar-buttons {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-action-button {
   padding: 10px;
   background: white;
   border: 2px solid #8b6c42;
@@ -357,7 +359,7 @@ ul li {
   width: 100%;
 }
 
-.menu-action-button:hover {
+.sidebar-action-button:hover {
   background: #f8f4f0;
   transform: translateY(-1px);
 }
