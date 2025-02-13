@@ -671,9 +671,7 @@ function App() {
           <span></span>
         </div>
       </button>
-      <header className="app-header">
-        <h1>Daugherty Ranches Equipment Tracker</h1>
-        <p className="tagline">Sanford and Son</p>
+      <div className="top-buttons">
         {getOverdueUnits().length > 0 && (
           <button 
             className="overdue-alert-button"
@@ -688,6 +686,10 @@ function App() {
             {getOverdueUnits().length} Overdue Unit{getOverdueUnits().length !== 1 ? 's' : ''}!
           </button>
         )}
+      </div>
+      <header className="app-header">
+        <h1>Daugherty Ranches Equipment Tracker</h1>
+        <p className="tagline">Sanford and Son</p>
       </header>
 
       {currentSection === null ? (
