@@ -23,6 +23,12 @@ localPort = 4173
 externalPort = 80
 
 [workflows]
-runButton = "Run Dev Server"
-run = "npm run preview -- --port $PORT"
-port = 5000
+runButton = "Run"
+
+[[workflows.workflow]]
+name = "Run"
+author = 39571520
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
