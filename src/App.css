@@ -291,6 +291,19 @@ ul li {
   padding: 12px;
   border-radius: 6px;
   margin-bottom: 10px;
+  color: #4b3f2a;
+  text-align: left;
+}
+
+ul li > span { /* Added to target the customer name span */
+  display: block; /* Makes customer name go to the next line */
+  margin-top: 5px; /* Adds some spacing */
+  font-style: italic; /* Optional: adds italics to customer name */
+}
+
+.sidebar-content ul li small {
+  color: #666;
+  font-size: 0.9em;
 }
 
 /* Loading Spinner */
@@ -454,6 +467,7 @@ ul li {
   color: #666;
   display: block;
   margin-top: 4px;
+  font-size: 0.9em;
 }
 
 .search-input {

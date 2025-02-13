@@ -537,9 +537,18 @@ function App() {
             <div>
               <h3>Active Checkouts</h3>
               <ul>
-                {getActiveCheckouts().map((unit, index) => (
-                  <li key={index}>{unit}</li>
-                ))}
+                {getActiveCheckouts().map((unit, index) => {
+                  const latestCheckout = equipmentList
+                    .filter(checkout => checkout.unit === unit)
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+                  return (
+                    <li key={index}>
+                      {unit}
+                      <br/>
+                      <small>{latestCheckout?.customerName || 'No customer info'}</small>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
