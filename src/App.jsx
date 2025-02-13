@@ -143,6 +143,26 @@ function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
+  const [filteredDueReturns, setFilteredDueReturns] = useState(null);
+
+  const getDueReturns = () => {
+    const today = new Date();
+    const sevenDaysFromNow = new Date();
+    sevenDaysFromNow.setDate(today.getDate() + 7);
+    
+    return equipmentList.filter(checkout => {
+      const returnDate = new Date(checkout.returnDate);
+      const hasCheckin = checkinList.find(
+        checkin => 
+          checkin.unit === checkout.unit && 
+          new Date(checkin.createdAt) > new Date(checkout.createdAt)
+      );
+      
+      return !hasCheckin && 
+             returnDate >= today && 
+             returnDate <= sevenDaysFromNow;
+    }).sort((a, b) => new Date(a.returnDate) - new Date(b.returnDate));
+  };
   
   const getEquipmentStats = () => {
     const total = availableUnits.length;
@@ -508,6 +528,9 @@ function App() {
           <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'stats' ? null : 'stats')}>
             Equipment Stats
           </button>
+          <button className="sidebar-action-button" onClick={() => setActiveTab(activeTab === 'returns' ? null : 'returns')}>
+            Due Returns
+          </button>
         </div>
         <div className="sidebar-content">
           {activeTab === 'checkouts' && (
@@ -551,7 +574,32 @@ function App() {
               })()}
             </div>
           )}
-          
+          {activeTab === 'returns' && (
+            <div>
+              <h3>Due Returns (Within 7 Days)</h3>
+              <input 
+                type="text" 
+                placeholder="Search by unit or customer..."
+                onChange={(e) => {
+                  const searchTerm = e.target.value.toLowerCase();
+                  const filteredReturns = getDueReturns().filter(item => 
+                    item.unit.toLowerCase().includes(searchTerm) || 
+                    item.customerName.toLowerCase().includes(searchTerm)
+                  );
+                  setFilteredDueReturns(filteredReturns);
+                }}
+                className="search-input"
+              />
+              <ul>
+                {(filteredDueReturns || getDueReturns()).map((item, i) => (
+                  <li key={i}>
+                    {item.unit} - {item.customerName}
+                    <br/>
+                    <small>Due: {new Date(item.returnDate).toLocaleDateString()}</small>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </div>
