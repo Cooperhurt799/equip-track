@@ -475,50 +475,16 @@ function App() {
           )}
         </div>
       </div>
-      <div className="menu-container">
-        <button 
-          className="cake-button"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          <div className="hamburger-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </button>
-        <div className="dropdown-panels">
-          <div 
-            className="panel-button" 
-            onClick={() => setActiveTab(activeTab === 'checkouts' ? null : 'checkouts')}
-          >
-            Active Checkouts ({getActiveCheckouts().length})
-          </div>
-          {activeTab === 'checkouts' && (
-            <div className="panel-content">
-              <ul>
-                {getActiveCheckouts().map((unit, index) => (
-                  <li key={index}>{unit}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <div 
-            className="panel-button"
-            onClick={() => setActiveTab(activeTab === 'users' ? null : 'users')}
-          >
-            Active Users ({getActiveUsers().length})
-          </div>
-          {activeTab === 'users' && (
-            <div className="panel-content">
-              <ul>
-                {getActiveUsers().map((user, index) => (
-                  <li key={index}>{user}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+      <button 
+        className="hamburger-button"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        <div className="hamburger-icon">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-      </div>
+      </button>
       <header className="app-header">
         <h1>Daugherty Ranches Equipment Tracker</h1>
         <p className="tagline">Sanford and Son</p>
