@@ -698,7 +698,19 @@ function App() {
                       }
                     ]}
                     value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
-                    onChange={(option) => setCheckinUnit(option.value)}
+                    onChange={(option) => {
+                      setCheckinUnit(option.value);
+                      // Find the latest checkout for this unit
+                      const latestCheckout = equipmentList
+                        .filter(checkout => checkout.unit === option.value)
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+                      
+                      if (latestCheckout) {
+                        setCheckinCustomerName(latestCheckout.customerName);
+                        setCheckinCustomerEmail(latestCheckout.customerEmail);
+                        setCheckinCustomerPhone(latestCheckout.customerPhone);
+                      }
+                    }}
                     placeholder="Select Unit to Check In"
                     styles={customSelectStyles}
                   />
