@@ -166,15 +166,11 @@ function App() {
   
   const getOverdueUnits = () => {
     const today = new Date();
+    const activeCheckouts = getActiveCheckouts();
+    
     return equipmentList.filter(checkout => {
       const returnDate = new Date(checkout.returnDate);
-      const hasCheckin = checkinList.find(
-        checkin => 
-          checkin.unit === checkout.unit && 
-          new Date(checkin.createdAt) > new Date(checkout.createdAt)
-      );
-      
-      return !hasCheckin && returnDate < today;
+      return activeCheckouts.includes(checkout.unit) && returnDate < today;
     }).map(checkout => ({
       ...checkout,
       daysOverdue: Math.floor((new Date() - new Date(checkout.returnDate)) / (1000 * 60 * 60 * 24))
