@@ -1,7 +1,7 @@
 
 {
-  "name": "Daugherty Ranches Equipment Tracker",
-  "short_name": "EquipTracker",
+  "name": "RanchAsset Tracker",
+  "short_name": "RanchAsset",
   "description": "Track equipment rentals and returns",
   "start_url": "/",
   "display": "standalone",
