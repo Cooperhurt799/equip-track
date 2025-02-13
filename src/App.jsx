@@ -169,20 +169,21 @@ function App() {
     const activeCheckouts = getActiveCheckouts();
     
     return equipmentList.filter(checkout => {
-      // Check if this is the most recent checkout for this unit
-      const isLatestCheckout = !equipmentList.some(other => 
-        other.unit === checkout.unit && 
-        new Date(other.createdAt) > new Date(checkout.createdAt)
-      );
+      // Only include units that are in active checkouts
+      if (!activeCheckouts.includes(checkout.unit)) {
+        return false;
+      }
       
-      // Check if there's no check-in after this checkout
-      const hasNoCheckin = !checkinList.some(checkin => 
-        checkin.unit === checkout.unit && 
-        new Date(checkin.createdAt) > new Date(checkout.createdAt)
-      );
-      
+      // Get the most recent checkout for this unit
+      const latestCheckout = equipmentList
+        .filter(c => c.unit === checkout.unit)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+        
+      // Only include if this is the latest checkout and it's overdue
+      const isLatestCheckout = checkout.createdAt === latestCheckout.createdAt;
       const returnDate = new Date(checkout.returnDate);
-      return isLatestCheckout && hasNoCheckin && returnDate < today;
+      
+      return isLatestCheckout && returnDate < today;
     }).map(checkout => ({
       ...checkout,
       daysOverdue: Math.floor((new Date() - new Date(checkout.returnDate)) / (1000 * 60 * 60 * 24))
