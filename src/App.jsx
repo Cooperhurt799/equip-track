@@ -467,25 +467,6 @@ function App() {
                           }))
                         }
                       ]}
-                      components={{
-                        Input: ({ children, ...props }) => (
-                          <components.Input {...props}>
-                            <input 
-                              {...props.innerProps}
-                              inputMode="numeric"
-                              pattern="[0-9]*"
-                              style={{
-                                border: 'none',
-                                background: 'transparent',
-                                padding: 0,
-                                outline: 'none',
-                                width: '100%'
-                              }}
-                            />
-                            {children}
-                          </components.Input>
-                        )
-                      }}
                       value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
                       onChange={(option) => {
                         setSelectedUnit(option.value);
