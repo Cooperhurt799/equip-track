@@ -144,8 +144,6 @@ function App() {
   // ---------------- Section Navigation State ----------------
   // currentSection: null (landing page), "checkout", or "checkin"
   const [currentSection, setCurrentSection] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
 
   // ---------------- Message States ----------------
   const [checkoutMessage, setCheckoutMessage] = useState("");
@@ -422,15 +420,7 @@ function App() {
     return activeUnits;
   };
 
-  const filteredEquipment = useMemo(() => {
-    return availableUnits.filter(unit => {
-      const matchesSearch = unit.toLowerCase().includes(searchTerm.toLowerCase());
-      const isActive = getActiveUnitNumbers().includes(unit);
-      return filterStatus === "all" ? matchesSearch :
-             filterStatus === "active" ? (matchesSearch && isActive) :
-             (matchesSearch && !isActive);
-    });
-  }, [availableUnits, searchTerm, filterStatus]);
+  
 
 
   return (
@@ -458,31 +448,13 @@ function App() {
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
               <div className="section-header">
-                <div className="search-filter-container">
-                  <input
-                    type="text"
-                    placeholder="Search equipment..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="search-input"
-                  />
-                  <select 
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
-                    className="filter-select"
-                  >
-                    <option value="all">All Equipment</option>
-                    <option value="active">Active Checkouts</option>
-                    <option value="available">Available</option>
-                  </select>
-                </div>
                 <div className="active-checkouts inline">
                   <h3>Select Equipment to Checkout</h3>
                   <Select
                       options={[
                         {
                           label: "Ranch Equipment",
-                          options: filteredEquipment.map((unit) => ({
+                          options: availableUnits.map((unit) => ({
                             value: unit,
                             label: unit,
                           }))
