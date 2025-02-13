@@ -149,7 +149,7 @@ function App() {
   };
 
   const getActiveUsers = () => {
-    const activeUsers = new Set();
+    const activeUsersMap = new Map();
     equipmentList.forEach(checkout => {
       const hasCheckin = checkinList.find(
         checkin => 
@@ -157,10 +157,14 @@ function App() {
           new Date(checkin.createdAt) > new Date(checkout.createdAt)
       );
       if (!hasCheckin) {
-        activeUsers.add(checkout.customerName);
+        const currentCount = activeUsersMap.get(checkout.customerName) || 0;
+        activeUsersMap.set(checkout.customerName, currentCount + 1);
       }
     });
-    return Array.from(activeUsers);
+    return Array.from(activeUsersMap.entries()).map(([name, count]) => ({
+      name,
+      count
+    }));
   };
 
   // ---------------- Section Navigation State ----------------
@@ -482,7 +486,7 @@ function App() {
               <h3>Active Users</h3>
               <ul>
                 {getActiveUsers().map((user, index) => (
-                  <li key={index}>{user}</li>
+                  <li key={index}>{user.name} ({user.count} unit{user.count !== 1 ? 's' : ''})</li>
                 ))}
               </ul>
             </div>
