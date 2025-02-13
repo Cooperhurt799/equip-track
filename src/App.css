@@ -65,6 +65,28 @@ body::before {
   color: #f2efe4;
 }
 
+.overdue-alert-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.overdue-alert-button:hover {
+  background-color: #c82333;
+}
+
 /* Landing and Section Container */
 .landing, .section-container {
   display: flex;

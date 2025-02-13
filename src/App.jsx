@@ -164,6 +164,23 @@ function App() {
     }).sort((a, b) => new Date(a.returnDate) - new Date(b.returnDate));
   };
   
+  const getOverdueUnits = () => {
+    const today = new Date();
+    return equipmentList.filter(checkout => {
+      const returnDate = new Date(checkout.returnDate);
+      const hasCheckin = checkinList.find(
+        checkin => 
+          checkin.unit === checkout.unit && 
+          new Date(checkin.createdAt) > new Date(checkout.createdAt)
+      );
+      
+      return !hasCheckin && returnDate < today;
+    }).map(checkout => ({
+      ...checkout,
+      daysOverdue: Math.floor((new Date() - new Date(checkout.returnDate)) / (1000 * 60 * 60 * 24))
+    }));
+  };
+
   const getEquipmentStats = () => {
     const total = availableUnits.length;
     const active = getActiveCheckouts().length;
@@ -657,6 +674,20 @@ function App() {
       <header className="app-header">
         <h1>Daugherty Ranches Equipment Tracker</h1>
         <p className="tagline">Sanford and Son</p>
+        {getOverdueUnits().length > 0 && (
+          <button 
+            className="overdue-alert-button"
+            onClick={() => {
+              const overdue = getOverdueUnits();
+              const message = overdue.map(unit => 
+                `Unit: ${unit.unit}\nCustomer: ${unit.customerName}\nDue Date: ${new Date(unit.returnDate).toLocaleDateString()}\nDays Overdue: ${unit.daysOverdue}`
+              ).join('\n\n');
+              alert('OVERDUE UNITS:\n\n' + message);
+            }}
+          >
+            {getOverdueUnits().length} Overdue Unit{getOverdueUnits().length !== 1 ? 's' : ''}!
+          </button>
+        )}
       </header>
 
       {currentSection === null ? (
