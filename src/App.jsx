@@ -384,6 +384,7 @@ function App() {
         createdAt: serverTimestamp()
       };
       await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
+      alert("Checkout Successful!");
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
@@ -507,6 +508,7 @@ function App() {
           createdAt: serverTimestamp()
         };
         await addDoc(collection(db, 'checkins'), checkinWithTimestamp);
+        alert("Check-in Successful!");
         setCheckinMessage("Check-in successful!");
 
         if (EMAIL_NOTIFICATIONS_ENABLED) {
