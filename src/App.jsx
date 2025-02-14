@@ -1,7 +1,6 @@
-// App.jsx
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Select from "react-select"; // Ensure react-select is installed
+import Select from "react-select";
 import emailjs from "emailjs-com";
 import { init as initEmailJS } from "emailjs-com";
 import { initializeApp } from "firebase/app";
