@@ -1,0 +1,74 @@
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uD @ framework-c4b3cc9fe6de615f.js:1
+uI @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uM @ framework-c4b3cc9fe6de615f.js:1
+uS @ framework-c4b3cc9fe6de615f.js:1
+C @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+Show 3 more frames
+Show lessUnderstand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+workspace_iframe.html:32 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uD @ framework-c4b3cc9fe6de615f.js:1
+uI @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uM @ framework-c4b3cc9fe6de615f.js:1
+uS @ framework-c4b3cc9fe6de615f.js:1
+C @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+postMessage
+n @ setImmediate.js:120
+YBdB.f.setImmediate @ setImmediate.js:27
+r @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+postMessage
+n @ setImmediate.js:120
+YBdB.f.setImmediate @ setImmediate.js:27
+r @ framework-c4b3cc9fe6de615f.js:1
+I @ framework-c4b3cc9fe6de615f.js:1
+t.unstable_scheduleCallback @ framework-c4b3cc9fe6de615f.js:1
+uw @ framework-c4b3cc9fe6de615f.js:1
+uk @ framework-c4b3cc9fe6de615f.js:1
+lj @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ _app-dc6bbe423e17564a.js:30
+n @ _app-dc6bbe423e17564a.js:30
+C @ _app-dc6bbe423e17564a.js:30
+O @ _app-dc6bbe423e17564a.js:30
+(anonymous) @ _app-dc6bbe423e17564a.js:30
+(anonymous) @ replEnvironmentDesktop-c79f81587a48a451.js:1
+ny.portsState.subscribe.yq.leading @ replEnvironmentDesktop-c79f81587a48a451.js:1
+y @ _app-dc6bbe423e17564a.js:4
+_ @ _app-dc6bbe423e17564a.js:4
+n @ _app-dc6bbe423e17564a.js:18
+update @ _app-dc6bbe423e17564a.js:18
+m @ 756-d1a5ae74e5d3b155.js:1
+(anonymous) @ 756-d1a5ae74e5d3b155.js:1
+c.emit @ 8707-43c11eb4fdb4b827.js:1
+(anonymous) @ 9175-5638591f7ea696fe.js:1
+(anonymous) @ 8707-43c11eb4fdb4b827.js:1
+handleCommand @ 8707-43c11eb4fdb4b827.js:1
+onSocketMessage @ 8707-43c11eb4fdb4b827.js:1
+Show 10 more frames
+Show lessUnderstand this error
+897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ardk%3A:32 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
