@@ -213,48 +213,74 @@ function App() {
       });
 
       if (Object.keys(formErrors).length > 0) {
-        throw new Error(Object.values(formErrors).join("\n"));
+        setIsLoading(false);
+        alert(Object.values(formErrors).join("\n"));
+        return;
       }
 
-      const checkoutData = {
-        unit: selectedUnit,
-        hoursMiles: checkoutHoursMiles,
-        checkoutDate,
-        returnDate,
-        customerName,
-        customerEmail,
-        customerPhone,
-        jobSite,
-        projectCode,
-        departmentID,
-        createdAt: new Date().toISOString(),
-        status: "active",
-      };
+      try {
+        const checkoutData = {
+          unit: selectedUnit,
+          hoursMiles: checkoutHoursMiles,
+          checkoutDate,
+          returnDate,
+          customerName,
+          customerEmail,
+          customerPhone,
+          jobSite,
+          projectCode,
+          departmentID,
+          createdAt: new Date().toISOString(),
+          status: "active",
+        };
 
-      const airtableRecord = await airtableService.syncCheckout(checkoutData);
-      console.log('Airtable sync successful:', airtableRecord);
+        // Sync to Airtable
+        const airtableRecord = await airtableService.syncCheckout(checkoutData);
+        console.log('Airtable sync successful:', airtableRecord);
 
-      // Clear form fields
-      setSelectedUnit(null);
-      setCheckoutHoursMiles("");
-      setCheckoutDate("");
-      setReturnDate("");
-      setCustomerName("");
-      setCustomerEmail("");
-      setCustomerPhone("");
-      setJobSite(null);
-      setProjectCode(null);
-      setDepartmentID(null);
+        if (EMAIL_NOTIFICATIONS_ENABLED) {
+          try {
+            await emailjs.send(
+              EMAILJS_SERVICE_ID,
+              EMAILJS_TEMPLATE_ID_CHECKOUT,
+              {
+                to_email: customerEmail,
+                customer_name: customerName,
+                unit: selectedUnit,
+                checkout_date: checkoutDate,
+                return_date: returnDate,
+                job_site: jobSite,
+                project_code: projectCode,
+                department_id: departmentID,
+              },
+              EMAILJS_USER_ID
+            );
+          } catch (err) {
+            console.error("Failed to send email:", err);
+          }
+        }
 
-      setCheckoutMessage("Checkout successful!");
-      setTimeout(() => setCheckoutMessage(""), 3000);
+        // Clear form fields
+        setSelectedUnit(null);
+        setCheckoutHoursMiles("");
+        setCheckoutDate("");
+        setReturnDate("");
+        setCustomerName("");
+        setCustomerEmail("");
+        setCustomerPhone("");
+        setJobSite(null);
+        setProjectCode(null);
+        setDepartmentID(null);
 
-    } catch (error) {
-      console.error("Error during checkout:", error);
-      setCheckoutMessage(error.message || "An error occurred during checkout. Please try again.");
-      setTimeout(() => setCheckoutMessage(""), 5000);
-    } finally {
-      setIsLoading(false);
+        setCheckoutMessage("Checkout successful!");
+        setTimeout(() => setCheckoutMessage(""), 3000);
+      } catch (error) {
+        console.error("Error during checkout:", error);
+        setCheckoutMessage(error.message || "An error occurred during checkout. Please try again.");
+        setTimeout(() => setCheckoutMessage(""), 5000);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
