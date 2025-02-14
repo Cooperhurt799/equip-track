@@ -205,7 +205,7 @@ function App() {
         throw new Error("Please fill in all required fields");
       }
 
-    const formErrors = validateForm({
+      const formErrors = validateForm({
       hoursMiles: checkoutHoursMiles,
       customerPhone,
       customerEmail,
