@@ -358,9 +358,28 @@ function App() {
       const airtableResponse = await addCheckoutToAirtable(newCheckout);
       console.log("Successfully added to Airtable:", airtableResponse);
 
-      // Only set success message after both operations complete successfully
+      // Set success message and show it prominently
       setCheckoutMessage("Checkout successful!");
-      alert("Checkout successful!");
+      
+      // Create and show a custom success message div
+      const successDiv = document.createElement('div');
+      successDiv.style.position = 'fixed';
+      successDiv.style.top = '50%';
+      successDiv.style.left = '50%';
+      successDiv.style.transform = 'translate(-50%, -50%)';
+      successDiv.style.background = '#4CAF50';
+      successDiv.style.color = 'white';
+      successDiv.style.padding = '20px';
+      successDiv.style.borderRadius = '5px';
+      successDiv.style.zIndex = '1000';
+      successDiv.textContent = 'Checkout Successful!';
+      document.body.appendChild(successDiv);
+
+      // Remove the success message after 3 seconds
+      setTimeout(() => {
+        document.body.removeChild(successDiv);
+      }, 3000);
+
       emailjs.send(
           EMAILJS_SERVICE_ID,
           EMAILJS_TEMPLATE_ID_CHECKOUT,
