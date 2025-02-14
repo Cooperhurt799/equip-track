@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import AuthWrapper from './AuthWrapper';
+import App from './App';
 import './App.css';
 
 try {
@@ -13,7 +13,7 @@ try {
 
   root.render(
     <React.StrictMode>
-      <AuthWrapper />
+      <App />
     </React.StrictMode>
   );
 } catch (error) {

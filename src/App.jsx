@@ -28,7 +28,12 @@ const firebaseConfig = {
   measurementId: "G-L58WPXJ4J1",
 };
 
-const app = initializeApp(firebaseConfig);
+let app;
+try {
+  app = initializeApp(firebaseConfig);
+} catch (error) {
+  app = getApp(); // Get the existing app if already initialized
+}
 const db = getFirestore(app);
 import "./reminderService"; // Import the reminder service if used
 
