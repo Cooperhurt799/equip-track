@@ -925,7 +925,7 @@ function App() {
                 <button type="submit">Checkout Equipment</button>
               </form>
               {checkoutMessage && <p className="message">{checkoutMessage}</p>}
-            </</section>
+            </section>
           ) : (
             <section className="checkin">
               <h2>Equipment Check-In</h2>
