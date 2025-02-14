@@ -301,10 +301,12 @@ function App() {
 
   const addEquipment = async (e) => {
     e.preventDefault();
+    console.log("Starting checkout process...");
 
     if (!window.confirm(`Are you sure you want to check out ${selectedUnit}?`)) {
       return;
     }
+
     if (
       selectedUnit &&
       checkoutHoursMiles &&
@@ -326,16 +328,20 @@ function App() {
         customerEmail,
         customerPhone,
         jobSite,
-        projectCode,       // new field
-        departmentID,      // new field
+        projectCode,
+        departmentID,
         createdAt: new Date().toISOString(),
       };
 
       try {
-        // First add to Firebase
-        await addDoc(collection(db, "checkouts"), newCheckout);
-        // Then add to Airtable
+        console.log("Adding to Firebase...");
+        const docRef = await addDoc(collection(db, "checkouts"), newCheckout);
+        console.log("Added to Firebase with ID:", docRef.id);
+        
+        console.log("Adding to Airtable...");
         await addCheckoutToAirtable(newCheckout);
+        console.log("Added to Airtable");
+        
         setCheckoutMessage("Checkout successful!");
         emailjs
           .send(
