@@ -4,7 +4,7 @@ import "./App.css";
 import Select, { components } from "react-select"; // Ensure react-select is installed
 import emailjs from "emailjs-com";
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
 import { addCheckoutToAirtable, addCheckinToAirtable } from './airtableService';
 
 const firebaseConfig = {
@@ -155,26 +155,72 @@ function App() {
     document.title = "Daugherty Ranches Equipment Tracker";
   }, []);
 
-  // Test Airtable connection on component mount
+  // Fetch data from Firebase
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const checkoutsQuery = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
-        const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
-        
+        const checkoutsQuery = query(
+          collection(db, 'checkouts'), 
+          orderBy('createdAt', 'desc')
+        );
+        const checkinsQuery = query(
+          collection(db, 'checkins'), 
+          orderBy('createdAt', 'desc')
+        );
+
         const [checkoutsSnapshot, checkinsSnapshot] = await Promise.all([
           getDocs(checkoutsQuery),
           getDocs(checkinsQuery)
         ]);
 
-        setEquipmentList(checkoutsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-        setCheckinList(checkinsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        const checkoutData = checkoutsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
+        }));
+
+        const checkinData = checkinsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
+        }));
+
+        setEquipmentList(checkoutData);
+        setCheckinList(checkinData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
+    // Initial fetch
     fetchData();
+
+    // Set up real-time listener
+    const checkoutsQuery = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
+    const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
+
+    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
+      const checkoutData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
+      }));
+      setEquipmentList(checkoutData);
+    });
+
+    const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
+      const checkinData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
+      }));
+      setCheckinList(checkinData);
+    });
+
+    return () => {
+      unsubscribeCheckouts();
+      unsubscribeCheckins();
+    };
   }, []);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
