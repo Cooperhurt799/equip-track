@@ -71,6 +71,7 @@ onValue(connectedRef, (snap) => {
 });
 
 import "./reminderService"; // Import the reminder service if used
+import airtableService from './airtableService';
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
@@ -523,6 +524,9 @@ const docRef = await addDoc(
       );
 console.log('Checkout saved successfully with ID:', docRef.id);
       console.log("Document written with ID: ", docRef.id);
+      
+      // Sync to Airtable
+      await airtableService.syncCheckout(checkoutWithTimestamp);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
@@ -632,6 +636,9 @@ console.log('Checkout saved successfully with ID:', docRef.id);
         checkinWithTimestamp
       );
       console.log("Checkin document written with ID: ", docRef.id);
+      
+      // Sync to Airtable
+      await airtableService.syncCheckin(checkinWithTimestamp);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
