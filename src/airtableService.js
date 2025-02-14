@@ -10,6 +10,7 @@ export const addCheckoutToAirtable = async (checkoutData) => {
     if (!checkoutData) {
       throw new Error('No checkout data provided');
     }
+    console.log('Creating Airtable record with data:', checkoutData);
     const record = await base('Checkouts').create([
       {
         fields: {
@@ -27,6 +28,7 @@ export const addCheckoutToAirtable = async (checkoutData) => {
         }
       }
     ]);
+    console.log('Airtable record created successfully:', record);
     return record;
   } catch (error) {
     console.error('Error adding to Airtable:', error);

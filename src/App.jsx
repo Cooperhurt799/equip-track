@@ -344,11 +344,12 @@ function App() {
 
       // Then add to Airtable
       console.log("Adding to Airtable...");
-      await addCheckoutToAirtable(newCheckout);
-      console.log("Successfully added to Airtable");
+      const airtableResponse = await addCheckoutToAirtable(newCheckout);
+      console.log("Successfully added to Airtable:", airtableResponse);
 
-      // Only set success message if both operations complete
+      // Only set success message after both operations complete successfully
       setCheckoutMessage("Checkout successful!");
+      alert("Checkout successful!");
       emailjs.send(
           EMAILJS_SERVICE_ID,
           EMAILJS_TEMPLATE_ID_CHECKOUT,
