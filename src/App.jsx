@@ -332,10 +332,10 @@ function App() {
       };
 
       try {
-        await Promise.all([
-          addDoc(collection(db, "checkouts"), newCheckout),
-          addCheckoutToAirtable(newCheckout)
-        ]);
+        // First add to Firebase
+        await addDoc(collection(db, "checkouts"), newCheckout);
+        // Then add to Airtable
+        await addCheckoutToAirtable(newCheckout);
         setCheckoutMessage("Checkout successful!");
         emailjs
           .send(
