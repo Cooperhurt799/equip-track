@@ -380,11 +380,10 @@ function App() {
 
       <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h2>Equipment Status</h2>
           <button onClick={() => setSidebarOpen(false)}>×</button>
         </div>
         <div className="sidebar-content">
-          <div className="sidebar-buttons">
+          <div className="sidebar-buttons" style={{ paddingTop: '20px' }}>
             <button 
               className="sidebar-action-button" 
               onClick={() => setActiveTab('active-checkouts')}

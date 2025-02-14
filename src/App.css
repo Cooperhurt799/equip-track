@@ -408,7 +408,7 @@ ul li > span { /* Added to target the customer name span */
 /* Sidebar Buttons Styles */
 .sidebar-buttons {
   padding: 20px;
-  padding-top: 90px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
