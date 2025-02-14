@@ -39,15 +39,15 @@ try {
 const db = getFirestore(app);
 
 // Configure Firestore settings for better offline support and reliability
-const firestoreSettings = {
+const firestoreSettings = getFirestore(app, {
   cacheSizeBytes: 100000000, // 100MB cache
   experimentalForceLongPolling: true, // Use long polling for better connection stability
   experimentalAutoDetectLongPolling: true,
-  merge: true
-};
+  ignoreUndefinedProperties: true
+});
 
-// Initialize Firestore with settings
-db.settings(firestoreSettings);
+// Update db reference
+const db = firestoreSettings;
 
 // Enable offline persistence with error handling
 enableIndexedDbPersistence(db, {
