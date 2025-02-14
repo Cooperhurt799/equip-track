@@ -1,10 +1,9 @@
-
 import Airtable from 'airtable';
 
-const AIRTABLE_API_KEY = import.meta.env.VITE_AIRTABLE_API_KEY;
+const AIRTABLE_PAT = import.meta.env.VITE_AIRTABLE_PAT;
 const AIRTABLE_BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
 
-const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
+const base = new Airtable({ apiKey: AIRTABLE_PAT }).base(AIRTABLE_BASE_ID);
 
 export const syncCheckout = async (checkoutData) => {
   try {
