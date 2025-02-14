@@ -379,7 +379,7 @@ function App() {
       };
 
       await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
-      
+
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
           await emailjs.send(
@@ -417,7 +417,7 @@ function App() {
       // Show success message
       setCheckoutMessage("Checkout successful!");
       setTimeout(() => setCheckoutMessage(""), 3000);
-      
+
     } catch (error) {
       console.error("Error adding checkout document: ", error);
       alert("Error during checkout. Please try again.");
