@@ -1,0 +1,415 @@
+12Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uD @ framework-c4b3cc9fe6de615f.js:1
+uI @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uM @ framework-c4b3cc9fe6de615f.js:1
+uS @ framework-c4b3cc9fe6de615f.js:1
+C @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+Show 3 more frames
+Show lessUnderstand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uD @ framework-c4b3cc9fe6de615f.js:1
+uI @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uM @ framework-c4b3cc9fe6de615f.js:1
+uS @ framework-c4b3cc9fe6de615f.js:1
+C @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+Show 3 more frames
+Show lessUnderstand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+framework-c4b3cc9fe6de615f.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-c4b3cc9fe6de615f.js:1Understand this error
+workspace_iframe.html:32 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Understand this error
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46125)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16
+f @ 8707-43c11eb4fdb4b827.js:1
+c.addListener @ 8707-43c11eb4fdb4b827.js:1
+h @ 424-21d3a9ef9712bdf1.js:1
+watchTextFile @ 424-21d3a9ef9712bdf1.js:1
+(anonymous) @ 756-d1a5ae74e5d3b155.js:1
+(anonymous) @ 756-d1a5ae74e5d3b155.js:1
+oO @ framework-c4b3cc9fe6de615f.js:1
+uB @ framework-c4b3cc9fe6de615f.js:1
+u_ @ framework-c4b3cc9fe6de615f.js:1
+r6 @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uO @ framework-c4b3cc9fe6de615f.js:1
+uS @ framework-c4b3cc9fe6de615f.js:1
+C @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+Show 3 more frames
+Show lessUnderstand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 fsError listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46311)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16
+f @ 8707-43c11eb4fdb4b827.js:1
+c.addListener @ 8707-43c11eb4fdb4b827.js:1
+h @ 424-21d3a9ef9712bdf1.js:1
+watchTextFile @ 424-21d3a9ef9712bdf1.js:1
+(anonymous) @ 756-d1a5ae74e5d3b155.js:1
+(anonymous) @ 756-d1a5ae74e5d3b155.js:1
+oO @ framework-c4b3cc9fe6de615f.js:1
+uB @ framework-c4b3cc9fe6de615f.js:1
+u_ @ framework-c4b3cc9fe6de615f.js:1
+r6 @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ framework-c4b3cc9fe6de615f.js:1
+uO @ framework-c4b3cc9fe6de615f.js:1
+uS @ framework-c4b3cc9fe6de615f.js:1
+C @ framework-c4b3cc9fe6de615f.js:1
+z @ framework-c4b3cc9fe6de615f.js:1
+(anonymous) @ setImmediate.js:40
+y @ setImmediate.js:69
+c @ setImmediate.js:109
+Show 3 more frames
+Show lessUnderstand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46125)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181041
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165733)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:163096
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 fsError listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46311)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181041
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165733)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:163096
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46125)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 fsError listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46311)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46125)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 fsError listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46311)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46125)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+_app-dc6bbe423e17564a.js:16 MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 fsError listeners added. Use emitter.setMaxListeners() to increase limit
+    at f (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:79238)
+    at c.addListener (https://cdn.replit.com/_next/static/chunks/8707-43c11eb4fdb4b827.js:1:81772)
+    at h (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:46311)
+    at Object.watchTextFile (https://cdn.replit.com/_next/static/chunks/424-21d3a9ef9712bdf1.js:1:50127)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988514
+    at Array.map (<anonymous>)
+    at https://cdn.replit.com/_next/static/chunks/756-d1a5ae74e5d3b155.js:1:1988489
+    at oO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:153605)
+    at uB (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:182655)
+    at u_ (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:165471)
+    at r6 (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:114363)
+    at https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181101
+    at uO (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:181107)
+    at uS (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:164474)
+    at C (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207254)
+    at z (https://cdn.replit.com/_next/static/chunks/framework-c4b3cc9fe6de615f.js:1:207784)
+    at https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34710
+    at y (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34825)
+    at c (https://cdn.segment.com/next-integrations/integrations/vendor/commons.a61d7bea37d2de5d4b69.js.gz:1:34183)
+(anonymous) @ _app-dc6bbe423e17564a.js:16Understand this warning
+Console.js:61 [2025-02-14T12:01:25.859Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d6d transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:25.860Z]  @firebase/firestore: Firestore (9.23.0): Could not reach Cloud Firestore backend. Connection failed 1 times. Most recent error: FirebaseError: [code=unavailable]: The operation could not be completed
+This typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.
+Mt.forEach.n.<computed> @ Console.js:61Understand this error
+Console.js:61 [2025-02-14T12:01:25.990Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d6e transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:25.991Z]  @firebase/database: FIREBASE WARNING: Firebase error. Please ensure that you have the URL of your Firebase Realtime Database instance configured correctly. (https://ranch-asset-tracker-default-rtdb.firebaseio.com/) 
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:27.480Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d6f transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:28.872Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d70 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:31.780Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d71 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:36.031Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d72 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:39.160Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d73 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:43.758Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d74 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:01:51.436Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d75 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:02:06.451Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d76 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:02:44.325Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d77 transport errored: Qd
+Mt.forEach.n.<computed> @ Console.js:61Understand this warning
+Console.js:61 [2025-02-14T12:03:16.138Z]  @firebase/firestore: Firestore (9.23.0): WebChannelConnection RPC 'Listen' stream 0x3b6c1d78 transport errored: Qd {type: 'c', target: Q, g: Q, defaultPrevented: false, status: 1}
+Mt.forEach.n.<computed> @ Console.js:61
+defaultLogHandler @ chunk-XM2LYHX5.js:1185
+warn @ chunk-XM2LYHX5.js:1249
+M2 @ firebase_firestore.js:2650
+(anonymous) @ firebase_firestore.js:12040
+(anonymous) @ firebase_firestore.js:12027
+ib @ firebase_firestore.js:463
+C @ firebase_firestore.js:433
+R.za @ firebase_firestore.js:2178
+J @ firebase_firestore.js:2026
+sc @ firebase_firestore.js:2004
+pc @ firebase_firestore.js:964
+k.Pa @ firebase_firestore.js:893
+k.nb @ firebase_firestore.js:831
+ib @ firebase_firestore.js:463
+C @ firebase_firestore.js:433
+Ad @ firebase_firestore.js:1572
+k.kb @ firebase_firestore.js:1567
+k.La @ firebase_firestore.js:1564
+od @ firebase_firestore.js:1474
+k.Xa @ firebase_firestore.js:1441
+Promise.then
+qd @ firebase_firestore.js:1432
+k.$a @ firebase_firestore.js:1428
+Promise.then
+k.send @ firebase_firestore.js:1409
+k.ha @ firebase_firestore.js:1534
+ic @ firebase_firestore.js:824
+Md @ firebase_firestore.js:1970
+k.Ma @ firebase_firestore.js:1937
+ub @ firebase_firestore.js:538
+Promise.then
+sb @ firebase_firestore.js:532
+Fc @ firebase_firestore.js:1923
+qc @ firebase_firestore.js:1042
+rc @ firebase_firestore.js:915
+k.Pa @ firebase_firestore.js:890
+k.nb @ firebase_firestore.js:831
+ib @ firebase_firestore.js:463
+C @ firebase_firestore.js:433
+Ad @ firebase_firestore.js:1572
+k.kb @ firebase_firestore.js:1567
+k.La @ firebase_firestore.js:1564
+od @ firebase_firestore.js:1474
+k.Xa @ firebase_firestore.js:1441
+Promise.then
+qd @ firebase_firestore.js:1432
+k.$a @ firebase_firestore.js:1428
+Promise.then
+k.send @ firebase_firestore.js:1409
+k.ha @ firebase_firestore.js:1534
+ic @ firebase_firestore.js:824
+gc @ firebase_firestore.js:808
+k.Na @ firebase_firestore.js:1857
+ub @ firebase_firestore.js:538
+Promise.then
+sb @ firebase_firestore.js:532
+Gc @ firebase_firestore.js:1801
+Q.m @ firebase_firestore.js:2123
+ro @ firebase_firestore.js:12021
+send @ firebase_firestore.js:11883
+Wo @ firebase_firestore.js:12205
+su @ firebase_firestore.js:12352
+Yu @ firebase_firestore.js:12649
+(anonymous) @ firebase_firestore.js:12672
+sc2 @ firebase_firestore.js:12671
+(anonymous) @ firebase_firestore.js:12281
+(anonymous) @ firebase_firestore.js:12305
+(anonymous) @ firebase_firestore.js:15195
+(anonymous) @ firebase_firestore.js:15226
+Promise.then
+ta @ firebase_firestore.js:15226
+enqueue @ firebase_firestore.js:15195
+enqueueAndForget @ firebase_firestore.js:15177
+(anonymous) @ firebase_firestore.js:12305
+(anonymous) @ firebase_firestore.js:12281
+fo @ firebase_firestore.js:11886
+(anonymous) @ firebase_firestore.js:12069
+setTimeout
+Ro @ firebase_firestore.js:12068
+eu @ firebase_firestore.js:12314
+Zo @ firebase_firestore.js:12280
+(anonymous) @ firebase_firestore.js:12270
+Promise.then
+auth @ firebase_firestore.js:12266
+start @ firebase_firestore.js:12165
+(anonymous) @ firebase_firestore.js:12290
+(anonymous) @ firebase_firestore.js:12116
+(anonymous) @ firebase_firestore.js:12928
+(anonymous) @ firebase_firestore.js:15195
+(anonymous) @ firebase_firestore.js:15226
+Promise.then
+ta @ firebase_firestore.js:15226
+enqueue @ firebase_firestore.js:15195
+enqueueAndForget @ firebase_firestore.js:15177
+handleDelayElapsed @ firebase_firestore.js:12928
+(anonymous) @ firebase_firestore.js:12908Understand this warning
