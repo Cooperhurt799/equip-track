@@ -402,8 +402,8 @@ const addEquipment = async (e) => {
         return;
       }
 
-    const formErrors = validateForm({
-      hoursMiles: checkoutHoursMiles,
+      const formErrors = validateForm({
+        hoursMiles: checkoutHoursMiles,
       customerPhone,
       customerEmail
     });
@@ -479,9 +479,12 @@ const addEquipment = async (e) => {
       setTimeout(() => {
         setCheckoutMessage("");
       }, 3000);
-
     } catch (error) {
       console.error("Error adding checkout document: ", error);
+      setCheckoutMessage("Error during checkout. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
       const errorMessage = error.code === 'permission-denied' 
         ? "You don't have permission to perform this action."
         : "An error occurred during checkout. Please try again.";
