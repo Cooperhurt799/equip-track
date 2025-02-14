@@ -358,11 +358,26 @@ function App() {
       const airtableResponse = await addCheckoutToAirtable(newCheckout);
       console.log("Successfully added to Airtable:", airtableResponse);
 
-      // Set success message and show it prominently
       setCheckoutMessage("Checkout successful!");
       
-      // Create and show a custom success message div
+      // Create and append success popup
       const successDiv = document.createElement('div');
+      successDiv.style.position = 'fixed';
+      successDiv.style.top = '50%';
+      successDiv.style.left = '50%';
+      successDiv.style.transform = 'translate(-50%, -50%)';
+      successDiv.style.background = '#4CAF50';
+      successDiv.style.color = 'white';
+      successDiv.style.padding = '20px';
+      successDiv.style.borderRadius = '5px';
+      successDiv.style.zIndex = '9999';
+      successDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+      successDiv.textContent = 'Checkout Successful!';
+      document.body.appendChild(successDiv);
+
+      // Update equipment list immediately
+      const checkouts = await getCheckouts();
+      setEquipmentList(checkouts);
       successDiv.style.position = 'fixed';
       successDiv.style.top = '50%';
       successDiv.style.left = '50%';
