@@ -3,7 +3,21 @@ import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import Select, { components } from "react-select"; // Ensure react-select is installed
 import emailjs from "emailjs-com";
-import { addCheckoutToAirtable, addCheckinToAirtable, getCheckouts, getCheckins } from './airtableService';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { addCheckoutToAirtable, addCheckinToAirtable } from './airtableService';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBGI1ePIuM8qH-HU7m0KoHWWTelNL8Rw7I",
+  authDomain: "ranch-asset-tracker.firebaseapp.com",
+  projectId: "ranch-asset-tracker",
+  storageBucket: "ranch-asset-tracker.appspot.com",
+  messagingSenderId: "599725599196",
+  appId: "1:599725599196:web:d70da6968196e0a0e7b593"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 import './reminderService'; // Import the reminder service if used
 
 // ---------------- EmailJS Configuration ----------------
@@ -143,21 +157,24 @@ function App() {
 
   // Test Airtable connection on component mount
   useEffect(() => {
-    const testAirtableConnection = async () => {
+    const fetchData = async () => {
       try {
-        const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTracker');
-        await base('Checkouts').select().firstPage();
-        return true;
+        const checkoutsQuery = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
+        const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
+        
+        const [checkoutsSnapshot, checkinsSnapshot] = await Promise.all([
+          getDocs(checkoutsQuery),
+          getDocs(checkinsQuery)
+        ]);
+
+        setEquipmentList(checkoutsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setCheckinList(checkinsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       } catch (error) {
-        console.error('Airtable connection error:', error);
-        return false;
+        console.error('Error fetching data:', error);
       }
     };
 
-    testAirtableConnection()
-      .then(success => {
-        console.log('Airtable connection test:', success ? 'Passed' : 'Failed');
-      });
+    fetchData();
   }, []);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
