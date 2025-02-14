@@ -3,7 +3,11 @@ import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import Select, { components } from "react-select"; // Ensure react-select is installed
 import emailjs from "emailjs-com";
+import { init as initEmailJS } from 'emailjs-com';
 import { initializeApp } from 'firebase/app';
+
+// Initialize EmailJS with your user ID
+initEmailJS("wyfCLJgbJeNcu3092");
 import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -415,9 +419,15 @@ function App() {
       setProjectCode("");
       setDepartmentID("");
 
-      // Show success message
+      // Show success message and clear form
       setCheckoutMessage("Checkout successful!");
-      setTimeout(() => setCheckoutMessage(""), 3000);
+      setTimeout(() => {
+        setCheckoutMessage("");
+        // Reset form state completely
+        document.getElementById("checkout-form").reset();
+      }, 3000);
+
+      console.log("Checkout completed successfully");
 
     } catch (error) {
       console.error("Error adding checkout document: ", error);
@@ -812,7 +822,7 @@ function App() {
                     />
                   </div>
               </div>
-              <form onSubmit={addEquipment}>
+              <form id="checkout-form" onSubmit={addEquipment}>
                 <div>
                   <label>
                     Hours/Miles:
