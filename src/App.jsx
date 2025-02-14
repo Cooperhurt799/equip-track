@@ -178,8 +178,8 @@ function App() {
       setCheckinList(checkinData);
     });
 
-    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
-      const checkoutData = snapshot.docs.map(doc => ({
+    // Return cleanup function
+    return () => {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
