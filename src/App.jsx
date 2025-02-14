@@ -14,6 +14,7 @@ import {
   serverTimestamp,
   enableIndexedDbPersistence,
 } from "firebase/firestore";
+import { getDatabase, ref, onValue } from "firebase/database";
 
 // Initialize EmailJS with your user ID
 initEmailJS("wyfCLJgbJeNcu3092");
@@ -51,15 +52,13 @@ enableIndexedDbPersistence(db, {
 });
 
 // Add connection state listener
-const connectedRef = collection(db, '.info/connected');
-onSnapshot(connectedRef, (snap) => {
-  if (snap.exists() && snap.data().connected) {
+const connectedRef = ref(getDatabase(), '.info/connected');
+onValue(connectedRef, (snap) => {
+  if (snap.val() === true) {
     console.log('Connected to Firebase');
   } else {
     console.warn('Disconnected from Firebase - operating in offline mode');
   }
-}, (error) => {
-  console.error('Error monitoring connection:', error);
 });
 
 import "./reminderService"; // Import the reminder service if used
