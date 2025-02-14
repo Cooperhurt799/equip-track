@@ -3,109 +3,17 @@ import "./App.css";
 import Select from "react-select";
 import emailjs from "emailjs-com";
 import { init as initEmailJS } from "emailjs-com";
-import { initializeApp, getApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  serverTimestamp,
-  enableIndexedDbPersistence,
-} from "firebase/firestore";
-import { getDatabase, ref, onValue } from "firebase/database";
+import airtableService from './airtableService';
 
 // Initialize EmailJS with your user ID
 initEmailJS("wyfCLJgbJeNcu3092");
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDpYCQla2yjxlZHC2h4hPJSPlhYg6y0a5M",
-  authDomain: "equipment-tracker-566c5.firebaseapp.com",
-  projectId: "equipment-tracker-566c5",
-  storageBucket: "equipment-tracker-566c5.firebasestorage.app",
-  messagingSenderId: "72142898448",
-  appId: "1:72142898448:web:187702fc7a5b5bdad71195",
-  measurementId: "G-L58WPXJ4J1",
-};
-
-let app;
-try {
-  app = getApp();
-} catch (e) {
-  app = initializeApp(firebaseConfig);
-}
-
-const db = getFirestore(app);
-console.log('Firebase connection initialized');
-
-// Test Firebase connection
-try {
-  const testCollection = collection(db, "checkouts");
-  console.log('Firebase collection reference created successfully');
-} catch (error) {
-  console.error('Firebase connection error:', error);
-}
-
-// Enable offline persistence with better error handling
-enableIndexedDbPersistence(db, {
-  synchronizeTabs: true
-}).catch((err) => {
-  if (err.code === 'failed-precondition') {
-    console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
-  } else if (err.code === 'unimplemented') {
-    console.warn('The current browser does not support persistence.');
-  } else {
-    console.error('Error enabling persistence:', err);
-  }
-});
-
-// Add connection state listener
-const connectedRef = ref(getDatabase(), '.info/connected');
-onValue(connectedRef, (snap) => {
-  if (snap.val() === true) {
-    console.log('Connected to Firebase');
-  } else {
-    console.warn('Disconnected from Firebase - operating in offline mode');
-  }
-});
-
-import "./reminderService"; // Import the reminder service if used
-import airtableService from './airtableService';
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
 const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
-const EMAIL_NOTIFICATIONS_ENABLED = true; // Enable email notifications
-
-// ---------------- Custom Styles for react-select ----------------
-const customSelectStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    width: "100%",
-    minHeight: "40px",
-    fontSize: "16px",
-    border: "2px solid #34495e",
-    boxShadow: state.isFocused ? "0 0 0 1px #34495e" : null,
-    borderRadius: "10px",
-    padding: "2px 5px",
-    backgroundColor: "#f8fafc",
-  }),
-  menu: (provided) => ({
-    ...provided,
-    width: "100%",
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: "#4b3f2a",
-  }),
-  singleValue: (provided) => ({
-    ...provided,
-    fontSize: "16px",
-  }),
-};
+const EMAIL_NOTIFICATIONS_ENABLED = true;
 
 // ---------------- Data Arrays ----------------
 const preUploadedUnits = [
@@ -158,13 +66,6 @@ const preProgrammedJobSites = [
   "James Cook Hanger",
 ];
 
-const rentalEquipmentList = [
-  "Excavator X100",
-  "Bulldozer B200",
-  "Crane C300",
-];
-
-// ---------------- New Data Arrays for Dropdowns ----------------
 const projectCodes = [
   "F2CP",
   "VHN.6BAPT",
@@ -196,88 +97,26 @@ const departmentIDs = [
   "RM 2300 Wildlife",
 ];
 
-// ---------------- Single Validate Function ----------------
-const validateForm = (data) => {
-  const errors = {};
-  if (!data.hoursMiles?.match(/^\d+$/)) {
-    errors.hoursMiles = "Hours/Miles must be a positive number";
-  }
-  if (!data.customerPhone?.match(/^\d{10}$/)) {
-    errors.customerPhone = "Phone number must be exactly 10 digits";
-  }
-  if (!data.customerEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-    errors.customerEmail = "Please enter a valid email address";
-  }
-  if (!data.jobSite) {
-    errors.jobSite = "Job site is required";
-  }
-  return errors;
-};
+const rentalEquipmentList = [
+  "Excavator X100",
+  "Bulldozer B200",
+  "Crane C300",
+];
 
 function App() {
   useEffect(() => {
     document.title = "Daugherty Ranches Equipment Tracker";
   }, []);
 
-  // ---------------- Real-time Data Fetching using onSnapshot ----------------
-  useEffect(() => {
-    const checkoutsQuery = query(
-      collection(db, "checkouts"),
-      orderBy("createdAt", "desc")
-    );
-    const checkinsQuery = query(
-      collection(db, "checkins"),
-      orderBy("createdAt", "desc")
-    );
-
-    let unsubscribeCheckouts;
-    let unsubscribeCheckins;
-    
-    const setupSubscriptions = () => {
-      unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
-        const checkoutData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt:
-            doc.data().createdAt?.toDate?.() ||
-            new Date(doc.data().createdAt).toISOString(),
-        }));
-        setEquipmentList(checkoutData);
-      });
-
-      unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
-        const checkinData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt:
-            doc.data().createdAt?.toDate?.() ||
-            new Date(doc.data().createdAt).toISOString(),
-        }));
-        setCheckinList(checkinData);
-      });
-    };
-
-    setupSubscriptions();
-
-    return () => {
-      if (unsubscribeCheckouts) unsubscribeCheckouts();
-      if (unsubscribeCheckins) unsubscribeCheckins();
-    };
-  }, []);
-
-  // ---------------- Sidebar and Section States ----------------
+  // ---------------- States ----------------
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
-  const [filteredDueReturns, setFilteredDueReturns] = useState(null);
   const [currentSection, setCurrentSection] = useState(null);
-
-  // ---------------- Message States ----------------
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // ---------------- Checkout Form State ----------------
-  const [equipmentList, setEquipmentList] = useState([]);
-  const [availableUnits, setAvailableUnits] = useState(preUploadedUnits);
+  // Checkout Form States
   const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -288,9 +127,9 @@ function App() {
   const [returnDate, setReturnDate] = useState("");
   const [projectCode, setProjectCode] = useState("");
   const [departmentID, setDepartmentID] = useState("");
+  const [availableUnits, setAvailableUnits] = useState(preUploadedUnits);
 
-  // ---------------- Check-In Form State ----------------
-  const [checkinList, setCheckinList] = useState([]);
+  // Check-in Form States
   const [checkinUnit, setCheckinUnit] = useState("");
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
@@ -303,177 +142,29 @@ function App() {
   const [checkinProjectCode, setCheckinProjectCode] = useState("");
   const [checkinDepartmentID, setCheckinDepartmentID] = useState("");
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  // ---------------- Utility Functions ----------------
-  const getDueReturns = () => {
-    const today = new Date();
-    const sevenDaysFromNow = new Date();
-    sevenDaysFromNow.setDate(today.getDate() + 7);
-
-    return equipmentList
-      .filter((checkout) => {
-        const returnDt = new Date(checkout.returnDate);
-        const hasCheckin = checkinList.find(
-          (checkin) =>
-            checkin.unit === checkout.unit &&
-            new Date(checkin.createdAt) > new Date(checkout.createdAt)
-        );
-        return (
-          !hasCheckin &&
-          returnDt >= today &&
-          returnDt <= sevenDaysFromNow
-        );
-      })
-      .sort(
-        (a, b) => new Date(a.returnDate) - new Date(b.returnDate)
-      );
-  };
-
-  const getOverdueUnits = () => {
-    const today = new Date();
-    return equipmentList
-      .filter((checkout) => {
-        // Get the most recent checkout for this unit
-        const latestCheckout = equipmentList
-          .filter((c) => c.unit === checkout.unit)
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt) - new Date(a.createdAt)
-          )[0];
-        const isLatestCheckout =
-          checkout.createdAt === latestCheckout.createdAt;
-        const returnDt = new Date(checkout.returnDate);
-        return isLatestCheckout && returnDt < today;
-      })
-      .map((checkout) => ({
-        ...checkout,
-        daysOverdue: Math.floor(
-          (new Date() - new Date(checkout.returnDate)) /
-            (1000 * 60 * 60 * 24)
-        ),
-      }));
-  };
-
-  const getActiveUnitNumbers = () => {
-    if (!availableUnits.length) return [];
-    const latestCheckout = {};
-    const latestCheckin = {};
-
-    // Get latest checkout for each unit
-    equipmentList.forEach((checkout) => {
-      const time = new Date(checkout.createdAt);
-      if (
-        !latestCheckout[checkout.unit] ||
-        time > new Date(latestCheckout[checkout.unit].createdAt)
-      ) {
-        latestCheckout[checkout.unit] = checkout;
-      }
-    });
-
-    // Get latest checkin for each unit
-    checkinList.forEach((checkin) => {
-      const time = new Date(checkin.createdAt);
-      if (
-        !latestCheckin[checkin.unit] ||
-        time > new Date(latestCheckin[checkin.unit].createdAt)
-      ) {
-        latestCheckin[checkin.unit] = checkin;
-      }
-    });
-
-    // Return units that are checked out but not checked in
-    return Object.values(latestCheckout)
-      .filter((checkout) => {
-        const checkin = latestCheckin[checkout.unit];
-        return (
-          !checkin ||
-          new Date(checkin.createdAt) < new Date(checkout.createdAt)
-        );
-      })
-      .map((checkout) => checkout.unit);
-  };
-
-  const getActiveCheckouts = () => {
-    return getActiveUnitNumbers();
-  };
-
-  const getActiveUsers = () => {
-    const activeUsersMap = new Map();
-    const activeUnits = getActiveUnitNumbers();
-
-    equipmentList.forEach((checkout) => {
-      if (activeUnits.includes(checkout.unit)) {
-        const currentCount = activeUsersMap.get(checkout.customerName) || 0;
-        activeUsersMap.set(checkout.customerName, currentCount + 1);
-      }
-    });
-    return Array.from(activeUsersMap.entries()).map(
-      ([name, count]) => ({
-        name,
-        count,
-      })
-    );
-  };
-
-  const getEquipmentStats = () => {
-    const total = availableUnits.length;
-    const active = getActiveCheckouts().length;
-    const available = total - active;
-
-    // Count checkouts per unit
-    const checkoutCounts = {};
-    equipmentList.forEach((checkout) => {
-      checkoutCounts[checkout.unit] =
-        (checkoutCounts[checkout.unit] || 0) + 1;
-    });
-    const mostCheckedOut = Object.entries(checkoutCounts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 3);
-
-    return { total, active, available, mostCheckedOut };
-  };
-
-  const getJobSiteSummary = () => {
-    const siteCounts = {};
-    getActiveCheckouts().forEach((unit) => {
-      const checkout = equipmentList.find(
-        (c) => c.unit === unit
-      );
-      if (checkout) {
-        siteCounts[checkout.jobSite] =
-          (siteCounts[checkout.jobSite] || 0) + 1;
-      }
-    });
-    return siteCounts;
-  };
-
-  // ---------------- Rental Equipment Handler ----------------
-  const handleRentalEquipmentSelect = (selectedOption) => {
-    const selectedRental = selectedOption.value;
-    if (selectedRental && !availableUnits.includes(selectedRental)) {
-      setAvailableUnits((prevUnits) => [
-        ...prevUnits,
-        selectedRental,
-      ]);
+  // ---------------- Form Validation ----------------
+  const validateForm = (data) => {
+    const errors = {};
+    if (!data.hoursMiles?.match(/^\d+$/)) {
+      errors.hoursMiles = "Hours/Miles must be a positive number";
     }
-    setSelectedUnit(selectedRental);
+    if (!data.customerPhone?.match(/^\d{10}$/)) {
+      errors.customerPhone = "Phone number must be exactly 10 digits";
+    }
+    if (!data.customerEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      errors.customerEmail = "Please enter a valid email address";
+    }
+    if (!data.jobSite) {
+      errors.jobSite = "Job site is required";
+    }
+    return errors;
   };
 
   // ---------------- Checkout Submission ----------------
   const addEquipment = async (e) => {
     e.preventDefault();
-    console.log('Starting equipment checkout with:', {
-      selectedUnit,
-      checkoutHoursMiles,
-      customerName,
-      jobSite,
-      projectCode,
-      departmentID
-    });
     setIsLoading(true);
 
-    // Check for required fields
     if (
       !selectedUnit ||
       !checkoutHoursMiles ||
@@ -491,13 +182,13 @@ function App() {
       return;
     }
 
-    // Validate form fields
     const formErrors = validateForm({
       hoursMiles: checkoutHoursMiles,
       customerPhone,
       customerEmail,
       jobSite,
     });
+
     if (Object.keys(formErrors).length > 0) {
       setIsLoading(false);
       alert(Object.values(formErrors).join("\n"));
@@ -505,7 +196,7 @@ function App() {
     }
 
     try {
-      const checkoutWithTimestamp = {
+      const checkoutData = {
         unit: selectedUnit,
         hoursMiles: checkoutHoursMiles,
         checkoutDate,
@@ -516,27 +207,13 @@ function App() {
         jobSite,
         projectCode,
         departmentID,
-        createdAt: serverTimestamp(),
+        createdAt: new Date().toISOString(),
         status: "active",
       };
 
-      console.log('Attempting to save checkout:', checkoutWithTimestamp);
-const docRef = await addDoc(
-        collection(db, "checkouts"),
-        checkoutWithTimestamp
-      );
-console.log('Checkout saved successfully with ID:', docRef.id);
-      console.log("Document written with ID: ", docRef.id);
-      
       // Sync to Airtable
-      console.log('Attempting Airtable sync with data:', checkoutWithTimestamp);
-      try {
-        const airtableRecord = await airtableService.syncCheckout(checkoutWithTimestamp);
-        console.log('Airtable sync successful:', airtableRecord);
-      } catch (error) {
-        console.error('Airtable sync failed:', error);
-        // Continue with the rest of the checkout process even if Airtable sync fails
-      }
+      const airtableRecord = await airtableService.syncCheckout(checkoutData);
+      console.log('Airtable sync successful:', airtableRecord);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
@@ -560,10 +237,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
         }
       }
 
-      // Show success message and clear form fields
-      setCheckoutMessage("Checkout successful!");
-      
-      // Clear all form fields
+      // Clear form fields
       setSelectedUnit(null);
       setCheckoutHoursMiles("");
       setCheckoutDate("");
@@ -575,37 +249,18 @@ console.log('Checkout saved successfully with ID:', docRef.id);
       setProjectCode(null);
       setDepartmentID(null);
 
-      // Reset the form to clear any remaining values
-      const checkoutForm = document.getElementById("checkout-form");
-      if (checkoutForm) {
-        checkoutForm.reset();
-      }
-
-      // Clear Select components
-      setTimeout(() => {
-        const selects = document.querySelectorAll('.select__clear-indicator');
-        selects.forEach(button => button.click());
-      }, 0);
-
-      console.log("Checkout completed successfully");
-
-      setTimeout(() => {
-        setCheckoutMessage("");
-      }, 3000);
+      setCheckoutMessage("Checkout successful!");
+      setTimeout(() => setCheckoutMessage(""), 3000);
     } catch (error) {
-      console.error("Error adding checkout document: ", error);
-      const errorMessage =
-        error.code === "permission-denied"
-          ? "You don't have permission to perform this action."
-          : "An error occurred during checkout. Please try again.";
-      setCheckoutMessage(errorMessage);
+      console.error("Error during checkout:", error);
+      setCheckoutMessage("An error occurred during checkout. Please try again.");
       setTimeout(() => setCheckoutMessage(""), 5000);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // ---------------- Check-In Submission ----------------
+  // ---------------- Check-in Submission ----------------
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -613,7 +268,6 @@ console.log('Checkout saved successfully with ID:', docRef.id);
       !checkinUnit ||
       !checkinHoursMiles ||
       !checkinJobSite ||
-      checkinDuration === "" ||
       !checkinCustomerName ||
       !checkinCustomerEmail ||
       !checkinCustomerPhone ||
@@ -626,7 +280,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
     }
 
     try {
-      const checkinWithTimestamp = {
+      const checkinData = {
         dateTimeReturned: checkinDateTime,
         unit: checkinUnit,
         hoursMiles: checkinHoursMiles,
@@ -638,17 +292,12 @@ console.log('Checkout saved successfully with ID:', docRef.id);
         inspectionNotes: checkinInspectionNotes,
         projectCode: checkinProjectCode,
         departmentID: checkinDepartmentID,
-        createdAt: serverTimestamp(),
+        createdAt: new Date().toISOString(),
       };
 
-      const docRef = await addDoc(
-        collection(db, "checkins"),
-        checkinWithTimestamp
-      );
-      console.log("Checkin document written with ID: ", docRef.id);
-      
       // Sync to Airtable
-      await airtableService.syncCheckin(checkinWithTimestamp);
+      const record = await airtableService.syncCheckin(checkinData);
+      console.log('Checkin synced to Airtable:', record);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
@@ -688,256 +337,13 @@ console.log('Checkout saved successfully with ID:', docRef.id);
       setCheckinMessage("Check-in successful!");
       setTimeout(() => setCheckinMessage(""), 3000);
     } catch (error) {
-      console.error("Error adding checkin document: ", error);
+      console.error("Error during check-in:", error);
       alert("Error during check-in. Please try again.");
     }
   };
 
-  // ---------------- Calculate Check-In Duration ----------------
-  useEffect(() => {
-    if (checkinDateTime && checkinUnit) {
-      let latestCheckoutTime = null;
-      equipmentList.forEach((record) => {
-        if (record.unit === checkinUnit) {
-          const time = new Date(record.createdAt);
-          if (!latestCheckoutTime || time > latestCheckoutTime) {
-            latestCheckoutTime = time;
-          }
-        }
-      });
-      if (latestCheckoutTime) {
-        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        setCheckinDuration(diffDays > 0 ? diffDays : 0);
-      } else {
-        setCheckinDuration("");
-      }
-    } else {
-      setCheckinDuration("");
-    }
-  }, [checkinDateTime, checkinUnit, equipmentList]);
-
   return (
     <div className="App">
-      <button
-        className="hamburger-button"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        <div className="hamburger-icon">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
-      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-        <div className="sidebar-buttons">
-          <button
-            className="sidebar-action-button"
-            onClick={() =>
-              setActiveTab(activeTab === "checkouts" ? null : "checkouts")
-            }
-          >
-            Active Checkouts ({getActiveCheckouts().length})
-          </button>
-          <button
-            className="sidebar-action-button"
-            onClick={() =>
-              setActiveTab(activeTab === "users" ? null : "users")
-            }
-          >
-            Active Users ({getActiveUsers().length})
-          </button>
-          <button
-            className="sidebar-action-button"
-            onClick={() =>
-              setActiveTab(activeTab === "stats" ? null : "stats")
-            }
-          >
-            Equipment Stats
-          </button>
-          <button
-            className="sidebar-action-button"
-            onClick={() =>
-              setActiveTab(activeTab === "returns" ? null : "returns")
-            }
-          >
-            Due Returns
-          </button>
-        </div>
-        <div className="sidebar-content">
-          {activeTab === "checkouts" && (
-            <div>
-              <h3>Active Checkouts</h3>
-              <ul>
-                {getActiveCheckouts().map((unit, index) => {
-                  const latestCheckout = equipmentList
-                    .filter((checkout) => checkout.unit === unit)
-                    .sort(
-                      (a, b) =>
-                        new Date(b.createdAt) - new Date(a.createdAt)
-                    )[0];
-                  return (
-                    <li key={index}>
-                      {unit}
-                      <br />
-                      <small>
-                        {latestCheckout?.customerName ||
-                          "No customer info"}
-                      </small>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-          {activeTab === "users" && (
-            <div>
-              <h3>Active Users</h3>
-              <ul>
-                {getActiveUsers().map((user, index) => (
-                  <li key={index}>
-                    {user.name} ({user.count} unit
-                    {user.count !== 1 ? "s" : ""})
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {activeTab === "stats" && (
-            <div>
-              <h3>Equipment Statistics</h3>
-              {(() => {
-                const stats = getEquipmentStats();
-                return (
-                  <div>
-                    <p>Total Equipment: {stats.total}</p>
-                    <p>Active: {stats.active}</p>
-                    <p>Available: {stats.available}</p>
-                    <h4>Most Used Equipment:</h4>
-                    <ul>
-                      {stats.mostCheckedOut.map(([unit, count], i) => (
-                        <li key={i}>
-                          {unit}: {count} checkouts
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })()}
-            </div>
-          )}
-          {activeTab === "returns" && (
-            <div>
-              <h3>Due Returns</h3>
-              <div className="filter-container">
-                <select
-                  className="days-filter"
-                  onChange={(e) => {
-                    const days = parseInt(e.target.value);
-                    const today = new Date();
-                    const futureDate = new Date();
-                    futureDate.setDate(today.getDate() + days);
-
-                    const filteredByDate = equipmentList
-                      .filter((checkout) => {
-                        const returnDt = new Date(checkout.returnDate);
-                        const hasCheckin = checkinList.find(
-                          (checkin) =>
-                            checkin.unit === checkout.unit &&
-                            new Date(checkin.createdAt) >
-                              new Date(checkout.createdAt)
-                        );
-                        return (
-                          !hasCheckin &&
-                          returnDt >= today &&
-                          returnDt <= futureDate
-                        );
-                      })
-                      .sort(
-                        (a, b) =>
-                          new Date(a.returnDate) - new Date(b.returnDate)
-                      );
-                    setFilteredDueReturns(filteredByDate);
-                  }}
-                >
-                  <option value="7">Next 7 days</option>
-                  {Array.from({ length: 30 }, (_, i) => i + 1).map(
-                    (num) => (
-                      <option key={num} value={num}>
-                        {num} day{num !== 1 ? "s" : ""}
-                      </option>
-                    )
-                  )}
-                </select>
-                <input
-                  type="text"
-                  placeholder="Search by unit or customer..."
-                  onChange={(e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const currentList =
-                      filteredDueReturns || getDueReturns();
-                    const filtered = currentList.filter(
-                      (item) =>
-                        item.unit
-                          .toLowerCase()
-                          .includes(searchTerm) ||
-                        item.customerName
-                          .toLowerCase()
-                          .includes(searchTerm)
-                    );
-                    setFilteredDueReturns(filtered);
-                  }}
-                  className="search-input"
-                />
-              </div>
-              <ul>
-                {(filteredDueReturns || getDueReturns()).map((item, i) => (
-                  <li key={i}>
-                    {item.unit} - {item.customerName}
-                    <br />
-                    <small>
-                      Due:{" "}
-                      {new Date(item.returnDate).toLocaleDateString()}
-                    </small>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-      <button
-        className="hamburger-button"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        <div className="hamburger-icon">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
-      <div className="top-buttons">
-        {getOverdueUnits().length > 0 && (
-          <button
-            className="overdue-alert-button"
-            onClick={() => {
-              const overdue = getOverdueUnits();
-              const message = overdue
-                .map(
-                  (unit) =>
-                    `Unit: ${unit.unit}\nCustomer: ${unit.customerName}\nDue Date: ${new Date(
-                      unit.returnDate
-                    ).toLocaleDateString()}\nDays Overdue: ${unit.daysOverdue}`
-                )
-                .join("\n\n");
-              alert("OVERDUE UNITS:\n\n" + message);
-            }}
-          >
-            {getOverdueUnits().length} Overdue Unit
-            {getOverdueUnits().length !== 1 ? "s" : ""}!
-          </button>
-        )}
-      </div>
       <header className="app-header">
         <h1>Ranch Asset Checkout Form</h1>
         <p className="tagline">Sanford and Son</p>
@@ -945,70 +351,52 @@ console.log('Checkout saved successfully with ID:', docRef.id);
 
       {currentSection === null ? (
         <div className="landing">
-          <button onClick={() => setCurrentSection("checkout")}>
-            Check-Out
-          </button>
-          <button onClick={() => setCurrentSection("checkin")}>
-            Check-In
-          </button>
+          <button onClick={() => setCurrentSection("checkout")}>Check-Out</button>
+          <button onClick={() => setCurrentSection("checkin")}>Check-In</button>
         </div>
       ) : (
         <div className="section-container">
-          <button
-            className="back-button"
-            onClick={() => setCurrentSection(null)}
-          >
+          <button className="back-button" onClick={() => setCurrentSection(null)}>
             ← Back
           </button>
+
           {currentSection === "checkout" ? (
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
-              <div className="section-header">
-                <div className="active-checkouts inline">
-                  <h3>Select Equipment to Checkout</h3>
-                  <Select
-                    options={[
-                      {
-                        label: "Ranch Equipment",
-                        options: availableUnits.map((unit) => ({
-                          value: unit,
-                          label: unit,
-                        })),
-                      },
-                      {
-                        label: "Rental Equipment",
-                        options: rentalEquipmentList.map((item) => ({
-                          value: item,
-                          label: item,
-                        })),
-                      },
-                    ]}
-                    value={
-                      selectedUnit
-                        ? { value: selectedUnit, label: selectedUnit }
-                        : null
-                    }
-                    onChange={(option) => {
-                      setSelectedUnit(option.value);
-                      if (rentalEquipmentList.includes(option.value)) {
-                        handleRentalEquipmentSelect(option);
-                      }
-                    }}
-                    placeholder="Select Equipment"
-                    styles={customSelectStyles}
-                  />
-                </div>
-              </div>
               <form id="checkout-form" onSubmit={addEquipment}>
+                <div>
+                  <label>
+                    Equipment:
+                    <Select
+                      options={[
+                        {
+                          label: "Ranch Equipment",
+                          options: availableUnits.map((unit) => ({
+                            value: unit,
+                            label: unit,
+                          })),
+                        },
+                        {
+                          label: "Rental Equipment",
+                          options: rentalEquipmentList.map((item) => ({
+                            value: item,
+                            label: item,
+                          })),
+                        },
+                      ]}
+                      value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
+                      onChange={(option) => setSelectedUnit(option.value)}
+                      placeholder="Select Equipment"
+                    />
+                  </label>
+                </div>
                 <div>
                   <label>
                     Hours/Miles:
                     <input
                       type="text"
                       value={checkoutHoursMiles}
-                      onChange={(e) =>
-                        setCheckoutHoursMiles(e.target.value)
-                      }
+                      onChange={(e) => setCheckoutHoursMiles(e.target.value)}
                       placeholder="Enter hours or miles"
                     />
                   </label>
@@ -1019,9 +407,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="text"
                       value={customerName}
-                      onChange={(e) =>
-                        setCustomerName(e.target.value)
-                      }
+                      onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Enter customer name"
                     />
                   </label>
@@ -1032,9 +418,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="email"
                       value={customerEmail}
-                      onChange={(e) =>
-                        setCustomerEmail(e.target.value)
-                      }
+                      onChange={(e) => setCustomerEmail(e.target.value)}
                       placeholder="Enter customer email"
                     />
                   </label>
@@ -1045,9 +429,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="text"
                       value={customerPhone}
-                      onChange={(e) =>
-                        setCustomerPhone(e.target.value)
-                      }
+                      onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="Enter customer phone number"
                     />
                   </label>
@@ -1060,16 +442,12 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                         value: site,
                         label: site,
                       }))}
-                      value={
-                        jobSite ? { value: jobSite, label: jobSite } : null
-                      }
+                      value={jobSite ? { value: jobSite, label: jobSite } : null}
                       onChange={(option) => setJobSite(option.value)}
                       placeholder="Select Job Site"
-                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
-                {/* New Project Code Dropdown */}
                 <div>
                   <label>
                     Project Code:
@@ -1078,20 +456,12 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                         value: code,
                         label: code,
                       }))}
-                      value={
-                        projectCode
-                          ? { value: projectCode, label: projectCode }
-                          : null
-                      }
-                      onChange={(option) =>
-                        setProjectCode(option.value)
-                      }
+                      value={projectCode ? { value: projectCode, label: projectCode } : null}
+                      onChange={(option) => setProjectCode(option.value)}
                       placeholder="Select Project Code"
-                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
-                {/* New Department ID Dropdown */}
                 <div>
                   <label>
                     Department ID:
@@ -1100,16 +470,9 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                         value: dept,
                         label: dept,
                       }))}
-                      value={
-                        departmentID
-                          ? { value: departmentID, label: departmentID }
-                          : null
-                      }
-                      onChange={(option) =>
-                        setDepartmentID(option.value)
-                      }
+                      value={departmentID ? { value: departmentID, label: departmentID } : null}
+                      onChange={(option) => setDepartmentID(option.value)}
                       placeholder="Select Department ID"
-                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -1119,9 +482,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="date"
                       value={checkoutDate}
-                      onChange={(e) =>
-                        setCheckoutDate(e.target.value)
-                      }
+                      onChange={(e) => setCheckoutDate(e.target.value)}
                     />
                   </label>
                 </div>
@@ -1131,9 +492,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="date"
                       value={returnDate}
-                      onChange={(e) =>
-                        setReturnDate(e.target.value)
-                      }
+                      onChange={(e) => setReturnDate(e.target.value)}
                     />
                   </label>
                 </div>
@@ -1141,86 +500,45 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                   {isLoading ? "Processing..." : "Checkout Equipment"}
                 </button>
               </form>
-              {checkoutMessage && (
-                <p className="message">{checkoutMessage}</p>
-              )}
+              {checkoutMessage && <p className="message">{checkoutMessage}</p>}
             </section>
           ) : (
             <section className="checkin">
               <h2>Equipment Check-In</h2>
-              <div className="section-header">
-                <div className="active-checkouts inline">
-                  <h3>Select Equipment to Check In</h3>
-                  <Select
-                    options={[
-                      {
-                        label: "Active Checkouts",
-                        options: getActiveUnitNumbers().map((unit) => ({
-                          value: unit,
-                          label: unit,
-                        })),
-                      },
-                      {
-                        label: "Ranch Equipment",
-                        options: availableUnits.map((unit) => ({
-                          value: unit,
-                          label: unit,
-                        })),
-                      },
-                      {
-                        label: "Rental Equipment",
-                        options: rentalEquipmentList.map((item) => ({
-                          value: item,
-                          label: item,
-                        })),
-                      },
-                    ]}
-                    value={
-                      checkinUnit
-                        ? { value: checkinUnit, label: checkinUnit }
-                        : null
-                    }
-                    onChange={(option) => {
-                      setCheckinUnit(option.value);
-                      // Find the latest checkout for this unit
-                      const latestCheckout = equipmentList
-                        .filter(
-                          (checkout) =>
-                            checkout.unit === option.value
-                        )
-                        .sort(
-                          (a, b) =>
-                            new Date(b.createdAt) -
-                            new Date(a.createdAt)
-                        )[0];
-
-                      if (latestCheckout) {
-                        setCheckinCustomerName(
-                          latestCheckout.customerName
-                        );
-                        setCheckinCustomerEmail(
-                          latestCheckout.customerEmail
-                        );
-                        setCheckinCustomerPhone(
-                          latestCheckout.customerPhone
-                        );
-                      }
-                    }}
-                    placeholder="Select Unit to Check In"
-                    styles={customSelectStyles}
-                  />
-                </div>
-              </div>
               <form onSubmit={addCheckin}>
+                <div>
+                  <label>
+                    Equipment:
+                    <Select
+                      options={[
+                        {
+                          label: "Ranch Equipment",
+                          options: availableUnits.map((unit) => ({
+                            value: unit,
+                            label: unit,
+                          })),
+                        },
+                        {
+                          label: "Rental Equipment",
+                          options: rentalEquipmentList.map((item) => ({
+                            value: item,
+                            label: item,
+                          })),
+                        },
+                      ]}
+                      value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
+                      onChange={(option) => setCheckinUnit(option.value)}
+                      placeholder="Select Equipment"
+                    />
+                  </label>
+                </div>
                 <div>
                   <label>
                     Hours/Miles:
                     <input
                       type="text"
                       value={checkinHoursMiles}
-                      onChange={(e) =>
-                        setCheckinHoursMiles(e.target.value)
-                      }
+                      onChange={(e) => setCheckinHoursMiles(e.target.value)}
                       placeholder="Enter hours/miles"
                     />
                   </label>
@@ -1231,9 +549,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="text"
                       value={checkinCustomerName}
-                      onChange={(e) =>
-                        setCheckinCustomerName(e.target.value)
-                      }
+                      onChange={(e) => setCheckinCustomerName(e.target.value)}
                       placeholder="Enter customer name"
                     />
                   </label>
@@ -1244,9 +560,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="email"
                       value={checkinCustomerEmail}
-                      onChange={(e) =>
-                        setCheckinCustomerEmail(e.target.value)
-                      }
+                      onChange={(e) => setCheckinCustomerEmail(e.target.value)}
                       placeholder="Enter customer email"
                     />
                   </label>
@@ -1257,9 +571,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="text"
                       value={checkinCustomerPhone}
-                      onChange={(e) =>
-                        setCheckinCustomerPhone(e.target.value)
-                      }
+                      onChange={(e) => setCheckinCustomerPhone(e.target.value)}
                       placeholder="Enter customer phone number"
                     />
                   </label>
@@ -1272,20 +584,12 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                         value: site,
                         label: site,
                       }))}
-                      value={
-                        checkinJobSite
-                          ? { value: checkinJobSite, label: checkinJobSite }
-                          : null
-                      }
-                      onChange={(option) =>
-                        setCheckinJobSite(option.value)
-                      }
+                      value={checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null}
+                      onChange={(option) => setCheckinJobSite(option.value)}
                       placeholder="Select Job Site"
-                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
-                {/* New Project Code Dropdown for Check-In */}
                 <div>
                   <label>
                     Project Code:
@@ -1294,23 +598,12 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                         value: code,
                         label: code,
                       }))}
-                      value={
-                        checkinProjectCode
-                          ? {
-                              value: checkinProjectCode,
-                              label: checkinProjectCode,
-                            }
-                          : null
-                      }
-                      onChange={(option) =>
-                        setCheckinProjectCode(option.value)
-                      }
+                      value={checkinProjectCode ? { value: checkinProjectCode, label: checkinProjectCode } : null}
+                      onChange={(option) => setCheckinProjectCode(option.value)}
                       placeholder="Select Project Code"
-                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
-                {/* New Department ID Dropdown for Check-In */}
                 <div>
                   <label>
                     Department ID:
@@ -1319,19 +612,9 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                         value: dept,
                         label: dept,
                       }))}
-                      value={
-                        checkinDepartmentID
-                          ? {
-                              value: checkinDepartmentID,
-                              label: checkinDepartmentID,
-                            }
-                          : null
-                      }
-                      onChange={(option) =>
-                        setCheckinDepartmentID(option.value)
-                      }
+                      value={checkinDepartmentID ? { value: checkinDepartmentID, label: checkinDepartmentID } : null}
+                      onChange={(option) => setCheckinDepartmentID(option.value)}
                       placeholder="Select Department ID"
-                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -1341,9 +624,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="datetime-local"
                       value={checkinDateTime}
-                      onChange={(e) =>
-                        setCheckinDateTime(e.target.value)
-                      }
+                      onChange={(e) => setCheckinDateTime(e.target.value)}
                     />
                   </label>
                 </div>
@@ -1353,7 +634,7 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     <input
                       type="number"
                       value={checkinDuration}
-                      readOnly
+                      onChange={(e) => setCheckinDuration(e.target.value)}
                     />
                   </label>
                 </div>
@@ -1362,18 +643,14 @@ console.log('Checkout saved successfully with ID:', docRef.id);
                     Inspection Notes:
                     <textarea
                       value={checkinInspectionNotes}
-                      onChange={(e) =>
-                        setCheckinInspectionNotes(e.target.value)
-                      }
+                      onChange={(e) => setCheckinInspectionNotes(e.target.value)}
                       placeholder="Enter inspection notes"
                     ></textarea>
                   </label>
                 </div>
                 <button type="submit">Check-In Equipment</button>
               </form>
-              {checkinMessage && (
-                <p className="message">{checkinMessage}</p>
-              )}
+              {checkinMessage && <p className="message">{checkinMessage}</p>}
             </section>
           )}
         </div>
