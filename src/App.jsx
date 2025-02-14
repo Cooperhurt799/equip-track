@@ -187,23 +187,23 @@ function App() {
   const addEquipment = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setCheckoutMessage("");
 
-    if (
-      !selectedUnit ||
-      !checkoutHoursMiles ||
-      !checkoutDate ||
-      !returnDate ||
-      !customerName ||
-      !customerEmail ||
-      !customerPhone ||
-      !jobSite ||
-      !projectCode ||
-      !departmentID
-    ) {
-      alert("Please fill in all required fields");
-      setIsLoading(false);
-      return;
-    }
+    try {
+      if (
+        !selectedUnit ||
+        !checkoutHoursMiles ||
+        !checkoutDate ||
+        !returnDate ||
+        !customerName ||
+        !customerEmail ||
+        !customerPhone ||
+        !jobSite ||
+        !projectCode ||
+        !departmentID
+      ) {
+        throw new Error("Please fill in all required fields");
+      }
 
     const formErrors = validateForm({
       hoursMiles: checkoutHoursMiles,
@@ -276,7 +276,7 @@ function App() {
       setTimeout(() => setCheckoutMessage(""), 3000);
     } catch (error) {
       console.error("Error during checkout:", error);
-      setCheckoutMessage("An error occurred during checkout. Please try again.");
+      setCheckoutMessage(error.message || "An error occurred during checkout. Please try again.");
       setTimeout(() => setCheckoutMessage(""), 5000);
     } finally {
       setIsLoading(false);
