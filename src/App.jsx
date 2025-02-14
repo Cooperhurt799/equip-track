@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
 import emailjs from "emailjs-com";
-import { init as initEmailJS } from "emailjs-com";
 import airtableService from './airtableService';
-
-// Initialize EmailJS with your user ID
-initEmailJS("wyfCLJgbJeNcu3092");
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";

@@ -187,7 +187,7 @@
     "ee-first": "^1.1.1",
     "ejs": "^3.1.10",
     "electron-to-chromium": "^1.5.97",
-    "emailjs-com": "^3.2.0",
+    
     "emittery": "^0.8.1",
     "emoji-regex": "^9.2.2",
     "emojis-list": "^3.0.0",
@@ -257,8 +257,7 @@
     "find-cache-dir": "^3.3.2",
     "find-root": "^1.1.0",
     "find-up": "^4.1.0",
-    "firebase": "^9.23.0",
-    "firebase-admin": "^13.1.0",
+    
     "flat-cache": "^3.2.0",
     "flatted": "^3.3.2",
     "follow-redirects": "^1.15.9",
