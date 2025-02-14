@@ -1,92 +1,56 @@
-import Airtable from 'airtable';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
 
-const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTracker');
+const firebaseConfig = {
+  apiKey: "AIzaSyBGI1ePIuM8qH-HU7m0KoHWWTelNL8Rw7I",
+  authDomain: "ranch-asset-tracker.firebaseapp.com",
+  projectId: "ranch-asset-tracker",
+  storageBucket: "ranch-asset-tracker.appspot.com",
+  messagingSenderId: "599725599196",
+  appId: "1:599725599196:web:d70da6968196e0a0e7b593"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export const getCheckouts = async () => {
   try {
-    const records = await base('Checkouts').select().all();
-    return records.map(record => record.fields);
+    const q = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   } catch (error) {
-    console.error('Error fetching checkouts from Airtable:', error);
+    console.error('Error fetching checkouts:', error);
     throw error;
   }
 };
 
 export const getCheckins = async () => {
   try {
-    const records = await base('Checkins').select().all();
-    return records.map(record => record.fields);
+    const q = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   } catch (error) {
-    console.error('Error fetching checkins from Airtable:', error);
+    console.error('Error fetching checkins:', error);
     throw error;
   }
 };
 
 export const addCheckoutToAirtable = async (checkoutData) => {
-  console.log('Attempting to add checkout to Airtable:', checkoutData);
   try {
-    if (!checkoutData) {
-      throw new Error('No checkout data provided');
-    }
-    console.log('Creating Airtable record with data:', checkoutData);
-    const record = await base('Checkouts').create([
-      {
-        fields: {
-          Unit: checkoutData.unit,
-          HoursMiles: checkoutData.hoursMiles,
-          CustomerName: checkoutData.customerName,
-          CustomerEmail: checkoutData.customerEmail,
-          CustomerPhone: checkoutData.customerPhone,
-          JobSite: checkoutData.jobSite,
-          ProjectCode: checkoutData.projectCode,
-          DepartmentID: checkoutData.departmentID,
-          CheckoutDate: checkoutData.checkoutDate,
-          ReturnDate: checkoutData.returnDate,
-          CreatedAt: checkoutData.createdAt
-        }
-      }
-    ]);
-    console.log('Airtable record created successfully:', record);
-    return record;
+    const docRef = await addDoc(collection(db, 'checkouts'), checkoutData);
+    return docRef;
   } catch (error) {
-    console.error('Error adding to Airtable:', error);
-    console.error('Error details:', {
-      message: error.message,
-      status: error.statusCode,
-      details: error.response ? error.response.data : null
-    });
+    console.error('Error adding checkout:', error);
     throw error;
   }
 };
 
 export const addCheckinToAirtable = async (checkinData) => {
   try {
-    const record = await base('Checkins').create([
-      {
-        fields: {
-          Unit: checkinData.unit,
-          HoursMiles: checkinData.hoursMiles,
-          CustomerName: checkinData.customerName,
-          CustomerEmail: checkinData.customerEmail,
-          CustomerPhone: checkinData.customerPhone,
-          JobSite: checkinData.jobSite,
-          ProjectCode: checkinData.projectCode,
-          DepartmentID: checkinData.departmentID,
-          DateTimeReturned: checkinData.dateTimeReturned,
-          Duration: checkinData.duration,
-          InspectionNotes: checkinData.inspectionNotes,
-          CreatedAt: checkinData.createdAt
-        }
-      }
-    ]);
-    return record;
+    const docRef = await addDoc(collection(db, 'checkins'), checkinData);
+    return docRef;
   } catch (error) {
-    console.error('Error adding to Airtable:', error);
-    console.error('Error details:', {
-      message: error.message,
-      status: error.statusCode,
-      details: error.response ? error.response.data : null
-    });
+    console.error('Error adding checkin:', error);
     throw error;
   }
 };

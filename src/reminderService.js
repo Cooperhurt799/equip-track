@@ -1,11 +1,69 @@
-import Airtable from 'airtable';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import emailjs from 'emailjs-com';
+import Airtable from 'airtable';
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_DAILY_SUMMARY_TEMPLATE_ID;
-const EMAILJS_USER_ID = import.meta.env.VITE_EMAILJS_USER_ID;
+const firebaseConfig = {
+  apiKey: "AIzaSyBGI1ePIuM8qH-HU7m0KoHWWTelNL8Rw7I",
+  authDomain: "ranch-asset-tracker.firebaseapp.com",
+  projectId: "ranch-asset-tracker",
+  storageBucket: "ranch-asset-tracker.appspot.com",
+  messagingSenderId: "599725599196",
+  appId: "1:599725599196:web:d70da6968196e0a0e7b593"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const EMAILJS_SERVICE_ID = "service_fimxodg";
+const EMAILJS_TEMPLATE_ID = "template_bxx6jfh";
+const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 
 const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTracker');
+
+const EMAILJS_SERVICE_ID_SUMMARY = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID_SUMMARY = import.meta.env.VITE_EMAILJS_DAILY_SUMMARY_TEMPLATE_ID;
+const EMAILJS_USER_ID_SUMMARY = import.meta.env.VITE_EMAILJS_USER_ID;
+
+
+export const checkForDueReturns = async () => {
+  try {
+    const today = new Date();
+    const checkoutsRef = collection(db, 'checkouts');
+    const q = query(
+      checkoutsRef,
+      where('returnDate', '<=', today.toISOString())
+    );
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const checkout = doc.data();
+      sendReminderEmail(checkout);
+    });
+  } catch (error) {
+    console.error('Error checking for due returns:', error);
+  }
+};
+
+const sendReminderEmail = (checkout) => {
+  const templateParams = {
+    to_email: checkout.customerEmail,
+    customer_name: checkout.customerName,
+    unit: checkout.unit,
+    return_date: checkout.returnDate
+  };
+
+  emailjs.send(
+    EMAILJS_SERVICE_ID,
+    EMAILJS_TEMPLATE_ID,
+    templateParams,
+    EMAILJS_USER_ID
+  ).catch(err => console.error('Failed to send reminder email:', err));
+};
+
+// Check for due returns every day
+setInterval(checkForDueReturns, 24 * 60 * 60 * 1000);
+
 
 export async function sendDailySummary() {
   try {
@@ -29,10 +87,10 @@ export async function sendDailySummary() {
     // Format the summary
     const summaryParams = {
       date: today.toLocaleDateString(),
-      checkouts: todayCheckouts.map(c => 
+      checkouts: todayCheckouts.map(c =>
         `Unit: ${c.unit} - Customer: ${c.customerName} - Job Site: ${c.jobSite}`
       ).join('\n'),
-      checkins: todayCheckins.map(c => 
+      checkins: todayCheckins.map(c =>
         `Unit: ${c.unit} - Hours/Miles: ${c.hoursMiles}`
       ).join('\n'),
       total_checkouts: todayCheckouts.length,
@@ -48,10 +106,10 @@ export async function sendDailySummary() {
 
     // Send summary email
     await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
+      EMAILJS_SERVICE_ID_SUMMARY,
+      EMAILJS_TEMPLATE_ID_SUMMARY,
       emailParams,
-      EMAILJS_USER_ID
+      EMAILJS_USER_ID_SUMMARY
     );
 
     console.log('Daily summary sent successfully');

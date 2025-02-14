@@ -258,6 +258,7 @@
     "find-root": "^1.1.0",
     "find-up": "^4.1.0",
     "firebase": "^9.23.0",
+    "firebase-admin": "^13.1.0",
     "flat-cache": "^3.2.0",
     "flatted": "^3.3.2",
     "follow-redirects": "^1.15.9",
