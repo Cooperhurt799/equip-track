@@ -29,10 +29,12 @@ const EMAILJS_USER_ID_SUMMARY = import.meta.env.VITE_EMAILJS_USER_ID;
 export const checkForDueReturns = async () => {
   try {
     const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of day
     const checkoutsRef = collection(db, 'checkouts');
     const q = query(
       checkoutsRef,
-      where('returnDate', '<=', today.toISOString())
+      where('returnDate', '<=', today.toISOString()),
+      where('status', '==', 'active')
     );
 
     const querySnapshot = await getDocs(q);
@@ -46,11 +48,16 @@ export const checkForDueReturns = async () => {
 };
 
 const sendReminderEmail = (checkout) => {
+  if (!checkout.customerEmail || !checkout.customerName || !checkout.unit || !checkout.returnDate) {
+    console.error('Missing required fields for email:', checkout);
+    return;
+  }
+  
   const templateParams = {
     to_email: checkout.customerEmail,
     customer_name: checkout.customerName,
     unit: checkout.unit,
-    return_date: checkout.returnDate
+    return_date: new Date(checkout.returnDate).toLocaleDateString()
   };
 
   emailjs.send(
@@ -71,8 +78,16 @@ export async function sendDailySummary() {
     today.setHours(0, 0, 0, 0);
 
     // Fetch today's checkouts from Airtable
+    const startOfDay = new Date(today);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+    
     const checkoutsRecords = await base('Checkouts').select({
-      filterByFormula: `DATESTR(createdAt) = '${today.toISOString().split('T')[0]}'`
+      filterByFormula: `AND(
+        createdAt >= '${startOfDay.toISOString()}',
+        createdAt <= '${endOfDay.toISOString()}'
+      )`
     }).all();
 
     const todayCheckouts = checkoutsRecords.map(record => record.fields);
@@ -104,13 +119,22 @@ export async function sendDailySummary() {
       subject: `Equipment Daily Summary - ${today.toLocaleDateString()}`
     };
 
+    if (!EMAILJS_SERVICE_ID_SUMMARY || !EMAILJS_TEMPLATE_ID_SUMMARY || !EMAILJS_USER_ID_SUMMARY) {
+      throw new Error('Missing required EmailJS configuration');
+    }
+
     // Send summary email
-    await emailjs.send(
-      EMAILJS_SERVICE_ID_SUMMARY,
-      EMAILJS_TEMPLATE_ID_SUMMARY,
-      emailParams,
-      EMAILJS_USER_ID_SUMMARY
-    );
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID_SUMMARY,
+        EMAILJS_TEMPLATE_ID_SUMMARY,
+        emailParams,
+        EMAILJS_USER_ID_SUMMARY
+      );
+    } catch (error) {
+      console.error('Failed to send summary email:', error);
+      throw error;
+    }
 
     console.log('Daily summary sent successfully');
   } catch (error) {
