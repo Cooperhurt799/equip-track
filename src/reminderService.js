@@ -19,7 +19,7 @@ const EMAILJS_SERVICE_ID = "service_fimxodg";
 const EMAILJS_TEMPLATE_ID = "template_bxx6jfh";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 
-import airtableService from './airtableService';
+const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTrackerTest');
 
 const EMAILJS_SERVICE_ID_SUMMARY = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID_SUMMARY = import.meta.env.VITE_EMAILJS_DAILY_SUMMARY_TEMPLATE_ID;
@@ -99,12 +99,21 @@ export async function sendDailySummary() {
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
     
-    const todayCheckouts = await airtableService.getCheckouts(startOfDay, endOfDay);
+    const checkoutsRecords = await base('Checkouts').select({
+      filterByFormula: `AND(
+        createdAt >= '${startOfDay.toISOString()}',
+        createdAt <= '${endOfDay.toISOString()}'
+      )`
+    }).all();
 
     const todayCheckouts = checkoutsRecords.map(record => record.fields);
 
     // Fetch today's checkins from Airtable
-    const todayCheckins = await airtableService.getCheckins(today);
+    const checkinsRecords = await base('Checkins').select({
+      filterByFormula: `DATESTR(createdAt) = '${today.toISOString().split('T')[0]}'`
+    }).all();
+
+    const todayCheckins = checkinsRecords.map(record => record.fields);
 
     // Format the summary
     const summaryParams = {
