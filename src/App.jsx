@@ -34,15 +34,32 @@ try {
 } catch (e) {
   app = initializeApp(firebaseConfig);
 }
+
 const db = getFirestore(app);
 
-// Enable offline persistence
-enableIndexedDbPersistence(db).catch((err) => {
+// Enable offline persistence with better error handling
+enableIndexedDbPersistence(db, {
+  synchronizeTabs: true
+}).catch((err) => {
   if (err.code === 'failed-precondition') {
-    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+    console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
   } else if (err.code === 'unimplemented') {
-    console.log('The current browser does not support persistence.');
+    console.warn('The current browser does not support persistence.');
+  } else {
+    console.error('Error enabling persistence:', err);
   }
+});
+
+// Add connection state listener
+const connectedRef = collection(db, '.info/connected');
+onSnapshot(connectedRef, (snap) => {
+  if (snap.exists() && snap.data().connected) {
+    console.log('Connected to Firebase');
+  } else {
+    console.warn('Disconnected from Firebase - operating in offline mode');
+  }
+}, (error) => {
+  console.error('Error monitoring connection:', error);
 });
 
 import "./reminderService"; // Import the reminder service if used
