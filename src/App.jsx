@@ -387,9 +387,9 @@ function App() {
       } catch (error) {
         console.error("Error adding checkout document: ", error);
       }
-    } else {
-      alert("Please fill in all checkout fields.");
-    }
+  } else {
+    alert("Please fill in all checkout fields.");
+  }
   };
 
   // ---------------- Retrieve Checkout Records ----------------
