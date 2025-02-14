@@ -5,10 +5,11 @@ import Select, { components } from "react-select"; // Ensure react-select is ins
 import emailjs from "emailjs-com";
 import { init as initEmailJS } from 'emailjs-com';
 import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
 // Initialize EmailJS with your user ID
 initEmailJS("wyfCLJgbJeNcu3092");
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBGI1ePIuM8qH-HU7m0KoHWWTelNL8Rw7I",
@@ -115,6 +116,9 @@ const validateForm = (formData) => {
   }
   if (!formData.customerPhone.match(/^\d{10}$/)) {
     errors.customerPhone = "Please enter a valid 10-digit phone number";
+  }
+  if (!formData.customerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    errors.customerEmail = "Please enter a valid email address";
   }
   return errors;
 };
@@ -412,32 +416,30 @@ const addEquipment = async (e) => {
           status: 'active'
         };
 
-        let docRef;
-        try {
-
         const docRef = await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
         console.log("Document written with ID: ", docRef.id);
 
         if (EMAIL_NOTIFICATIONS_ENABLED) {
-          await emailjs.send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_TEMPLATE_ID_CHECKOUT,
-            {
-              to_email: customerEmail,
-              customer_name: customerName,
-              unit: selectedUnit,
-              checkout_date: checkoutDate,
-              return_date: returnDate,
-              job_site: jobSite,
-              project_code: projectCode,
-              department_id: departmentID,
-            },
-            EMAILJS_USER_ID
-          );
-        } catch (err) {
-          console.error("Failed to send email:", err);
+          try {
+            await emailjs.send(
+              EMAILJS_SERVICE_ID,
+              EMAILJS_TEMPLATE_ID_CHECKOUT,
+              {
+                to_email: customerEmail,
+                customer_name: customerName,
+                unit: selectedUnit,
+                checkout_date: checkoutDate,
+                return_date: returnDate,
+                job_site: jobSite,
+                project_code: projectCode,
+                department_id: departmentID,
+              },
+              EMAILJS_USER_ID
+            );
+          } catch (err) {
+            console.error("Failed to send email:", err);
+          }
         }
-      }
 
       // Clear form fields
       setSelectedUnit("");
@@ -464,6 +466,8 @@ const addEquipment = async (e) => {
     } catch (error) {
       console.error("Error adding checkout document: ", error);
       alert("Error during checkout. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -525,7 +529,6 @@ const addEquipment = async (e) => {
     }
 
     try {
-      try {
         const checkinWithTimestamp = {
           dateTimeReturned: checkinDateTime,
           unit: checkinUnit,
