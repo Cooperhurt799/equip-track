@@ -11,6 +11,7 @@ const EMAILJS_SERVICE_ID = "service_fimxodg";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
 const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
+const EMAIL_NOTIFICATIONS_ENABLED = false; // Set to false to disable email notifications
 
 // ---------------- Custom Styles for react-select ----------------
 const customSelectStyles = {
@@ -400,7 +401,8 @@ function App() {
         document.body.removeChild(successDiv);
       }, 3000);
 
-      emailjs.send(
+      if (EMAIL_NOTIFICATIONS_ENABLED) {
+        emailjs.send(
           EMAILJS_SERVICE_ID,
           EMAILJS_TEMPLATE_ID_CHECKOUT,
           {
@@ -504,10 +506,11 @@ function App() {
       try {
         await addCheckinToAirtable(newCheckin);
         setCheckinMessage("Check-in successful!");
-        emailjs
-          .send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_TEMPLATE_ID_CHECKIN,
+        if (EMAIL_NOTIFICATIONS_ENABLED) {
+          emailjs
+            .send(
+              EMAILJS_SERVICE_ID,
+              EMAILJS_TEMPLATE_ID_CHECKIN,
             {
               to_email: checkinCustomerEmail,
               customer_name: checkinCustomerName,
