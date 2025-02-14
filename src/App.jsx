@@ -3,7 +3,7 @@ import "./App.css";
 import Select from "react-select";
 import emailjs from "emailjs-com";
 import { init as initEmailJS } from "emailjs-com";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApp } from "firebase/app";
 import {
   getFirestore,
   collection,
@@ -28,7 +28,12 @@ const firebaseConfig = {
   measurementId: "G-L58WPXJ4J1",
 };
 
-const app = initializeApp(firebaseConfig);
+let app;
+try {
+  app = getApp();
+} catch (e) {
+  app = initializeApp(firebaseConfig);
+}
 const db = getFirestore(app);
 
 // Enable offline persistence
