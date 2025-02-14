@@ -155,6 +155,8 @@ export async function sendDailySummary() {
     console.log('Daily summary sent successfully');
   } catch (error) {
     console.error("Error sending daily summary:", error);
+    // Retry after 5 minutes if there's an error
+    setTimeout(() => sendDailySummary(), 5 * 60 * 1000);
   }
 }
 

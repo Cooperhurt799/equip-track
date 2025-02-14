@@ -164,12 +164,22 @@ function App() {
 
   // Fetch data from Firebase
   useEffect(() => {
+    let mounted = true;
     const checkoutsQuery = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
     const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
 
     // Set up real-time listeners
     let unsubscribeCheckouts;
     let unsubscribeCheckins;
+
+    // Only update state if component is mounted
+    const safeSetEquipmentList = (data) => {
+      if (mounted) setEquipmentList(data);
+    };
+
+    const safeSetCheckinList = (data) => {
+      if (mounted) setCheckinList(data);
+    };
 
     unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
       const checkoutData = snapshot.docs.map(doc => ({
@@ -356,15 +366,18 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
 const validateForm = (data) => {
-  const errors = [];
-  if (!data.hoursMiles.match(/^\d+$/)) {
-    errors.push("Hours/Miles must be a number");
+  const errors = {};
+  if (!data.hoursMiles?.match(/^\d+$/)) {
+    errors.hoursMiles = "Hours/Miles must be a positive number";
   }
-  if (!data.customerPhone.match(/^\d{10}$/)) {
-    errors.push("Phone number must be 10 digits");
+  if (!data.customerPhone?.match(/^\d{10}$/)) {
+    errors.customerPhone = "Phone number must be exactly 10 digits";
   }
-  if (!data.customerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-    errors.push("Invalid email format");
+  if (!data.customerEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    errors.customerEmail = "Please enter a valid email address";
+  }
+  if (!data.jobSite) {
+    errors.jobSite = "Job site is required";
   }
   return errors;
 };
@@ -465,7 +478,11 @@ const addEquipment = async (e) => {
 
     } catch (error) {
       console.error("Error adding checkout document: ", error);
-      alert("Error during checkout. Please try again.");
+      const errorMessage = error.code === 'permission-denied' 
+        ? "You don't have permission to perform this action."
+        : "An error occurred during checkout. Please try again.";
+      setCheckoutMessage(errorMessage);
+      setTimeout(() => setCheckoutMessage(""), 5000);
     } finally {
       setIsLoading(false);
     }
