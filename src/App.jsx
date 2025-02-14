@@ -150,7 +150,7 @@ function App() {
     const today = new Date();
     const sevenDaysFromNow = new Date();
     sevenDaysFromNow.setDate(today.getDate() + 7);
-    
+
     return equipmentList.filter(checkout => {
       const returnDate = new Date(checkout.returnDate);
       const hasCheckin = checkinList.find(
@@ -158,32 +158,32 @@ function App() {
           checkin.unit === checkout.unit && 
           new Date(checkin.createdAt) > new Date(checkout.createdAt)
       );
-      
+
       return !hasCheckin && 
              returnDate >= today && 
              returnDate <= sevenDaysFromNow;
     }).sort((a, b) => new Date(a.returnDate) - new Date(b.returnDate));
   };
-  
+
   const getOverdueUnits = () => {
     const today = new Date();
     const activeCheckouts = getActiveCheckouts();
-    
+
     return equipmentList.filter(checkout => {
       // Only include units that are in active checkouts
       if (!activeCheckouts.includes(checkout.unit)) {
         return false;
       }
-      
+
       // Get the most recent checkout for this unit
       const latestCheckout = equipmentList
         .filter(c => c.unit === checkout.unit)
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
-        
+
       // Only include if this is the latest checkout and it's overdue
       const isLatestCheckout = checkout.createdAt === latestCheckout.createdAt;
       const returnDate = new Date(checkout.returnDate);
-      
+
       return isLatestCheckout && returnDate < today;
     }).map(checkout => ({
       ...checkout,
@@ -195,7 +195,7 @@ function App() {
     const total = availableUnits.length;
     const active = getActiveCheckouts().length;
     const available = total - active;
-    
+
     // Get most checked out equipment
     const checkoutCounts = {};
     equipmentList.forEach(checkout => {
@@ -204,7 +204,7 @@ function App() {
     const mostCheckedOut = Object.entries(checkoutCounts)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3);
-      
+
     return { total, active, available, mostCheckedOut };
   };
 
@@ -214,7 +214,7 @@ function App() {
       ...checkinList.map(item => ({ ...item, type: 'checkin' }))
     ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
-    
+
     return allActivity;
   };
 
@@ -228,7 +228,7 @@ function App() {
     });
     return siteCounts;
   };
-  
+
   const getActiveCheckouts = () => {
     const activeUnits = getActiveUnitNumbers();
     return activeUnits;
@@ -237,7 +237,7 @@ function App() {
   const getActiveUsers = () => {
     const activeUsersMap = new Map();
     const activeUnits = getActiveUnitNumbers();
-    
+
     equipmentList.forEach(checkout => {
       if (activeUnits.includes(checkout.unit)) {
         const currentCount = activeUsersMap.get(checkout.customerName) || 0;
@@ -329,68 +329,68 @@ function App() {
       alert(`Please fill in the following required fields: ${missingFields.join(', ')}`);
       return;
     }
-      const newCheckout = {
-        unit: selectedUnit,
-        hoursMiles: checkoutHoursMiles,
-        checkoutDate,
-        returnDate,
-        customerName,
-        customerEmail,
-        customerPhone,
-        jobSite,
-        projectCode,
-        departmentID,
-        createdAt: new Date().toISOString(),
-      };
+    const newCheckout = {
+      unit: selectedUnit,
+      hoursMiles: checkoutHoursMiles,
+      checkoutDate,
+      returnDate,
+      customerName,
+      customerEmail,
+      customerPhone,
+      jobSite,
+      projectCode,
+      departmentID,
+      createdAt: new Date().toISOString(),
+    };
 
-      try {
-        console.log("Starting checkout process with data:", newCheckout);
-        
-        console.log("Adding to Firebase...");
-        const docRef = await addDoc(collection(db, "checkouts"), newCheckout);
-        console.log("Successfully added to Firebase with ID:", docRef.id);
-        
-        console.log("Adding to Airtable...");
-        const airtableResponse = await addCheckoutToAirtable(newCheckout);
-        console.log("Successfully added to Airtable:", airtableResponse);
-        
-        setCheckoutMessage("Checkout successful!");
-        emailjs
-          .send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_TEMPLATE_ID_CHECKOUT,
-            {
-              to_email: customerEmail,
-              customer_name: customerName,
-              unit: selectedUnit,
-              checkout_date: checkoutDate,
-              return_date: returnDate,
-              job_site: jobSite,
-              project_code: projectCode,
-              department_id: departmentID,
-            },
-            EMAILJS_USER_ID
-          )
-          .catch((err) => console.error("Failed to send email:", err));
-        // Reset checkout form fields.
-        setSelectedUnit("");
-        setCheckoutHoursMiles("");
-        setCheckoutDate("");
-        setReturnDate("");
-        setCustomerName("");
-        setCustomerEmail("");
-        setCustomerPhone("");
-        setJobSite("");
-        setProjectCode("");
-        setDepartmentID("");
-        setTimeout(() => setCheckoutMessage(""), 3000);
-      } catch (error) {
-        console.error("Error adding checkout document: ", error);
-      }
+    try {
+      console.log("Starting checkout process with data:", newCheckout);
+
+      console.log("Adding to Firebase...");
+      const docRef = await addDoc(collection(db, "checkouts"), newCheckout);
+      console.log("Successfully added to Firebase with ID:", docRef.id);
+
+      console.log("Adding to Airtable...");
+      const airtableResponse = await addCheckoutToAirtable(newCheckout);
+      console.log("Successfully added to Airtable:", airtableResponse);
+
+      setCheckoutMessage("Checkout successful!");
+      emailjs
+        .send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID_CHECKOUT,
+          {
+            to_email: customerEmail,
+            customer_name: customerName,
+            unit: selectedUnit,
+            checkout_date: checkoutDate,
+            return_date: returnDate,
+            job_site: jobSite,
+            project_code: projectCode,
+            department_id: departmentID,
+          },
+          EMAILJS_USER_ID
+        )
+        .catch((err) => console.error("Failed to send email:", err));
+
+      setSelectedUnit("");
+      setCheckoutHoursMiles("");
+      setCheckoutDate("");
+      setReturnDate("");
+      setCustomerName("");
+      setCustomerEmail("");
+      setCustomerPhone("");
+      setJobSite("");
+      setProjectCode("");
+      setDepartmentID("");
+      setTimeout(() => setCheckoutMessage(""), 3000);
+    } catch (error) {
+      console.error("Error adding checkout document: ", error);
+    }
   } else {
     alert("Please fill in all checkout fields.");
   }
-  };
+};
 
   // ---------------- Retrieve Checkout Records ----------------
   useEffect(() => {
@@ -645,7 +645,7 @@ function App() {
                     const today = new Date();
                     const futureDate = new Date();
                     futureDate.setDate(today.getDate() + days);
-                    
+
                     const filteredByDate = equipmentList.filter(checkout => {
                       const returnDate = new Date(checkout.returnDate);
                       const hasCheckin = checkinList.find(
@@ -653,12 +653,12 @@ function App() {
                           checkin.unit === checkout.unit && 
                           new Date(checkin.createdAt) > new Date(checkout.createdAt)
                       );
-                      
+
                       return !hasCheckin && 
                              returnDate >= today && 
                              returnDate <= futureDate;
                     }).sort((a, b) => new Date(a.returnDate) - new Date(b.returnDate));
-                    
+
                     setFilteredDueReturns(filteredByDate);
                   }}
                 >
@@ -922,7 +922,7 @@ function App() {
                       const latestCheckout = equipmentList
                         .filter(checkout => checkout.unit === option.value)
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
-                      
+
                       if (latestCheckout) {
                         setCheckinCustomerName(latestCheckout.customerName);
                         setCheckinCustomerEmail(latestCheckout.customerEmail);
