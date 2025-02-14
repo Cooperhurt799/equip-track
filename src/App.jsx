@@ -355,8 +355,7 @@ function App() {
       console.log("Successfully added to Airtable:", airtableResponse);
 
       setCheckoutMessage("Checkout successful!");
-      emailjs
-        .send(
+      emailjs.send(
           EMAILJS_SERVICE_ID,
           EMAILJS_TEMPLATE_ID_CHECKOUT,
           {
@@ -387,10 +386,7 @@ function App() {
     } catch (error) {
       console.error("Error adding checkout document: ", error);
     }
-  } else {
-    alert("Please fill in all checkout fields.");
-  }
-};
+  };
 
   // ---------------- Retrieve Checkout Records ----------------
   useEffect(() => {
@@ -942,7 +938,7 @@ function App() {
                       type="text"
                       value={checkinHoursMiles}
                       onChange={(e) => setCheckinHoursMiles(e.target.value)}
-                      placeholder="Enter hours or miles"
+                      placeholder="Enter hours ormiles"
                     />
                   </label>
                 </div>
