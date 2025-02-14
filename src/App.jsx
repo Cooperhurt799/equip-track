@@ -418,7 +418,8 @@ function App() {
           EMAILJS_USER_ID
         )
         .catch((err) => console.error("Failed to send email:", err));
-
+      }
+      
       setSelectedUnit("");
       setCheckoutHoursMiles("");
       setCheckoutDate("");
