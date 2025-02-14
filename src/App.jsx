@@ -334,9 +334,6 @@ function App() {
       return;
     }
 
-    if (!window.confirm(`Are you sure you want to check out ${selectedUnit}?`)) {
-      return;
-    }
     const newCheckout = {
       unit: selectedUnit,
       hoursMiles: checkoutHoursMiles,
@@ -358,11 +355,16 @@ function App() {
       const airtableResponse = await addCheckoutToAirtable(newCheckout);
       console.log("Successfully added to Airtable:", airtableResponse);
 
-      // Show success message
-      alert("Checkout Successful!");
-      
       // Update equipment list
       const checkouts = await getCheckouts();
+      
+      // Show success message below button
+      setCheckoutMessage("Checkout Successful!");
+      
+      // Clear message after 3 seconds
+      setTimeout(() => {
+        setCheckoutMessage("");
+      }, 3000);
       setEquipmentList(checkouts);
 
       // Clear all form fields
