@@ -386,20 +386,20 @@ const addEquipment = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!selectedUnit || 
-        !checkoutHoursMiles || 
-        !checkoutDate || 
-        !returnDate || 
-        !customerName || 
-        !customerEmail ||
-        !customerPhone || 
-        !jobSite || 
-        !projectCode || 
-        !departmentID) {
-      setIsLoading(false);
-      alert("Please fill in all required fields");
-      return;
-    }
+    try {
+      if (!selectedUnit || 
+          !checkoutHoursMiles || 
+          !checkoutDate || 
+          !returnDate || 
+          !customerName || 
+          !customerEmail ||
+          !customerPhone || 
+          !jobSite || 
+          !projectCode || 
+          !departmentID) {
+        alert("Please fill in all required fields");
+        return;
+      }
 
     const formErrors = validateForm({
       hoursMiles: checkoutHoursMiles,
@@ -454,6 +454,9 @@ const addEquipment = async (e) => {
           }
         }
 
+      // Show success message
+      setCheckoutMessage("Checkout successful!");
+      
       // Clear form fields
       setSelectedUnit("");
       setCheckoutHoursMiles("");
@@ -466,15 +469,15 @@ const addEquipment = async (e) => {
       setProjectCode("");
       setDepartmentID("");
 
-      // Show success message and clear form
-      setCheckoutMessage("Checkout successful!");
-      setTimeout(() => {
-        setCheckoutMessage("");
-        // Reset form state completely
-        document.getElementById("checkout-form").reset();
-      }, 3000);
+      // Reset form completely
+      document.getElementById("checkout-form").reset();
 
       console.log("Checkout completed successfully");
+      
+      // Clear success message after delay
+      setTimeout(() => {
+        setCheckoutMessage("");
+      }, 3000);
 
     } catch (error) {
       console.error("Error adding checkout document: ", error);
