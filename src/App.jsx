@@ -156,47 +156,27 @@ function App() {
 
   // Fetch data from Firebase
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const checkoutsQuery = query(
-          collection(db, 'checkouts'), 
-          orderBy('createdAt', 'desc')
-        );
-        const checkinsQuery = query(
-          collection(db, 'checkins'), 
-          orderBy('createdAt', 'desc')
-        );
-
-        const [checkoutsSnapshot, checkinsSnapshot] = await Promise.all([
-          getDocs(checkoutsQuery),
-          getDocs(checkinsQuery)
-        ]);
-
-        const checkoutData = checkoutsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
-        }));
-
-        const checkinData = checkinsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
-        }));
-
-        setEquipmentList(checkoutData);
-        setCheckinList(checkinData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    // Initial fetch
-    fetchData();
-
-    // Set up real-time listener
     const checkoutsQuery = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
     const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
+
+    // Set up real-time listeners
+    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
+      const checkoutData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(doc.data().createdAt).toISOString()
+      }));
+      setEquipmentList(checkoutData);
+    });
+
+    const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
+      const checkinData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(doc.data().createdAt).toISOString()
+      }));
+      setCheckinList(checkinData);
+    });
 
     const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
       const checkoutData = snapshot.docs.map(doc => ({
@@ -589,31 +569,33 @@ function App() {
 
   // ---------------- Active Checkouts Section ----------------
   const getActiveUnitNumbers = () => {
-    if (!availableUnits.length || !checkinList.length) return [];
+    if (!availableUnits.length) return [];
     const latestCheckout = {};
-    availableUnits.forEach((unit) => {
-      equipmentList.forEach((checkout) => {
-        if (checkout.unit === unit) {
-          const time = new Date(checkout.createdAt);
-          if (!latestCheckout[unit] || time > latestCheckout[unit]) {
-            latestCheckout[unit] = time;
-          }
-        }
-      });
-    });
-    const activeUnits = [];
-    for (const unit in latestCheckout) {
-      const correspondingCheckin = checkinList.find(
-        (checkin) =>
-          checkin.unit === unit &&
-          checkin.createdAt &&
-          new Date(checkin.createdAt) > latestCheckout[unit]
-      );
-      if (!correspondingCheckin) {
-        activeUnits.push(unit);
+    const latestCheckin = {};
+    
+    // Get latest checkout for each unit
+    equipmentList.forEach((checkout) => {
+      const time = new Date(checkout.createdAt);
+      if (!latestCheckout[checkout.unit] || time > new Date(latestCheckout[checkout.unit].createdAt)) {
+        latestCheckout[checkout.unit] = checkout;
       }
-    }
-    return activeUnits;
+    });
+
+    // Get latest checkin for each unit
+    checkinList.forEach((checkin) => {
+      const time = new Date(checkin.createdAt);
+      if (!latestCheckin[checkin.unit] || time > new Date(latestCheckin[checkin.unit].createdAt)) {
+        latestCheckin[checkin.unit] = checkin;
+      }
+    });
+
+    // Check which units are active (checked out but not checked in)
+    return Object.values(latestCheckout)
+      .filter(checkout => {
+        const checkin = latestCheckin[checkout.unit];
+        return !checkin || new Date(checkin.createdAt) < new Date(checkout.createdAt);
+      })
+      .map(checkout => checkout.unit);
   };
 
 
