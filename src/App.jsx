@@ -507,11 +507,11 @@ function App() {
       try {
         await addCheckinToAirtable(newCheckin);
         setCheckinMessage("Check-in successful!");
+        
         if (EMAIL_NOTIFICATIONS_ENABLED) {
-          emailjs
-            .send(
-              EMAILJS_SERVICE_ID,
-              EMAILJS_TEMPLATE_ID_CHECKIN,
+          emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID_CHECKIN,
             {
               to_email: checkinCustomerEmail,
               customer_name: checkinCustomerName,
@@ -525,7 +525,18 @@ function App() {
             EMAILJS_USER_ID
           )
           .catch((err) => console.error("Failed to send email:", err));
-        // Reset check-in form fields.
+        unit: checkinUnit,
+            checkin_date: checkinDateTime,
+            job_site: checkinJobSite,
+            inspection_notes: checkinInspectionNotes,
+            project_code: checkinProjectCode,
+            department_id: checkinDepartmentID,
+          },
+          EMAILJS_USER_ID
+        ).catch((err) => console.error("Failed to send email:", err));
+        }
+        
+        // Reset check-in form fields
         setCheckinDateTime("");
         setCheckinUnit("");
         setCheckinHoursMiles("");
