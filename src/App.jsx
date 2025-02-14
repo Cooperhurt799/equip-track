@@ -37,20 +37,34 @@ try {
 }
 
 const db = getFirestore(app);
-const CACHE_SIZE = 1000000000; // 1GB cache
 
+// Configure Firestore settings for better offline support and reliability
+const firestoreSettings = {
+  cacheSizeBytes: 100000000, // 100MB cache
+  experimentalForceLongPolling: true, // Use long polling for better connection stability
+  experimentalAutoDetectLongPolling: true,
+  merge: true
+};
+
+// Initialize Firestore with settings
+db.settings(firestoreSettings);
+
+// Enable offline persistence with error handling
 enableIndexedDbPersistence(db, {
-  cacheSizeBytes: CACHE_SIZE
+  synchronizeTabs: true,
+  forceOwnership: false
 }).catch((err) => {
-  console.warn('Persistence failed:', err);
   if (err.code === 'failed-precondition') {
-    // Multiple tabs open
-    console.warn('Persistence unavailable - multiple tabs');
+    console.warn('Persistence unavailable - multiple tabs open');
   } else if (err.code === 'unimplemented') {
-    // Browser doesn't support persistence
-    console.warn('Persistence unavailable - not supported');
+    console.warn('Persistence unavailable - not supported by browser');
+  } else {
+    console.error('Persistence error:', err);
   }
 });
+
+// Add connection state listener
+db.enableNetwork().catch(err => console.warn('Network connection error:', err));
 
 import "./reminderService";
 
