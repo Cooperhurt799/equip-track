@@ -1,4 +1,3 @@
-
 import Airtable from 'airtable';
 
 const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' })
@@ -32,6 +31,11 @@ export const addCheckoutToAirtable = async (checkoutData) => {
     return record;
   } catch (error) {
     console.error('Error adding to Airtable:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.statusCode,
+      details: error.response ? error.response.data : null
+    });
     throw error;
   }
 };
@@ -59,6 +63,11 @@ export const addCheckinToAirtable = async (checkinData) => {
     return record;
   } catch (error) {
     console.error('Error adding to Airtable:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.statusCode,
+      details: error.response ? error.response.data : null
+    });
     throw error;
   }
 };

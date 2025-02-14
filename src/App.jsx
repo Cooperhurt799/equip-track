@@ -17,6 +17,15 @@ const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 // ---------------- Custom Styles for react-select ----------------
 const customSelectStyles = {
   control: (provided, state) => ({
+
+// Test Airtable connection on component mount
+useEffect(() => {
+  testAirtableConnection()
+    .then(success => {
+      console.log('Airtable connection test:', success ? 'Passed' : 'Failed');
+    });
+}, []);
+
     ...provided,
     width: "100%",
     minHeight: "40px",
