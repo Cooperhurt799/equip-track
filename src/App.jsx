@@ -178,7 +178,13 @@ function App() {
       setCheckinList(checkinData);
     });
 
-    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
+    return () => {
+      unsubscribeCheckouts();
+      unsubscribeCheckins();
+    };
+  }, []);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
       const checkoutData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
