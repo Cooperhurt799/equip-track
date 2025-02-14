@@ -22,7 +22,6 @@ const validateForm = (data) => {
   }
   return errors;
 };
-import airtableService from './airtableService';
 
 // Initialize EmailJS
 initEmailJS("wyfCLJgbJeNcu3092");
