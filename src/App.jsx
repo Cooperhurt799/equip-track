@@ -206,6 +206,15 @@ function App() {
       }
 
       const formErrors = validateForm({
+        hoursMiles: checkoutHoursMiles,
+        customerPhone,
+        customerEmail,
+        jobSite,
+      });
+
+      if (Object.keys(formErrors).length > 0) {
+        throw new Error(Object.values(formErrors).join("\n"));
+      }
       hoursMiles: checkoutHoursMiles,
       customerPhone,
       customerEmail,
