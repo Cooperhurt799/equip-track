@@ -7,6 +7,21 @@ const base = new Airtable({ apiKey: AIRTABLE_PAT }).base(AIRTABLE_BASE_ID);
 
 export const syncCheckout = async (checkoutData) => {
   try {
+    console.log('Starting Airtable sync with config:', {
+      apiKey: AIRTABLE_PAT ? 'Present' : 'Missing',
+      baseId: AIRTABLE_BASE_ID ? 'Present' : 'Missing'
+    });
+    
+    if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
+      throw new Error('Missing Airtable configuration');
+    }
+
+    console.log('Attempting to create Airtable record with data:', {
+      unit: checkoutData.unit,
+      customerName: checkoutData.customerName,
+      jobSite: checkoutData.jobSite
+    });
+
     const record = await base('Checkouts').create({
       unit: checkoutData.unit,
       hoursMiles: checkoutData.hoursMiles,
@@ -21,10 +36,15 @@ export const syncCheckout = async (checkoutData) => {
       createdAt: new Date().toISOString(),
       status: checkoutData.status
     });
-    console.log('Synced checkout to Airtable:', record.getId());
+    
+    console.log('Successfully synced checkout to Airtable:', record.getId());
     return record;
   } catch (error) {
-    console.error('Error syncing checkout to Airtable:', error);
+    console.error('Detailed Airtable sync error:', {
+      message: error.message,
+      error: error,
+      data: checkoutData
+    });
     throw error;
   }
 };
