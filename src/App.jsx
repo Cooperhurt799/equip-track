@@ -128,11 +128,16 @@ function App() {
 
   // ---------------- States ----------------
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState('active-checkouts');
   const [currentSection, setCurrentSection] = useState(null);
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [daysFilter, setDaysFilter] = useState("all");
+  const [activeCheckouts, setActiveCheckouts] = useState([]);
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [dueReturns, setDueReturns] = useState([]);
 
   // Checkout Form States
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -379,23 +384,86 @@ function App() {
           <button onClick={() => setSidebarOpen(false)}>×</button>
         </div>
         <div className="sidebar-content">
+          <div className="sidebar-buttons">
+            <button 
+              className="sidebar-action-button" 
+              onClick={() => setActiveTab('active-checkouts')}
+            >
+              Active Checkouts
+            </button>
+            <button 
+              className="sidebar-action-button" 
+              onClick={() => setActiveTab('active-users')}
+            >
+              Active Users
+            </button>
+            <button 
+              className="sidebar-action-button" 
+              onClick={() => setActiveTab('due-returns')}
+            >
+              Due Returns
+            </button>
+          </div>
+          
           <div className="filter-container">
             <input
               type="text"
               className="search-input"
               placeholder="Search equipment..."
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <select className="days-filter">
+            <select 
+              className="days-filter"
+              onChange={(e) => setDaysFilter(e.target.value)}
+            >
               <option value="all">All Time</option>
               <option value="7">Last 7 Days</option>
               <option value="30">Last 30 Days</option>
               <option value="90">Last 90 Days</option>
             </select>
           </div>
-          <h3>Active Checkouts</h3>
-          <ul>
-            {/* Active checkouts will be listed here */}
-          </ul>
+
+          {activeTab === 'active-checkouts' && (
+            <>
+              <h3>Active Checkouts</h3>
+              <ul>
+                {activeCheckouts.map((checkout, index) => (
+                  <li key={index}>
+                    {checkout.unit} - {checkout.customerName}
+                    <small>Due: {new Date(checkout.returnDate).toLocaleDateString()}</small>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {activeTab === 'active-users' && (
+            <>
+              <h3>Active Users</h3>
+              <ul>
+                {activeUsers.map((user, index) => (
+                  <li key={index}>
+                    {user.customerName}
+                    <small>{user.unit}</small>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {activeTab === 'due-returns' && (
+            <>
+              <h3>Due Returns</h3>
+              <ul>
+                {dueReturns.map((item, index) => (
+                  <li key={index}>
+                    {item.unit} - {item.customerName}
+                    <small>Due: {new Date(item.returnDate).toLocaleDateString()}</small>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </div>
 
