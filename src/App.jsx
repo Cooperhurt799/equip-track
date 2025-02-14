@@ -4,7 +4,7 @@ import "./App.css";
 import Select from "react-select"; // Ensure react-select is installed
 import emailjs from "emailjs-com";
 import { init as initEmailJS } from "emailjs-com";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApp } from "firebase/app";
 import {
   getFirestore,
   collection,
