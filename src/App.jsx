@@ -359,22 +359,8 @@ function App() {
       console.log("Successfully added to Airtable:", airtableResponse);
 
       // Show success message
-      const successDiv = document.createElement('div');
-      successDiv.style.position = 'fixed';
-      successDiv.style.top = '50%';
-      successDiv.style.left = '50%';
-      successDiv.style.transform = 'translate(-50%, -50%)';
-      successDiv.style.background = '#4CAF50';
-      successDiv.style.color = 'white';
-      successDiv.style.padding = '20px';
-      successDiv.style.borderRadius = '5px';
-      successDiv.style.zIndex = '9999';
-      successDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
-      successDiv.style.fontSize = '18px';
-      successDiv.style.fontWeight = 'bold';
-      successDiv.textContent = 'Checkout Successful!';
-      document.body.appendChild(successDiv);
-
+      alert("Checkout Successful!");
+      
       // Update equipment list
       const checkouts = await getCheckouts();
       setEquipmentList(checkouts);
