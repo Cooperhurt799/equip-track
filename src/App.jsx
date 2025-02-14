@@ -13,6 +13,7 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
+  enableIndexedDbPersistence,
 } from "firebase/firestore";
 
 // Initialize EmailJS with your user ID
