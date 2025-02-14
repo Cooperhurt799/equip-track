@@ -5,6 +5,7 @@ import Select, { components } from "react-select"; // Ensure react-select is ins
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import emailjs from "emailjs-com";
+import { addCheckoutToAirtable, addCheckinToAirtable } from './airtableService';
 import './reminderService'; // Import the reminder service if used
 
 // ---------------- EmailJS Configuration ----------------
@@ -331,7 +332,10 @@ function App() {
       };
 
       try {
-        await addDoc(collection(db, "checkouts"), newCheckout);
+        await Promise.all([
+          addDoc(collection(db, "checkouts"), newCheckout),
+          addCheckoutToAirtable(newCheckout)
+        ]);
         setCheckoutMessage("Checkout successful!");
         emailjs
           .send(
@@ -443,7 +447,10 @@ function App() {
       };
 
       try {
-        await addDoc(collection(db, "checkins"), newCheckin);
+        await Promise.all([
+          addDoc(collection(db, "checkins"), newCheckin),
+          addCheckinToAirtable(newCheckin)
+        ]);
         setCheckinMessage("Check-in successful!");
         emailjs
           .send(
