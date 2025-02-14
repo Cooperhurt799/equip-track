@@ -2,10 +2,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import Select, { components } from "react-select"; // Ensure react-select is installed
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
 import emailjs from "emailjs-com";
-import { addCheckoutToAirtable, addCheckinToAirtable } from './airtableService';
+import { addCheckoutToAirtable, addCheckinToAirtable, getCheckouts, getCheckins } from './airtableService';
 import './reminderService'; // Import the reminder service if used
 
 // ---------------- EmailJS Configuration ----------------
@@ -356,12 +354,6 @@ function App() {
     try {
       console.log("Starting checkout process with data:", newCheckout);
 
-      // First add to Firebase
-      console.log("Adding to Firebase...");
-      const docRef = await addDoc(collection(db, "checkouts"), newCheckout);
-      console.log("Successfully added to Firebase with ID:", docRef.id);
-
-      // Then add to Airtable
       console.log("Adding to Airtable...");
       const airtableResponse = await addCheckoutToAirtable(newCheckout);
       console.log("Successfully added to Airtable:", airtableResponse);
@@ -406,11 +398,7 @@ function App() {
   useEffect(() => {
     const fetchCheckouts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "checkouts"));
-        const checkouts = [];
-        querySnapshot.forEach((doc) => {
-          checkouts.push({ id: doc.id, ...doc.data() });
-        });
+        const checkouts = await getCheckouts();
         setEquipmentList(checkouts);
       } catch (error) {
         console.error("Error fetching checkouts: ", error);
@@ -475,10 +463,7 @@ function App() {
       };
 
       try {
-        await Promise.all([
-          addDoc(collection(db, "checkins"), newCheckin),
-          addCheckinToAirtable(newCheckin)
-        ]);
+        await addCheckinToAirtable(newCheckin);
         setCheckinMessage("Check-in successful!");
         emailjs
           .send(
@@ -521,11 +506,7 @@ function App() {
   useEffect(() => {
     const fetchCheckins = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "checkins"));
-        const checkins = [];
-        querySnapshot.forEach((doc) => {
-          checkins.push({ id: doc.id, ...doc.data() });
-        });
+        const checkins = await getCheckins();
         setCheckinList(checkins);
       } catch (error) {
         console.error("Error fetching checkins: ", error);

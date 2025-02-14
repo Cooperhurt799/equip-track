@@ -1,6 +1,26 @@
 import Airtable from 'airtable';
 
-const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' })
+const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTracker');
+
+export const getCheckouts = async () => {
+  try {
+    const records = await base('Checkouts').select().all();
+    return records.map(record => record.fields);
+  } catch (error) {
+    console.error('Error fetching checkouts from Airtable:', error);
+    throw error;
+  }
+};
+
+export const getCheckins = async () => {
+  try {
+    const records = await base('Checkins').select().all();
+    return records.map(record => record.fields);
+  } catch (error) {
+    console.error('Error fetching checkins from Airtable:', error);
+    throw error;
+  }
+};
   .base('EquipTracker');
 
 export const addCheckoutToAirtable = async (checkoutData) => {
