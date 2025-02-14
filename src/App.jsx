@@ -17,15 +17,6 @@ const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 // ---------------- Custom Styles for react-select ----------------
 const customSelectStyles = {
   control: (provided, state) => ({
-
-// Test Airtable connection on component mount
-useEffect(() => {
-  testAirtableConnection()
-    .then(success => {
-      console.log('Airtable connection test:', success ? 'Passed' : 'Failed');
-    });
-}, []);
-
     ...provided,
     width: "100%",
     minHeight: "40px",
@@ -149,6 +140,25 @@ const departmentIDs = [
 function App() {
   useEffect(() => {
     document.title = "Daugherty Ranches Equipment Tracker";
+  }, []);
+
+  // Test Airtable connection on component mount
+  useEffect(() => {
+    const testAirtableConnection = async () => {
+      try {
+        const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTracker');
+        await base('Checkouts').select().firstPage();
+        return true;
+      } catch (error) {
+        console.error('Airtable connection error:', error);
+        return false;
+      }
+    };
+
+    testAirtableConnection()
+      .then(success => {
+        console.log('Airtable connection test:', success ? 'Passed' : 'Failed');
+      });
   }, []);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
