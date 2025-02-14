@@ -419,52 +419,7 @@ function App() {
           )}
 
           <div className="sidebar-list">
-            {activeTab === 'active-checkouts' && (
-              <>
-                <h3>Active Checkouts</h3>
-                <ul className="equipment-list">
-                  {activeCheckouts.map((checkout, index) => (
-                    <li key={index} className="equipment-item">
-                      <div className="equipment-name">{checkout.unit}</div>
-                      <div className="equipment-details">
-                        <span>Due: {new Date(checkout.returnDate).toLocaleDateString()}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {activeTab === 'active-users' && (
-              <>
-                <h3>Active Users</h3>
-                <ul className="users-list">
-                  {activeUsers.map((user, index) => (
-                    <li key={index} className="user-item">
-                      <div className="user-equipment">
-                        Equipment: {user.unit}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {activeTab === 'due-returns' && (
-              <>
-                <h3>Due Returns</h3>
-                <ul className="returns-list">
-                  {dueReturns.map((item, index) => (
-                    <li key={index} className="return-item">
-                      <div className="equipment-name">{item.unit}</div>
-                      <div className="return-details">
-                        <span className="due-date">Due: {new Date(item.returnDate).toLocaleDateString()}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
+            {/* Content will be shown here based on selected tab */}
           </div>
         </div>
       </div>
