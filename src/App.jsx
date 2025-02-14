@@ -4,8 +4,7 @@ import "./App.css";
 import Select, { components } from "react-select"; // Ensure react-select is installed
 import emailjs from "emailjs-com";
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
-import { addCheckoutToAirtable, addCheckinToAirtable } from './airtableService';
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBGI1ePIuM8qH-HU7m0KoHWWTelNL8Rw7I",
@@ -413,11 +412,11 @@ function App() {
     };
 
     try {
-      console.log("Starting checkout process with data:", newCheckout);
-
-      console.log("Adding to Airtable...");
-      const airtableResponse = await addCheckoutToAirtable(newCheckout);
-      console.log("Successfully added to Airtable:", airtableResponse);
+      const checkoutWithTimestamp = {
+        ...newCheckout,
+        createdAt: serverTimestamp()
+      };
+      await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
 
       // Update equipment list
       const checkouts = await getCheckouts();
@@ -568,7 +567,11 @@ function App() {
       };
 
       try {
-        await addCheckinToAirtable(newCheckin);
+        const checkinWithTimestamp = {
+          ...newCheckin,
+          createdAt: serverTimestamp()
+        };
+        await addDoc(collection(db, 'checkins'), checkinWithTimestamp);
         setCheckinMessage("Check-in successful!");
 
         if (EMAIL_NOTIFICATIONS_ENABLED) {
