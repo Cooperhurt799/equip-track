@@ -367,26 +367,26 @@ function App() {
     }
 
     try {
-      const checkoutWithTimestamp = {
-        unit: selectedUnit,
-        hoursMiles: checkoutHoursMiles,
-        checkoutDate,
-        returnDate,
-        customerName,
-        customerEmail,
-        customerPhone,
-        jobSite,
-        projectCode,
-        departmentID,
-        createdAt: serverTimestamp(),
-        status: 'active'
-      };
+      try {
+        const checkoutWithTimestamp = {
+          unit: selectedUnit,
+          hoursMiles: checkoutHoursMiles,
+          checkoutDate,
+          returnDate,
+          customerName,
+          customerEmail,
+          customerPhone,
+          jobSite,
+          projectCode,
+          departmentID,
+          createdAt: serverTimestamp(),
+          status: 'active'
+        };
 
-      const docRef = await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
-      console.log("Document written with ID: ", docRef.id);
+        const docRef = await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
+        console.log("Document written with ID: ", docRef.id);
 
-      if (EMAIL_NOTIFICATIONS_ENABLED) {
-        try {
+        if (EMAIL_NOTIFICATIONS_ENABLED) {
           await emailjs.send(
             EMAILJS_SERVICE_ID,
             EMAILJS_TEMPLATE_ID_CHECKOUT,
@@ -493,22 +493,24 @@ function App() {
     }
 
     try {
-      const checkinWithTimestamp = {
-        dateTimeReturned: checkinDateTime,
-        unit: checkinUnit,
-        hoursMiles: checkinHoursMiles,
-        jobSite: checkinJobSite,
-        duration: checkinDuration,
-        customerName: checkinCustomerName,
-        customerEmail: checkinCustomerEmail,
-        customerPhone: checkinCustomerPhone,
-        inspectionNotes: checkinInspectionNotes,
-        projectCode: checkinProjectCode,
-        departmentID: checkinDepartmentID,
-        createdAt: serverTimestamp()
-      };
+      try {
+        const checkinWithTimestamp = {
+          dateTimeReturned: checkinDateTime,
+          unit: checkinUnit,
+          hoursMiles: checkinHoursMiles,
+          jobSite: checkinJobSite,
+          duration: checkinDuration,
+          customerName: checkinCustomerName,
+          customerEmail: checkinCustomerEmail,
+          customerPhone: checkinCustomerPhone,
+          inspectionNotes: checkinInspectionNotes,
+          projectCode: checkinProjectCode,
+          departmentID: checkinDepartmentID,
+          createdAt: serverTimestamp()
+        };
 
-      await addDoc(collection(db, 'checkins'), checkinWithTimestamp);
+        const docRef = await addDoc(collection(db, 'checkins'), checkinWithTimestamp);
+        console.log("Checkin document written with ID: ", docRef.id);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
