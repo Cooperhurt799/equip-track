@@ -358,10 +358,10 @@ function App() {
 
       // Update equipment list
       const checkouts = await getCheckouts();
-      
+
       // Show success message below button
       setCheckoutMessage("Checkout Successful!");
-      
+
       // Clear message after 3 seconds
       setTimeout(() => {
         setCheckoutMessage("");
@@ -419,7 +419,7 @@ function App() {
         )
         .catch((err) => console.error("Failed to send email:", err));
       }
-      
+
       setSelectedUnit("");
       setCheckoutHoursMiles("");
       setCheckoutDate("");
@@ -507,7 +507,7 @@ function App() {
       try {
         await addCheckinToAirtable(newCheckin);
         setCheckinMessage("Check-in successful!");
-        
+
         if (EMAIL_NOTIFICATIONS_ENABLED) {
           emailjs.send(
             EMAILJS_SERVICE_ID,
@@ -520,22 +520,13 @@ function App() {
               job_site: checkinJobSite,
               inspection_notes: checkinInspectionNotes,
               project_code: checkinProjectCode,
-              department_id: checkinDepartmentID,
+              department_id: checkinDepartmentID
             },
             EMAILJS_USER_ID
           )
           .catch((err) => console.error("Failed to send email:", err));
-        unit: checkinUnit,
-            checkin_date: checkinDateTime,
-            job_site: checkinJobSite,
-            inspection_notes: checkinInspectionNotes,
-            project_code: checkinProjectCode,
-            department_id: checkinDepartmentID,
-          },
-          EMAILJS_USER_ID
-        ).catch((err) => console.error("Failed to send email:", err));
         }
-        
+
         // Reset check-in form fields
         setCheckinDateTime("");
         setCheckinUnit("");
