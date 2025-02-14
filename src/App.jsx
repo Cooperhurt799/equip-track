@@ -526,7 +526,14 @@ console.log('Checkout saved successfully with ID:', docRef.id);
       console.log("Document written with ID: ", docRef.id);
       
       // Sync to Airtable
-      await airtableService.syncCheckout(checkoutWithTimestamp);
+      console.log('Attempting Airtable sync with data:', checkoutWithTimestamp);
+      try {
+        const airtableRecord = await airtableService.syncCheckout(checkoutWithTimestamp);
+        console.log('Airtable sync successful:', airtableRecord);
+      } catch (error) {
+        console.error('Airtable sync failed:', error);
+        // Continue with the rest of the checkout process even if Airtable sync fails
+      }
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
