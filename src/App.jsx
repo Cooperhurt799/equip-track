@@ -349,8 +349,25 @@ function App() {
     setSelectedUnit(selectedRental);
   };
 
-  const addEquipment = async (e) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+const validateForm = (data) => {
+  const errors = [];
+  if (!data.hoursMiles.match(/^\d+$/)) {
+    errors.push("Hours/Miles must be a number");
+  }
+  if (!data.customerPhone.match(/^\d{10}$/)) {
+    errors.push("Phone number must be 10 digits");
+  }
+  if (!data.customerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    errors.push("Invalid email format");
+  }
+  return errors;
+};
+
+const addEquipment = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!selectedUnit || 
         !checkoutHoursMiles || 
@@ -362,12 +379,24 @@ function App() {
         !jobSite || 
         !projectCode || 
         !departmentID) {
+      setIsLoading(false);
       alert("Please fill in all required fields");
       return;
     }
 
+    const formErrors = validateForm({
+      hoursMiles: checkoutHoursMiles,
+      customerPhone,
+      customerEmail
+    });
+
+    if (formErrors.length > 0) {
+      setIsLoading(false);
+      alert(formErrors.join('\n'));
+      return;
+    }
+
     try {
-      try {
         const checkoutWithTimestamp = {
           unit: selectedUnit,
           hoursMiles: checkoutHoursMiles,
@@ -382,6 +411,9 @@ function App() {
           createdAt: serverTimestamp(),
           status: 'active'
         };
+
+        let docRef;
+        try {
 
         const docRef = await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
         console.log("Document written with ID: ", docRef.id);
@@ -930,7 +962,9 @@ function App() {
                     />
                   </label>
                 </div>
-                <button type="submit">Checkout Equipment</button>
+                <button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Processing...' : 'Checkout Equipment'}
+                </button>
               </form>
               {checkoutMessage && <p className="message">{checkoutMessage}</p>}
             </section>
