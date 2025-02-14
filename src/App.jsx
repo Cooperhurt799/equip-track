@@ -418,53 +418,6 @@ function App() {
       };
       await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
 
-      // Update equipment list
-      const checkoutsRef = collection(db, 'checkouts');
-      const checkoutsSnapshot = await getDocs(query(checkoutsRef, orderBy('createdAt', 'desc')));
-      const checkouts = checkoutsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      // Show success message below button
-      setCheckoutMessage("Checkout Successful!");
-
-      // Clear message after 3 seconds
-      setTimeout(() => {
-        setCheckoutMessage("");
-      }, 3000);
-      setEquipmentList(checkouts);
-
-      // Clear all form fields
-      setSelectedUnit("");
-      setCheckoutHoursMiles("");
-      setCheckoutDate("");
-      setReturnDate("");
-      setCustomerName("");
-      setCustomerEmail("");
-      setCustomerPhone("");
-      setJobSite("");
-      setProjectCode("");
-      setDepartmentID("");
-      setCheckoutMessage("Checkout successful!");
-
-      // Remove success message after 3 seconds
-      setTimeout(() => {
-        if (successDiv && document.body.contains(successDiv)) {
-          document.body.removeChild(successDiv);
-        }
-      }, 3000);
-      successDiv.style.transform = 'translate(-50%, -50%)';
-      successDiv.style.background = '#4CAF50';
-      successDiv.style.color = 'white';
-      successDiv.style.padding = '20px';
-      successDiv.style.borderRadius = '5px';
-      successDiv.style.zIndex = '1000';
-      successDiv.textContent = 'Checkout Successful!';
-      document.body.appendChild(successDiv);
-
-      // Remove the success message after 3 seconds
-      setTimeout(() => {
-        document.body.removeChild(successDiv);
-      }, 3000);
-
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         emailjs.send(
           EMAILJS_SERVICE_ID,
@@ -484,6 +437,8 @@ function App() {
         .catch((err) => console.error("Failed to send email:", err));
       }
 
+      setCheckoutMessage("Checkout successful!");
+      // Clear form fields
       setSelectedUnit("");
       setCheckoutHoursMiles("");
       setCheckoutDate("");
