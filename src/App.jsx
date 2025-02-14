@@ -513,20 +513,30 @@ function App() {
 
       // Show success message and clear form fields
       setCheckoutMessage("Checkout successful!");
-      setSelectedUnit("");
+      
+      // Clear all form fields
+      setSelectedUnit(null);
       setCheckoutHoursMiles("");
       setCheckoutDate("");
       setReturnDate("");
       setCustomerName("");
       setCustomerEmail("");
       setCustomerPhone("");
-      setJobSite("");
-      setProjectCode("");
-      setDepartmentID("");
+      setJobSite(null);
+      setProjectCode(null);
+      setDepartmentID(null);
 
-      // Reset form (if needed)
+      // Reset the form to clear any remaining values
       const checkoutForm = document.getElementById("checkout-form");
-      if (checkoutForm) checkoutForm.reset();
+      if (checkoutForm) {
+        checkoutForm.reset();
+      }
+
+      // Clear Select components
+      setTimeout(() => {
+        const selects = document.querySelectorAll('.select__clear-indicator');
+        selects.forEach(button => button.click());
+      }, 0);
 
       console.log("Checkout completed successfully");
 
