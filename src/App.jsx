@@ -12,12 +12,13 @@ initEmailJS("wyfCLJgbJeNcu3092");
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBGI1ePIuM8qH-HU7m0KoHWWTelNL8Rw7I",
-  authDomain: "ranch-asset-tracker.firebaseapp.com",
-  projectId: "ranch-asset-tracker",
-  storageBucket: "ranch-asset-tracker.appspot.com",
-  messagingSenderId: "599725599196",
-  appId: "1:599725599196:web:d70da6968196e0a0e7b593"
+  apiKey: "AIzaSyDpYCQla2yjxlZHC2h4hPJSPlhYg6y0a5M",
+  authDomain: "equipment-tracker-566c5.firebaseapp.com",
+  projectId: "equipment-tracker-566c5",
+  storageBucket: "equipment-tracker-566c5.firebasestorage.app",
+  messagingSenderId: "72142898448",
+  appId: "1:72142898448:web:187702fc7a5b5bdad71195",
+  measurementId: "G-L58WPXJ4J1"
 };
 
 const app = initializeApp(firebaseConfig);
