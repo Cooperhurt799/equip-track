@@ -34,38 +34,54 @@ export const checkForDueReturns = async () => {
     const q = query(
       checkoutsRef,
       where('returnDate', '<=', today.toISOString()),
-      where('status', '==', 'active')
+      where('status', '==', 'active'),
+      orderBy('returnDate', 'desc')
     );
 
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
+    const promises = querySnapshot.docs.map(doc => {
       const checkout = doc.data();
-      sendReminderEmail(checkout);
+      return sendReminderEmail(checkout).catch(err => {
+        console.error(`Failed to send reminder for checkout ${doc.id}:`, err);
+      });
     });
+    
+    await Promise.all(promises);
+    console.log(`Processed ${querySnapshot.size} due returns`);
   } catch (error) {
     console.error('Error checking for due returns:', error);
+    throw error; // Rethrow to handle it at a higher level if needed
   }
 };
 
-const sendReminderEmail = (checkout) => {
+const sendReminderEmail = async (checkout) => {
   if (!checkout.customerEmail || !checkout.customerName || !checkout.unit || !checkout.returnDate) {
-    console.error('Missing required fields for email:', checkout);
-    return;
+    const error = new Error('Missing required fields for email');
+    error.checkout = checkout;
+    throw error;
   }
   
   const templateParams = {
-    to_email: checkout.customerEmail,
-    customer_name: checkout.customerName,
-    unit: checkout.unit,
-    return_date: new Date(checkout.returnDate).toLocaleDateString()
+    to_email: checkout.customerEmail.trim(),
+    customer_name: checkout.customerName.trim(),
+    unit: checkout.unit.trim(),
+    return_date: new Date(checkout.returnDate).toLocaleDateString(),
+    job_site: checkout.jobSite?.trim() || 'N/A'
   };
 
-  emailjs.send(
-    EMAILJS_SERVICE_ID,
-    EMAILJS_TEMPLATE_ID,
-    templateParams,
-    EMAILJS_USER_ID
-  ).catch(err => console.error('Failed to send reminder email:', err));
+  try {
+    const result = await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      templateParams,
+      EMAILJS_USER_ID
+    );
+    console.log(`Email sent successfully to ${templateParams.to_email}`);
+    return result;
+  } catch (err) {
+    console.error('Failed to send reminder email:', err);
+    throw err;
+  }
 };
 
 // Check for due returns every day
@@ -143,9 +159,18 @@ export async function sendDailySummary() {
 }
 
 // Run summary at 11:59 PM every day
+const MINUTE = 60000;
+let lastSummaryDate = null;
+
 setInterval(() => {
   const now = new Date();
-  if (now.getHours() === 23 && now.getMinutes() === 59) {
-    sendDailySummary();
+  const currentDate = now.toDateString();
+  
+  if (now.getHours() === 23 && now.getMinutes() === 59 && currentDate !== lastSummaryDate) {
+    lastSummaryDate = currentDate;
+    sendDailySummary().catch(err => {
+      console.error('Failed to send daily summary:', err);
+      lastSummaryDate = null; // Reset to try again
+    });
   }
-}, 60000); // Check every minute
+}, MINUTE);
