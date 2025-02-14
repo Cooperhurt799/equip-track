@@ -362,6 +362,43 @@ function App() {
 
   return (
     <div className="App">
+      <button 
+        className="hamburger-button"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        <div className="hamburger-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <h2>Equipment Status</h2>
+          <button onClick={() => setSidebarOpen(false)}>×</button>
+        </div>
+        <div className="sidebar-content">
+          <div className="filter-container">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search equipment..."
+            />
+            <select className="days-filter">
+              <option value="all">All Time</option>
+              <option value="7">Last 7 Days</option>
+              <option value="30">Last 30 Days</option>
+              <option value="90">Last 90 Days</option>
+            </select>
+          </div>
+          <h3>Active Checkouts</h3>
+          <ul>
+            {/* Active checkouts will be listed here */}
+          </ul>
+        </div>
+      </div>
+
       <header className="app-header">
         <h1>Ranch Asset Checkout Form</h1>
         <p className="tagline">Sanford and Son</p>
