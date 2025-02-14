@@ -378,7 +378,8 @@ function App() {
         status: 'active'
       };
 
-      await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
+      const docRef = await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
+      console.log("Document written with ID: ", docRef.id);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
