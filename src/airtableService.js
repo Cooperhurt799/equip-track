@@ -1,7 +1,7 @@
 
 import Airtable from 'airtable';
 
-const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn.f6df5c9a242f120e1904d1e5aa8b182992bd6430a88846d24974f8b735345253' })
+const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' })
   .base('EquipTracker');
 
 export const addCheckoutToAirtable = async (checkoutData) => {
