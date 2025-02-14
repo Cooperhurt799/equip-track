@@ -178,19 +178,14 @@ function App() {
       setCheckinList(checkinData);
     });
 
-    const checkoutData = snapshot.docs.map(doc => ({
+    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
+      const checkoutData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
       }));
       setEquipmentList(checkoutData);
     });
-
-    // Return cleanup function
-    return () => {
-      unsubscribeCheckouts();
-      unsubscribeCheckins();
-    };
 
     const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
       const checkinData = snapshot.docs.map(doc => ({
