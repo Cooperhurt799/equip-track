@@ -1,10 +1,13 @@
-
 import Airtable from 'airtable';
 
 const AIRTABLE_PAT = 'patd7ADu0bzOlkCvn';
 const AIRTABLE_BASE_ID = 'appWJ4F5x70p3NMms';
-
 const base = new Airtable({ apiKey: AIRTABLE_PAT }).base(AIRTABLE_BASE_ID);
+
+// General error logging function
+const logError = (errorContext, error) => {
+  console.error(`Error in ${errorContext}:`, error);
+};
 
 // Create (Checkout)
 export const syncCheckout = async (checkoutData) => {
@@ -25,11 +28,11 @@ export const syncCheckout = async (checkoutData) => {
         status: checkoutData.status
       }
     });
-    
+
     console.log('Successfully synced checkout to Airtable:', record.getId());
     return record;
   } catch (error) {
-    console.error('Error syncing to Airtable:', error);
+    logError('syncCheckout', error);
     throw error;
   }
 };
@@ -56,7 +59,7 @@ export const syncCheckin = async (checkinData) => {
     console.log('Synced checkin to Airtable:', record.getId());
     return record;
   } catch (error) {
-    console.error('Error syncing checkin to Airtable:', error);
+    logError('syncCheckin', error);
     throw error;
   }
 };
@@ -67,7 +70,7 @@ export const fetchCheckouts = async () => {
     const records = await base('Checkouts').select().all();
     return records.map(record => ({ id: record.id, ...record.fields }));
   } catch (error) {
-    console.error('Error fetching checkouts:', error);
+    logError('fetchCheckouts', error);
     throw error;
   }
 };
@@ -82,7 +85,7 @@ export const fetchActiveCheckouts = async () => {
       .all();
     return records.map(record => ({ id: record.id, ...record.fields }));
   } catch (error) {
-    console.error('Error fetching active checkouts:', error);
+    logError('fetchActiveCheckouts', error);
     throw error;
   }
 };
@@ -95,7 +98,7 @@ export const updateCheckoutStatus = async (recordId, status) => {
     });
     return record;
   } catch (error) {
-    console.error('Error updating checkout status:', error);
+    logError('updateCheckoutStatus', error);
     throw error;
   }
 };
@@ -106,7 +109,7 @@ export const deleteCheckout = async (recordId) => {
     const record = await base('Checkouts').destroy(recordId);
     return record;
   } catch (error) {
-    console.error('Error deleting checkout:', error);
+    logError('deleteCheckout', error);
     throw error;
   }
 };

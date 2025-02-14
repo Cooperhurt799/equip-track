@@ -3,6 +3,25 @@ import "./App.css";
 import Select from "react-select";
 import emailjs from "emailjs-com";
 import { init as initEmailJS } from "emailjs-com";
+import * as airtableService from './airtableService';
+
+// Form validation utility
+const validateForm = (data) => {
+  const errors = {};
+  if (!data.hoursMiles?.match(/^\d+$/)) {
+    errors.hoursMiles = "Hours/Miles must be a positive number";
+  }
+  if (!data.customerPhone?.match(/^\d{10}$/)) {
+    errors.customerPhone = "Phone number must be exactly 10 digits";
+  }
+  if (!data.customerEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    errors.customerEmail = "Please enter a valid email address";
+  }
+  if (!data.jobSite) {
+    errors.jobSite = "Job site is required";
+  }
+  return errors;
+};
 import airtableService from './airtableService';
 
 // Initialize EmailJS
