@@ -221,7 +221,6 @@ function App() {
 
   // ---------------- Real-time Data Fetching using onSnapshot ----------------
   useEffect(() => {
-    let mounted = true;
     const checkoutsQuery = query(
       collection(db, "checkouts"),
       orderBy("createdAt", "desc")
@@ -231,34 +230,38 @@ function App() {
       orderBy("createdAt", "desc")
     );
 
-    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
-      if (!mounted) return;
-      const checkoutData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt:
-          doc.data().createdAt?.toDate?.() ||
-          new Date(doc.data().createdAt).toISOString(),
-      }));
-      setEquipmentList(checkoutData);
-    });
+    let unsubscribeCheckouts;
+    let unsubscribeCheckins;
+    
+    const setupSubscriptions = () => {
+      unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
+        const checkoutData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt:
+            doc.data().createdAt?.toDate?.() ||
+            new Date(doc.data().createdAt).toISOString(),
+        }));
+        setEquipmentList(checkoutData);
+      });
 
-    const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
-      if (!mounted) return;
-      const checkinData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt:
-          doc.data().createdAt?.toDate?.() ||
-          new Date(doc.data().createdAt).toISOString(),
-      }));
-      setCheckinList(checkinData);
-    });
+      unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
+        const checkinData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt:
+            doc.data().createdAt?.toDate?.() ||
+            new Date(doc.data().createdAt).toISOString(),
+        }));
+        setCheckinList(checkinData);
+      });
+    };
+
+    setupSubscriptions();
 
     return () => {
-      mounted = false;
-      unsubscribeCheckouts();
-      unsubscribeCheckins();
+      if (unsubscribeCheckouts) unsubscribeCheckouts();
+      if (unsubscribeCheckins) unsubscribeCheckins();
     };
   }, []);
 
