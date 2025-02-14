@@ -405,65 +405,71 @@ function App() {
             </button>
           </div>
           
-          <div className="filter-container">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search equipment..."
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <select 
-              className="days-filter"
-              onChange={(e) => setDaysFilter(e.target.value)}
-            >
-              <option value="all">All Time</option>
-              <option value="7">Last 7 Days</option>
-              <option value="30">Last 30 Days</option>
-              <option value="90">Last 90 Days</option>
-            </select>
-          </div>
-
-          {activeTab === 'active-checkouts' && (
-            <>
-              <h3>Active Checkouts</h3>
-              <ul>
-                {activeCheckouts.map((checkout, index) => (
-                  <li key={index}>
-                    {checkout.unit} - {checkout.customerName}
-                    <small>Due: {new Date(checkout.returnDate).toLocaleDateString()}</small>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          {activeTab === 'active-users' && (
-            <>
-              <h3>Active Users</h3>
-              <ul>
-                {activeUsers.map((user, index) => (
-                  <li key={index}>
-                    {user.customerName}
-                    <small>{user.unit}</small>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
           {activeTab === 'due-returns' && (
-            <>
-              <h3>Due Returns</h3>
-              <ul>
-                {dueReturns.map((item, index) => (
-                  <li key={index}>
-                    {item.unit} - {item.customerName}
-                    <small>Due: {new Date(item.returnDate).toLocaleDateString()}</small>
-                  </li>
-                ))}
-              </ul>
-            </>
+            <div className="filter-container">
+              <select 
+                className="days-filter"
+                onChange={(e) => setDaysFilter(e.target.value)}
+              >
+                <option value="7">Next 7 Days</option>
+                <option value="14">Next 14 Days</option>
+                <option value="30">Next 30 Days</option>
+                <option value="90">Next 90 Days</option>
+              </select>
+            </div>
           )}
+
+          <div className="sidebar-list">
+            {activeTab === 'active-checkouts' && (
+              <>
+                <h3>Active Checkouts</h3>
+                <ul className="equipment-list">
+                  {activeCheckouts.map((checkout, index) => (
+                    <li key={index} className="equipment-item">
+                      <div className="equipment-name">{checkout.unit}</div>
+                      <div className="equipment-details">
+                        <span>Checked out by: {checkout.customerName}</span>
+                        <span>Due: {new Date(checkout.returnDate).toLocaleDateString()}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {activeTab === 'active-users' && (
+              <>
+                <h3>Active Users</h3>
+                <ul className="users-list">
+                  {activeUsers.map((user, index) => (
+                    <li key={index} className="user-item">
+                      <div className="user-name">{user.customerName}</div>
+                      <div className="user-equipment">
+                        Equipment: {user.unit}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {activeTab === 'due-returns' && (
+              <>
+                <h3>Due Returns</h3>
+                <ul className="returns-list">
+                  {dueReturns.map((item, index) => (
+                    <li key={index} className="return-item">
+                      <div className="equipment-name">{item.unit}</div>
+                      <div className="return-details">
+                        <span>User: {item.customerName}</span>
+                        <span className="due-date">Due: {new Date(item.returnDate).toLocaleDateString()}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
