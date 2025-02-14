@@ -347,7 +347,6 @@ function App() {
 
   const addEquipment = async (e) => {
     e.preventDefault();
-    console.log("Starting checkout process...");
 
     if (!selectedUnit || 
         !checkoutHoursMiles || 
@@ -363,29 +362,24 @@ function App() {
       return;
     }
 
-    const newCheckout = {
-      unit: selectedUnit,
-      hoursMiles: checkoutHoursMiles,
-      checkoutDate,
-      returnDate,
-      customerName,
-      customerEmail,
-      customerPhone,
-      jobSite,
-      projectCode,
-      departmentID,
-      createdAt: new Date().toISOString(),
-      status: 'active'
-    };
-
     try {
       const checkoutWithTimestamp = {
-        ...newCheckout,
-        createdAt: serverTimestamp()
+        unit: selectedUnit,
+        hoursMiles: checkoutHoursMiles,
+        checkoutDate,
+        returnDate,
+        customerName,
+        customerEmail,
+        customerPhone,
+        jobSite,
+        projectCode,
+        departmentID,
+        createdAt: serverTimestamp(),
+        status: 'active'
       };
-      await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
-      alert("Checkout Successful!");
 
+      await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
+      
       if (EMAIL_NOTIFICATIONS_ENABLED) {
         try {
           await emailjs.send(
@@ -408,9 +402,6 @@ function App() {
         }
       }
 
-      // Show success message
-      alert("Checkout Successful");
-
       // Clear form fields
       setSelectedUnit("");
       setCheckoutHoursMiles("");
@@ -423,9 +414,10 @@ function App() {
       setProjectCode("");
       setDepartmentID("");
 
-      // Update UI message
+      // Show success message
       setCheckoutMessage("Checkout successful!");
       setTimeout(() => setCheckoutMessage(""), 3000);
+      
     } catch (error) {
       console.error("Error adding checkout document: ", error);
       alert("Error during checkout. Please try again.");
@@ -474,20 +466,23 @@ function App() {
 
   const addCheckin = async (e) => {
     e.preventDefault();
-    if (
-      checkinDateTime &&
-      checkinUnit &&
-      checkinHoursMiles &&
-      checkinJobSite &&
-      checkinDuration !== "" &&
-      checkinCustomerName &&
-      checkinCustomerEmail &&
-      checkinCustomerPhone &&
-      checkinInspectionNotes &&
-      checkinProjectCode &&
-      checkinDepartmentID
-    ) {
-      const newCheckin = {
+    if (!checkinDateTime ||
+        !checkinUnit ||
+        !checkinHoursMiles ||
+        !checkinJobSite ||
+        checkinDuration === "" ||
+        !checkinCustomerName ||
+        !checkinCustomerEmail ||
+        !checkinCustomerPhone ||
+        !checkinInspectionNotes ||
+        !checkinProjectCode ||
+        !checkinDepartmentID) {
+      alert("Please fill in all check-in fields.");
+      return;
+    }
+
+    try {
+      const checkinWithTimestamp = {
         dateTimeReturned: checkinDateTime,
         unit: checkinUnit,
         hoursMiles: checkinHoursMiles,
@@ -497,22 +492,16 @@ function App() {
         customerEmail: checkinCustomerEmail,
         customerPhone: checkinCustomerPhone,
         inspectionNotes: checkinInspectionNotes,
-        projectCode: checkinProjectCode,      // new field
-        departmentID: checkinDepartmentID,    // new field
-        createdAt: new Date().toISOString(),
+        projectCode: checkinProjectCode,
+        departmentID: checkinDepartmentID,
+        createdAt: serverTimestamp()
       };
 
-      try {
-        const checkinWithTimestamp = {
-          ...newCheckin,
-          createdAt: serverTimestamp()
-        };
-        await addDoc(collection(db, 'checkins'), checkinWithTimestamp);
-        alert("Check-in Successful!");
-        setCheckinMessage("Check-in successful!");
+      await addDoc(collection(db, 'checkins'), checkinWithTimestamp);
 
-        if (EMAIL_NOTIFICATIONS_ENABLED) {
-          emailjs.send(
+      if (EMAIL_NOTIFICATIONS_ENABLED) {
+        try {
+          await emailjs.send(
             EMAILJS_SERVICE_ID,
             EMAILJS_TEMPLATE_ID_CHECKIN,
             {
@@ -526,28 +515,32 @@ function App() {
               department_id: checkinDepartmentID
             },
             EMAILJS_USER_ID
-          )
-          .catch((err) => console.error("Failed to send email:", err));
+          );
+        } catch (err) {
+          console.error("Failed to send email:", err);
         }
-
-        // Reset check-in form fields
-        setCheckinDateTime("");
-        setCheckinUnit("");
-        setCheckinHoursMiles("");
-        setCheckinJobSite("");
-        setCheckinDuration("");
-        setCheckinCustomerName("");
-        setCheckinCustomerEmail("");
-        setCheckinCustomerPhone("");
-        setCheckinInspectionNotes("");
-        setCheckinProjectCode("");
-        setCheckinDepartmentID("");
-        setTimeout(() => setCheckinMessage(""), 3000);
-      } catch (error) {
-        console.error("Error adding checkin document: ", error);
       }
-    } else {
-      alert("Please fill in all check-in fields.");
+
+      // Clear form fields
+      setCheckinDateTime("");
+      setCheckinUnit("");
+      setCheckinHoursMiles("");
+      setCheckinJobSite("");
+      setCheckinDuration("");
+      setCheckinCustomerName("");
+      setCheckinCustomerEmail("");
+      setCheckinCustomerPhone("");
+      setCheckinInspectionNotes("");
+      setCheckinProjectCode("");
+      setCheckinDepartmentID("");
+
+      // Show success message
+      setCheckinMessage("Check-in successful!");
+      setTimeout(() => setCheckinMessage(""), 3000);
+
+    } catch (error) {
+      console.error("Error adding checkin document: ", error);
+      alert("Error during check-in. Please try again.");
     }
   };
 
