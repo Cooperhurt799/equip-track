@@ -13,6 +13,7 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
+  enableIndexedDbPersistence,
 } from "firebase/firestore";
 
 // Initialize EmailJS with your user ID
@@ -30,12 +31,28 @@ const firebaseConfig = {
 
 let app;
 try {
-  app = initializeApp(firebaseConfig);
+  app = getApp();
 } catch (error) {
-  app = getApp(); // Get the existing app if already initialized
+  app = initializeApp(firebaseConfig);
 }
+
 const db = getFirestore(app);
-import "./reminderService"; // Import the reminder service if used
+const CACHE_SIZE = 1000000000; // 1GB cache
+
+enableIndexedDbPersistence(db, {
+  cacheSizeBytes: CACHE_SIZE
+}).catch((err) => {
+  console.warn('Persistence failed:', err);
+  if (err.code === 'failed-precondition') {
+    // Multiple tabs open
+    console.warn('Persistence unavailable - multiple tabs');
+  } else if (err.code === 'unimplemented') {
+    // Browser doesn't support persistence
+    console.warn('Persistence unavailable - not supported');
+  }
+});
+
+import "./reminderService";
 
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
