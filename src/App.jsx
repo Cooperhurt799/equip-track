@@ -307,18 +307,28 @@ function App() {
       return;
     }
 
-    if (
-      selectedUnit &&
-      checkoutHoursMiles &&
-      checkoutDate &&
-      returnDate &&
-      customerName &&
-      customerEmail &&
-      customerPhone &&
-      jobSite &&
-      projectCode &&
-      departmentID
-    ) {
+    // Validate all required fields
+    const requiredFields = {
+      'Unit': selectedUnit,
+      'Hours/Miles': checkoutHoursMiles,
+      'Checkout Date': checkoutDate,
+      'Return Date': returnDate,
+      'Customer Name': customerName,
+      'Customer Email': customerEmail,
+      'Customer Phone': customerPhone,
+      'Job Site': jobSite,
+      'Project Code': projectCode,
+      'Department ID': departmentID
+    };
+
+    const missingFields = Object.entries(requiredFields)
+      .filter(([_, value]) => !value)
+      .map(([field]) => field);
+
+    if (missingFields.length > 0) {
+      alert(`Please fill in the following required fields: ${missingFields.join(', ')}`);
+      return;
+    }
       const newCheckout = {
         unit: selectedUnit,
         hoursMiles: checkoutHoursMiles,
@@ -334,13 +344,15 @@ function App() {
       };
 
       try {
+        console.log("Starting checkout process with data:", newCheckout);
+        
         console.log("Adding to Firebase...");
         const docRef = await addDoc(collection(db, "checkouts"), newCheckout);
-        console.log("Added to Firebase with ID:", docRef.id);
+        console.log("Successfully added to Firebase with ID:", docRef.id);
         
         console.log("Adding to Airtable...");
-        await addCheckoutToAirtable(newCheckout);
-        console.log("Added to Airtable");
+        const airtableResponse = await addCheckoutToAirtable(newCheckout);
+        console.log("Successfully added to Airtable:", airtableResponse);
         
         setCheckoutMessage("Checkout successful!");
         emailjs

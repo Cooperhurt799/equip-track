@@ -5,7 +5,11 @@ const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn.f6df5c9a242f120e1904d1e5a
   .base('EquipTracker');
 
 export const addCheckoutToAirtable = async (checkoutData) => {
+  console.log('Attempting to add checkout to Airtable:', checkoutData);
   try {
+    if (!checkoutData) {
+      throw new Error('No checkout data provided');
+    }
     const record = await base('Checkouts').create([
       {
         fields: {
