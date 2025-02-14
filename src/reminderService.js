@@ -19,7 +19,7 @@ const EMAILJS_SERVICE_ID = "service_fimxodg";
 const EMAILJS_TEMPLATE_ID = "template_bxx6jfh";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 
-const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('EquipTrackerTest');
+const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('appWJ4F5x70p3NMms');
 
 const EMAILJS_SERVICE_ID_SUMMARY = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID_SUMMARY = import.meta.env.VITE_EMAILJS_DAILY_SUMMARY_TEMPLATE_ID;
