@@ -160,7 +160,10 @@ function App() {
     const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
 
     // Set up real-time listeners
-    const unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
+    let unsubscribeCheckouts;
+    let unsubscribeCheckins;
+
+    unsubscribeCheckouts = onSnapshot(checkoutsQuery, (snapshot) => {
       const checkoutData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -169,7 +172,7 @@ function App() {
       setEquipmentList(checkoutData);
     });
 
-    const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
+    unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
       const checkinData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -178,33 +181,10 @@ function App() {
       setCheckinList(checkinData);
     });
 
+    // Return cleanup function
     return () => {
-      unsubscribeCheckouts();
-      unsubscribeCheckins();
-    };
-  }, []);
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-      const checkoutData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
-      }));
-      setEquipmentList(checkoutData);
-    });
-
-    const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
-      const checkinData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
-      }));
-      setCheckinList(checkinData);
-    });
-
-    return () => {
-      unsubscribeCheckouts();
-      unsubscribeCheckins();
+      if (unsubscribeCheckouts) unsubscribeCheckouts();
+      if (unsubscribeCheckins) unsubscribeCheckins();
     };
   }, []);
 
@@ -578,7 +558,7 @@ function App() {
     if (!availableUnits.length) return [];
     const latestCheckout = {};
     const latestCheckin = {};
-    
+
     // Get latest checkout for each unit
     equipmentList.forEach((checkout) => {
       const time = new Date(checkout.createdAt);
@@ -944,8 +924,7 @@ function App() {
                   <h3>Select Equipment to Check In</h3>
                   <Select
                     options={[
-                      {
-                        label: "Active Checkouts",
+                      {label: "Active Checkouts",
                         options: getActiveUnitNumbers().map((unit) => ({
                           value: unit,
                           label: unit,
