@@ -31,6 +31,16 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// Enable offline persistence
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code === 'failed-precondition') {
+    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+  } else if (err.code === 'unimplemented') {
+    console.log('The current browser does not support persistence.');
+  }
+});
+
 import "./reminderService"; // Import the reminder service if used
 
 // ---------------- EmailJS Configuration ----------------
