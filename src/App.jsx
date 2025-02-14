@@ -180,9 +180,8 @@ function App() {
 
     // Return cleanup function
     return () => {
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt
+      unsubscribeCheckouts();
+      unsubscribeCheckins();
       }));
       setEquipmentList(checkoutData);
     });
