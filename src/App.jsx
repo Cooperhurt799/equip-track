@@ -427,7 +427,6 @@ function App() {
                     <li key={index} className="equipment-item">
                       <div className="equipment-name">{checkout.unit}</div>
                       <div className="equipment-details">
-                        <span>Checked out by: {checkout.customerName}</span>
                         <span>Due: {new Date(checkout.returnDate).toLocaleDateString()}</span>
                       </div>
                     </li>
@@ -442,7 +441,6 @@ function App() {
                 <ul className="users-list">
                   {activeUsers.map((user, index) => (
                     <li key={index} className="user-item">
-                      <div className="user-name">{user.customerName}</div>
                       <div className="user-equipment">
                         Equipment: {user.unit}
                       </div>
@@ -460,7 +458,6 @@ function App() {
                     <li key={index} className="return-item">
                       <div className="equipment-name">{item.unit}</div>
                       <div className="return-details">
-                        <span>User: {item.customerName}</span>
                         <span className="due-date">Due: {new Date(item.returnDate).toLocaleDateString()}</span>
                       </div>
                     </li>
