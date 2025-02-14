@@ -419,7 +419,9 @@ function App() {
       await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
 
       // Update equipment list
-      const checkouts = await getCheckouts();
+      const checkoutsRef = collection(db, 'checkouts');
+      const checkoutsSnapshot = await getDocs(query(checkoutsRef, orderBy('createdAt', 'desc')));
+      const checkouts = checkoutsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       // Show success message below button
       setCheckoutMessage("Checkout Successful!");
@@ -502,7 +504,9 @@ function App() {
   useEffect(() => {
     const fetchCheckouts = async () => {
       try {
-        const checkouts = await getCheckouts();
+        const checkoutsQuery = query(collection(db, 'checkouts'), orderBy('createdAt', 'desc'));
+        const checkoutsSnapshot = await getDocs(checkoutsQuery);
+        const checkouts = checkoutsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setEquipmentList(checkouts);
       } catch (error) {
         console.error("Error fetching checkouts: ", error);
@@ -617,7 +621,9 @@ function App() {
   useEffect(() => {
     const fetchCheckins = async () => {
       try {
-        const checkins = await getCheckins();
+        const checkinsQuery = query(collection(db, 'checkins'), orderBy('createdAt', 'desc'));
+        const checkinsSnapshot = await getDocs(checkinsQuery);
+        const checkins = checkinsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setCheckinList(checkins);
       } catch (error) {
         console.error("Error fetching checkins: ", error);
@@ -920,8 +926,7 @@ function App() {
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="Enter customer phone number"
                     />
-                  </label>
-                </div>
+                  </label</div>
                 <div>
                   <label>
                     Job Site:
