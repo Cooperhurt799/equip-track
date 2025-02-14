@@ -354,7 +354,7 @@ function App() {
         !checkoutDate || 
         !returnDate || 
         !customerName || 
-        !customerEmail || 
+        !customerEmail ||
         !customerPhone || 
         !jobSite || 
         !projectCode || 
@@ -375,6 +375,7 @@ function App() {
       projectCode,
       departmentID,
       createdAt: new Date().toISOString(),
+      status: 'active'
     };
 
     try {
@@ -385,25 +386,30 @@ function App() {
       await addDoc(collection(db, 'checkouts'), checkoutWithTimestamp);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
-        emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID_CHECKOUT,
-          {
-            to_email: customerEmail,
-            customer_name: customerName,
-            unit: selectedUnit,
-            checkout_date: checkoutDate,
-            return_date: returnDate,
-            job_site: jobSite,
-            project_code: projectCode,
-            department_id: departmentID,
-          },
-          EMAILJS_USER_ID
-        )
-        .catch((err) => console.error("Failed to send email:", err));
+        try {
+          await emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID_CHECKOUT,
+            {
+              to_email: customerEmail,
+              customer_name: customerName,
+              unit: selectedUnit,
+              checkout_date: checkoutDate,
+              return_date: returnDate,
+              job_site: jobSite,
+              project_code: projectCode,
+              department_id: departmentID,
+            },
+            EMAILJS_USER_ID
+          );
+        } catch (err) {
+          console.error("Failed to send email:", err);
+        }
       }
 
-      setCheckoutMessage("Checkout successful!");
+      // Show success message
+      alert("Checkout Successful");
+
       // Clear form fields
       setSelectedUnit("");
       setCheckoutHoursMiles("");
@@ -415,9 +421,13 @@ function App() {
       setJobSite("");
       setProjectCode("");
       setDepartmentID("");
+
+      // Update UI message
+      setCheckoutMessage("Checkout successful!");
       setTimeout(() => setCheckoutMessage(""), 3000);
     } catch (error) {
       console.error("Error adding checkout document: ", error);
+      alert("Error during checkout. Please try again.");
     }
   };
 
@@ -915,7 +925,7 @@ function App() {
                 <button type="submit">Checkout Equipment</button>
               </form>
               {checkoutMessage && <p className="message">{checkoutMessage}</p>}
-            </section>
+            </</section>
           ) : (
             <section className="checkin">
               <h2>Equipment Check-In</h2>
