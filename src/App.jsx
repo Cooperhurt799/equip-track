@@ -926,7 +926,8 @@ function App() {
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="Enter customer phone number"
                     />
-                  </label</div>
+                  </label>
+                </div>
                 <div>
                   <label>
                     Job Site:
