@@ -185,6 +185,17 @@ function App() {
 
   // ---------------- Real-time Data Fetching using onSnapshot ----------------
   useEffect(() => {
+    // Load initial data from localStorage
+    const savedEquipmentList = localStorage.getItem('equipmentList');
+    const savedCheckinList = localStorage.getItem('checkinList');
+    
+    if (savedEquipmentList) {
+      setEquipmentList(JSON.parse(savedEquipmentList));
+    }
+    if (savedCheckinList) {
+      setCheckinList(JSON.parse(savedCheckinList));
+    }
+
     let mounted = true;
     const checkoutsQuery = query(
       collection(db, "checkouts"),
@@ -205,6 +216,7 @@ function App() {
           new Date(doc.data().createdAt).toISOString(),
       }));
       setEquipmentList(checkoutData);
+      localStorage.setItem('equipmentList', JSON.stringify(checkoutData));
     });
 
     const unsubscribeCheckins = onSnapshot(checkinsQuery, (snapshot) => {
@@ -217,6 +229,7 @@ function App() {
           new Date(doc.data().createdAt).toISOString(),
       }));
       setCheckinList(checkinData);
+      localStorage.setItem('checkinList', JSON.stringify(checkinData));
     });
 
     return () => {
