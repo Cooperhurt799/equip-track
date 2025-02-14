@@ -37,6 +37,15 @@ try {
 }
 
 const db = getFirestore(app);
+console.log('Firebase connection initialized');
+
+// Test Firebase connection
+try {
+  const testCollection = collection(db, "checkouts");
+  console.log('Firebase collection reference created successfully');
+} catch (error) {
+  console.error('Firebase connection error:', error);
+}
 
 // Enable offline persistence with better error handling
 enableIndexedDbPersistence(db, {
@@ -450,6 +459,14 @@ function App() {
   // ---------------- Checkout Submission ----------------
   const addEquipment = async (e) => {
     e.preventDefault();
+    console.log('Starting equipment checkout with:', {
+      selectedUnit,
+      checkoutHoursMiles,
+      customerName,
+      jobSite,
+      projectCode,
+      departmentID
+    });
     setIsLoading(true);
 
     // Check for required fields
@@ -499,10 +516,12 @@ function App() {
         status: "active",
       };
 
-      const docRef = await addDoc(
+      console.log('Attempting to save checkout:', checkoutWithTimestamp);
+const docRef = await addDoc(
         collection(db, "checkouts"),
         checkoutWithTimestamp
       );
+console.log('Checkout saved successfully with ID:', docRef.id);
       console.log("Document written with ID: ", docRef.id);
 
       if (EMAIL_NOTIFICATIONS_ENABLED) {
