@@ -21,7 +21,6 @@ export const getCheckins = async () => {
     throw error;
   }
 };
-  .base('EquipTracker');
 
 export const addCheckoutToAirtable = async (checkoutData) => {
   console.log('Attempting to add checkout to Airtable:', checkoutData);
