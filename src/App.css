@@ -1,42 +1,16 @@
-/* Import the Roboto Slab font from Google Fonts for an earthy look */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600&display=swap');
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* Global Styles */
-html {
+/* Reset and base styles */
+html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  background-color: #34495e;
-  overflow-x: hidden;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: 'Roboto Slab', serif;
-  background-color: #ffffff;
-  color: #34495e;
-  overflow-x: hidden;
-}
-
-/* Add overscroll color control */
-html {
-  background-color: #34495e;
-}
-
-body {
-  background-color: #ffffff;
-  margin: 0;
   min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+  color: #2d3748;
 }
 
-#root {
-  background-color: #ffffff;
-  min-height: 100vh;
-}
-
-/* Main Container */
 .App {
   max-width: 1200px;
   margin: 0 auto;
@@ -44,37 +18,148 @@ body {
   position: relative;
 }
 
-/* Modern Header Styling */
+/* Header Styling */
 .app-header {
   width: 90%;
-  margin: 0 auto;
-  padding: 30px 20px;
-  background: linear-gradient(135deg, #34495e, #2c3e50);
+  margin: 20px auto 40px;
+  padding: 30px;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
   color: #fff;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(44, 62, 80, 0.15);
-  margin-bottom: 40px;
-  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
 }
 
-/* On desktop screens, reduce the header width */
-@media (min-width: 768px) {
-  .app-header {
-    width: 50%;
-  }
+.app-header:hover {
+  transform: translateY(-5px);
 }
 
 .app-header h1 {
   margin: 0;
   font-size: 2.5rem;
   font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
 .app-header .tagline {
   margin-top: 10px;
   font-size: 1.2rem;
   font-weight: 300;
-  color: #f2efe4;
+  color: #e2e8f0;
+}
+
+/* Form and Section Styling */
+section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Input Styling */
+input, select, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+  background-color: #fff;
+}
+
+/* Button Styling */
+button {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Message Styling */
+.message {
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+  margin: 16px 0;
+}
+
+.message.success {
+  background-color: #c6f6d5;
+  color: #2f855a;
+  border: 1px solid #9ae6b4;
+}
+
+.message.error {
+  background-color: #fed7d7;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-header {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  padding: 24px;
+}
+
+.sidebar-content {
+  padding: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-header {
+    width: 95%;
+    padding: 20px;
+  }
+
+  section {
+    padding: 20px;
+  }
 }
 
 .top-buttons {
@@ -124,17 +209,6 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-}
-
-.overdue-alert-button {
-  padding: 10px 20px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  animation: pulse 2s infinite;
 }
 
 .overdue-alert-close {
@@ -203,18 +277,7 @@ body {
   color: #666;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
 
-/* Landing and Section Container */
 .landing, .section-container {
   display: flex;
   flex-direction: column;
@@ -222,7 +285,6 @@ body {
   margin-top: 60px;
 }
 
-/* Landing Buttons */
 .landing button {
   width: 80%;
   max-width: 300px;
@@ -243,7 +305,6 @@ body {
   box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
 }
 
-/* Back Button */
 .back-button {
   margin-bottom: 20px;
   padding: 8px 12px;
@@ -262,7 +323,6 @@ body {
   box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
 }
 
-/* Container for the side-by-side forms (not used in landing mode) */
 .forms-row {
   display: flex;
   gap: 20px;
@@ -271,25 +331,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Section Styling */
-section {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  flex: 1;
-  box-shadow: 0 4px 20px rgba(52, 73, 94, 0.06);
-  border: 2px solid #34495e;
-  min-width: 300px;
-  margin-bottom: 24px;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Section Header Styles */
 .section-header {
   margin-bottom: 20px;
   padding: 15px;
@@ -299,7 +340,6 @@ section {
   box-shadow: 0 2px 6px rgba(44, 62, 80, 0.06);
 }
 
-/* Select Container Styles */
 .select__control {
   border: 2px solid #34495e !important;
   box-shadow: none !important;
@@ -314,7 +354,6 @@ section {
   box-shadow: 0 0 0 1px #34495e !important;
 }
 
-/* Active Checkouts Section */
 .active-checkouts {
   margin-bottom: 25px;
 }
@@ -326,7 +365,6 @@ section {
   text-align: center;
 }
 
-/* Rental Equipment Section */
 .rental-equipment {
   margin-bottom: 15px;
 }
@@ -337,7 +375,6 @@ section {
   color: #4b3f2a;
 }
 
-/* Form Element Styling */
 form div {
   margin-bottom: 15px;
 }
@@ -420,23 +457,6 @@ textarea:focus {
   background-color: #fff;
 }
 
-button {
-  background-color: #34495e;
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  background-color: #2c3e50;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
-}
 
 .message {
   margin: 10px 0;
@@ -490,7 +510,6 @@ ul li > span {
   font-size: 0.9em;
 }
 
-/* Loading Spinner */
 .spinner {
   width: 40px;
   height: 40px;
@@ -519,7 +538,6 @@ ul li > span {
   z-index: 1000;
 }
 
-/* Hamburger Button Styles */
 .hamburger-button {
   position: fixed;
   left: 20px;
@@ -547,7 +565,6 @@ ul li > span {
   border-color: #2c3e50;
 }
 
-/* Hamburger Icon Styles */
 .hamburger-icon {
   width: 20px;
   height: 14px;
@@ -565,7 +582,6 @@ ul li > span {
   border-radius: 2px;
 }
 
-/* Sidebar Buttons Styles */
 .sidebar-buttons {
   padding: 20px;
   padding-top: 20px;
@@ -615,7 +631,6 @@ ul li > span {
 .cake-button:hover {
   transform: scale(1.1);
 }
-
 
 .sidebar {
   position: fixed;

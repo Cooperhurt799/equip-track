@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f8f7f4;
+  background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+  font-family: 'Poppins', sans-serif;
 }
 
 .auth-container {
