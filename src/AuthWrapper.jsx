@@ -26,8 +26,18 @@ function AuthWrapper() {
     'Figure2ranch': 'Figure1902'
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
 
     if (validCredentials[email] === password) {
       const userObj = { username: email };
@@ -73,7 +83,9 @@ function AuthWrapper() {
               />
             </div>
             {error && <p className="error">{error}</p>}
-            <button type="submit">Sign In</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
           </form>
         </div>
       </div>

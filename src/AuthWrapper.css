@@ -57,7 +57,18 @@
   font-weight: 500;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+.auth-container button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.auth-container button:hover:not(:disabled) {
+  background-color: #2c3e50;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
 }
 
 .auth-container button:hover {
