@@ -77,7 +77,7 @@ export const syncCheckout = async (checkoutData) => {
           jobSite: checkoutData.jobSite,
           projectCode: checkoutData.projectCode,
           departmentID: checkoutData.departmentID,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date().toISOString().split('T')[0],
           status: checkoutData.status
         }
       }
@@ -106,7 +106,7 @@ export const syncCheckin = async (checkinData) => {
         inspectionNotes: checkinData.inspectionNotes,
         projectCode: checkinData.projectCode,
         departmentID: checkinData.departmentID,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString().split('T')[0]
       }
     });
     console.log('Synced checkin to Airtable:', record.getId());
