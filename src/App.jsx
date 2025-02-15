@@ -685,18 +685,26 @@ function App() {
                       <Select
                         options={[
                           {
-                            label: "Ranch Equipment",
-                            options: availableUnits.map((unit) => ({
-                              value: unit,
-                              label: unit,
-                            })),
+                            label: "Available Equipment",
+                            options: availableUnits
+                              .filter(unit => !equipmentList.some(item => 
+                                item.status === "active" && item.unit === unit
+                              ))
+                              .map((unit) => ({
+                                value: unit,
+                                label: unit,
+                              })),
                           },
                           {
                             label: "Rental Equipment",
-                            options: rentalEquipmentList.map((item) => ({
-                              value: item,
-                              label: item,
-                            })),
+                            options: rentalEquipmentList
+                              .filter(unit => !equipmentList.some(item => 
+                                item.status === "active" && item.unit === unit
+                              ))
+                              .map((item) => ({
+                                value: item,
+                                label: item,
+                              })),
                           },
                         ]}
                         value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
