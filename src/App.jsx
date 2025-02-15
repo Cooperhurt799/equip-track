@@ -479,6 +479,20 @@ function App() {
               </select>
             </div>
           )}
+          {activeTab === "due-returns" && (
+            <div className="days-filter-container">
+              <label>Show returns due within:</label>
+              <select 
+                className="days-filter-select"
+                value={daysFilter}
+                onChange={(e) => setDaysFilter(e.target.value)}
+              >
+                {[1,2,3,4,5,7,10,14,21,30,45,60].map(days => (
+                  <option key={days} value={days}>{days} days</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="sidebar-list">
             {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
               <li key={index}>
