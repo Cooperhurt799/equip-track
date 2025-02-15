@@ -14,6 +14,15 @@ const base = new Airtable({
   endpointUrl: 'https://api.airtable.com'
 }).base(AIRTABLE_BASE_ID);
 
+// Verify tables exist
+base('Checkouts').select({ maxRecords: 1 }).firstPage()
+  .then(() => console.log('✅ Checkouts table verified'))
+  .catch(err => console.error('❌ Checkouts table error:', err));
+
+base('Checkins').select({ maxRecords: 1 }).firstPage()
+  .then(() => console.log('✅ Checkins table verified'))
+  .catch(err => console.error('❌ Checkins table error:', err));
+
 // General error logging function
 const logError = (errorContext, error) => {
   console.error(`Error in ${errorContext}:`, error);
