@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
 import emailjs from "emailjs-com";
-import { init as initEmailJS } from "emailjs-com";
 import * as airtableService from './airtableService';
 
 // Form validation utility
@@ -30,7 +29,7 @@ const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 const EMAIL_NOTIFICATIONS_ENABLED = true;
 
-// Initialize EmailJS only once
+// Initialize EmailJS once
 emailjs.init(EMAILJS_USER_ID);
 
 // ---------------- Data Arrays ----------------
