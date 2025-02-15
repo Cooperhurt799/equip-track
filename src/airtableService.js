@@ -73,6 +73,7 @@ export const syncCheckout = async (checkoutData) => {
           customerName: checkoutData.customerName,
           customerEmail: checkoutData.customerEmail,
           phone: checkoutData.customerPhone,
+          company: checkoutData.company,
           jobSite: checkoutData.jobSite,
           projectCode: checkoutData.projectCode,
           departmentID: checkoutData.departmentID,
