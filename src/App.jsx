@@ -146,6 +146,7 @@ function App() {
   const [activeCheckouts, setActiveCheckouts] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
   const [dueReturns, setDueReturns] = useState([]);
+  const [equipmentList, setEquipmentList] = useState([]);
 
   // ---------------- Checkout Form States ----------------
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -289,7 +290,7 @@ function App() {
         const querySnapshot = await airtableService.fetchCheckouts();
         // Assume fetchCheckouts returns an array of checkout records
         console.log("Fetched checkouts:", querySnapshot);
-        // Optionally, update availableUnits or equipmentList here if needed
+        setEquipmentList(querySnapshot); // Update equipmentList with fetched data
       } catch (error) {
         console.error("Error fetching checkouts:", error);
       }
