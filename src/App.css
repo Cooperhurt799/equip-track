@@ -484,10 +484,10 @@ ul li > span {
 
 /* Hamburger Button Styles */
 .hamburger-button {
-  position: fixed;
+  position: absolute;
   left: 20px;
   top: 20px;
-  z-index: 998;
+  z-index: 1000;
   padding: 15px;
   width: 50px;
   height: 50px;
@@ -495,16 +495,14 @@ ul li > span {
   border: 2px solid #34495e;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease, opacity 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
 }
 
-.sidebar.open ~ .hamburger-button {
-  opacity: 1;
-  pointer-events: auto;
+.sidebar {
+  z-index: 999;
 }
 
 .hamburger-button:hover {
