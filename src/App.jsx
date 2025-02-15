@@ -5,7 +5,7 @@ import emailjs, { init as initEmailJS } from "emailjs-com";
 import * as airtableService from './airtableService';
 
 // Initialize EmailJS with your user ID
-initEmailJS(import.meta.env.VITE_EMAILJS_USER_ID);
+initEmailJS("wyfCLJgbJeNcu3092");
 
 // Form validation utility
 const validateForm = (data) => {
@@ -26,10 +26,10 @@ const validateForm = (data) => {
 };
 
 // ---------------- EmailJS Configuration ----------------
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID_CHECKOUT = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CHECKOUT;
-const EMAILJS_TEMPLATE_ID_CHECKIN = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CHECKIN;
-const EMAILJS_USER_ID = import.meta.env.VITE_EMAILJS_USER_ID;
+const EMAILJS_SERVICE_ID = "service_fimxodg";
+const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
+const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
+const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 const EMAIL_NOTIFICATIONS_ENABLED = true;
 
 
