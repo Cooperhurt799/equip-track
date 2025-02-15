@@ -276,6 +276,7 @@ function App() {
         customerName,
         customerEmail,
         customerPhone,
+        company,
         jobSite,
         projectCode,
         departmentID,
