@@ -520,8 +520,7 @@ function App() {
               </li>
             ))}
           </div>
-
-          </div>
+        </div>
       </div>
 
       <header className="app-header">
