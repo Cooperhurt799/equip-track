@@ -792,7 +792,22 @@ function App() {
                           },
                         ]}
                         value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
-                        onChange={(option) => setCheckinUnit(option.value)}
+                        onChange={(option) => {
+                          setCheckinUnit(option.value);
+                          // Find matching active checkout
+                          const activeCheckout = equipmentList.find(
+                            item => item.status === "active" && item.unit === option.value
+                          );
+                          if (activeCheckout) {
+                            setCheckinCustomerName(activeCheckout.customerName || '');
+                            setCheckinCustomerEmail(activeCheckout.customerEmail || '');
+                            setCheckinCustomerPhone(activeCheckout.customerPhone || '');
+                            setCheckinJobSite(activeCheckout.jobSite || '');
+                            setCheckinProjectCode(activeCheckout.projectCode || '');
+                            setCheckinDepartmentID(activeCheckout.departmentID || '');
+                            setCheckinHoursMiles(activeCheckout.hoursMiles || '');
+                          }
+                        }}
                         placeholder="Select Equipment"
                         styles={customSelectStyles}
                       />
