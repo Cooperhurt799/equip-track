@@ -530,25 +530,25 @@ function App() {
             <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
               <button
                 className={`sidebar-action-button ${activeTab === "active-checkouts" ? "active" : ""}`}
-                onClick={() => setActiveTab("active-checkouts")}
+                onClick={() => setActiveTab(activeTab === "active-checkouts" ? null : "active-checkouts")}
               >
                 Active Checkouts
               </button>
               <button
                 className={`sidebar-action-button ${activeTab === "active-users" ? "active" : ""}`}
-                onClick={() => setActiveTab("active-users")}
+                onClick={() => setActiveTab(activeTab === "active-users" ? null : "active-users")}
               >
                 Active Users
               </button>
               <button
                 className={`sidebar-action-button ${activeTab === "due-returns" ? "active" : ""}`}
-                onClick={() => setActiveTab("due-returns")}
+                onClick={() => setActiveTab(activeTab === "due-returns" ? null : "due-returns")}
               >
                 Due Returns
               </button>
               <button
                 className={`sidebar-action-button ${activeTab === "equipment-details" ? "active" : ""}`}
-                onClick={() => setActiveTab("equipment-details")}
+                onClick={() => setActiveTab(activeTab === "equipment-details" ? null : "equipment-details")}
               >
                 Equipment Details
               </button>
