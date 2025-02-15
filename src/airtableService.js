@@ -67,16 +67,16 @@ export const syncCheckout = async (checkoutData) => {
     const record = await base(CHECKOUT_TABLE).create([
       {
         fields: {
-          Unit: checkoutData.unit,
-          "Hours/Miles": hoursMilesNum,
-          "Checkout Date": checkoutData.checkoutDate,
-          "Return Date": checkoutData.returnDate,
-          "Customer Name": checkoutData.customerName,
-          "Customer Email": checkoutData.customerEmail,
-          "Customer Phone": checkoutData.customerPhone,
-          "Job Site": checkoutData.jobSite,
-          "Project Code": checkoutData.projectCode,
-          "Department ID": checkoutData.departmentID,
+          unit: checkoutData.unit,
+          hoursMiles: hoursMilesNum,
+          checkoutDate: checkoutData.checkoutDate,
+          returnDate: checkoutData.returnDate,
+          customerName: checkoutData.customerName,
+          customerEmail: checkoutData.customerEmail,
+          customerPhone: checkoutData.customerPhone,
+          jobSite: checkoutData.jobSite,
+          projectCode: checkoutData.projectCode,
+          departmentID: checkoutData.departmentID,
           createdAt: new Date().toISOString(),
           status: checkoutData.status
         }
@@ -95,17 +95,17 @@ export const syncCheckin = async (checkinData) => {
   try {
     const record = await base(CHECKIN_TABLE).create({
       fields: {
-        Unit: checkinData.unit,
-        "Hours/Miles": checkinData.hoursMiles,
-        "Date/Time Returned": checkinData.dateTimeReturned,
-        "Customer Name": checkinData.customerName,
-        "Customer Email": checkinData.customerEmail,
-        "Customer Phone": checkinData.customerPhone,
-        "Job Site": checkinData.jobSite,
-        Duration: checkinData.duration,
-        "Inspection Notes": checkinData.inspectionNotes,
-        "Project Code": checkinData.projectCode,
-        "Department ID": checkinData.departmentID,
+        unit: checkinData.unit,
+        hoursMiles: checkinData.hoursMiles,
+        dateTimeReturned: checkinData.dateTimeReturned,
+        customerName: checkinData.customerName,
+        customerEmail: checkinData.customerEmail,
+        customerPhone: checkinData.customerPhone,
+        jobSite: checkinData.jobSite,
+        duration: checkinData.duration,
+        inspectionNotes: checkinData.inspectionNotes,
+        projectCode: checkinData.projectCode,
+        departmentID: checkinData.departmentID,
         createdAt: new Date().toISOString()
       }
     });
