@@ -23,7 +23,7 @@ function AuthWrapper() {
   const [error, setError] = useState("");
 
   const validCredentials = {
-    'Figure2Ranch': 'Figure1902'
+    'Figure2ranch': 'Figure1902'
   };
 
   const handleSubmit = (e) => {
