@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
-import emailjs from "emailjs-com";
+import emailjs, { init as initEmailJS } from "emailjs-com";
 import * as airtableService from './airtableService';
+
+// Initialize EmailJS with your user ID
+initEmailJS(import.meta.env.VITE_EMAILJS_USER_ID);
 
 // Form validation utility
 const validateForm = (data) => {
