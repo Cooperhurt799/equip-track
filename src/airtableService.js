@@ -25,7 +25,12 @@ const verifyAirtableAccess = async () => {
   try {
     console.log('Verifying Airtable credentials...');
     console.log('Base ID:', AIRTABLE_BASE_ID);
-    console.log('PAT Status:', AIRTABLE_PAT ? '✓ Present' : '✗ Missing');
+    console.log('PAT Length:', AIRTABLE_PAT ? AIRTABLE_PAT.length : '0 (Missing)');
+    console.log('PAT First 4 chars:', AIRTABLE_PAT ? AIRTABLE_PAT.substring(0, 4) : 'None');
+    
+    if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
+      throw new Error('Missing required Airtable credentials');
+    }
     
     const checkoutResult = await base(CHECKOUT_TABLE).select({ maxRecords: 1 }).firstPage();
     console.log('✅ Checkouts table (tblBPe0VIpO38LPP9) verified');
@@ -38,6 +43,9 @@ const verifyAirtableAccess = async () => {
     console.error('❌ Airtable verification failed:', error.message);
     console.error('Error status:', error.statusCode);
     console.error('Error details:', error.error);
+    if (!AIRTABLE_PAT || AIRTABLE_PAT.length < 10) {
+      console.error('API Key appears invalid - please check your VITE_AIRTABLE_PAT in Secrets');
+    }
     return false;
   }
 };
