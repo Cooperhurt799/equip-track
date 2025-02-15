@@ -917,11 +917,10 @@ function App() {
                             setCheckinCustomerName(activeCheckout.customerName || '');
                             setCheckinCustomerEmail(activeCheckout.customerEmail || '');
                             setCheckinCustomerPhone(activeCheckout.customerPhone || '');
-                            setCheckinCompany(activeCheckout.company || '');
+                            setCheckinCompany(activeCheckout.company || ''); // Ensure company is set
                             setCheckinJobSite(activeCheckout.jobSite || '');
                             setCheckinProjectCode(activeCheckout.projectCode || '');
                             setCheckinDepartmentID(activeCheckout.departmentID || '');
-                            setCheckinDuration(activeCheckout.duration || '');
                             setCheckinHoursMiles(activeCheckout.hoursMiles || '');
                             const currentDate = new Date().toISOString().slice(0, 16);
                             setCheckinDateTime(currentDate);
