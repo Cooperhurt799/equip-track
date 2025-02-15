@@ -483,28 +483,26 @@ function App() {
             {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
               <li key={index}>
                 <strong>{checkout.unit}</strong>
-                <span>Customer: {checkout.customerName}</span>
-                <small>Return Date: {new Date(checkout.returnDate).toLocaleDateString()}</small>
               </li>
             ))}
 
             {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
               .reduce((unique, checkout) => {
                 if (!unique.some(user => user.email === checkout.customerEmail)) {
+                  const unitCount = equipmentList.filter(item => 
+                    item.status === "active" && 
+                    item.customerEmail === checkout.customerEmail
+                  ).length;
                   unique.push({
                     name: checkout.customerName,
-                    email: checkout.customerEmail,
-                    units: equipmentList.filter(item => 
-                      item.status === "active" && 
-                      item.customerEmail === checkout.customerEmail
-                    ).map(item => item.unit)
+                    unitCount
                   });
                 }
                 return unique;
               }, []).map((user, index) => (
                 <li key={index}>
                   <strong>{user.name}</strong>
-                  <span>Equipment: {user.units.join(", ")}</span>
+                  <span> ({user.unitCount} units)</span>
                 </li>
               ))}
 
@@ -517,11 +515,24 @@ function App() {
             }).map((checkout, index) => (
               <li key={index}>
                 <strong>{checkout.unit}</strong>
-                <span>Customer: {checkout.customerName}</span>
                 <small>Due: {new Date(checkout.returnDate).toLocaleDateString()}</small>
               </li>
             ))}
           </div>
+
+          {activeTab === "due-returns" && (
+            <div className="filter-container">
+              <input
+                type="number"
+                min="1"
+                max="60"
+                className="days-filter"
+                value={daysFilter}
+                onChange={(e) => setDaysFilter(e.target.value)}
+                placeholder="Enter number of days (1-60)"
+              />
+            </div>
+          )}
         </div>
       </div>
 
