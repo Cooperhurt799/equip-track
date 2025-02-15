@@ -917,6 +917,7 @@ function App() {
                             setCheckinCustomerName(activeCheckout.customerName || '');
                             setCheckinCustomerEmail(activeCheckout.customerEmail || '');
                             setCheckinCustomerPhone(activeCheckout.customerPhone || '');
+                            setCheckinCompany(activeCheckout.company || '');
                             setCheckinJobSite(activeCheckout.jobSite || '');
                             setCheckinProjectCode(activeCheckout.projectCode || '');
                             setCheckinDepartmentID(activeCheckout.departmentID || '');
