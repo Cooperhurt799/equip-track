@@ -944,8 +944,7 @@ function App() {
                         onChange={(e) => setCheckinCustomerPhone(e.target.value)}
                         placeholder="Enter customer phone number"
                       />
-                    </label>
-                  </div>
+                    </label>                  </div>
                   <div>
                     <label>
                       Job Site:
@@ -1026,8 +1025,10 @@ function App() {
                 {checkinMessage && <p className="message">{checkinMessage}</p>}
               </section>
             )}
+            </div>
           </div>
         )}
+      </div>
       </div> {/* Added closing container */}
     </div>
   );
