@@ -150,6 +150,7 @@ function App() {
   const [showOverdueAlert, setShowOverdueAlert] = useState(false);
   const [overdueItems, setOverdueItems] = useState([]);
   const [showOverdueDetails, setShowOverdueDetails] = useState(false);
+  const [overdueAlertDismissed, setOverdueAlertDismissed] = useState(false);
 
   // ---------------- Checkout Form States ----------------
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -555,10 +556,13 @@ function App() {
           <p className="tagline">Sanford and Son</p>
         </header>
 
-        {showOverdueAlert && (
+        {showOverdueAlert && !overdueAlertDismissed && (
           <button 
             className="overdue-alert-button" 
-            onClick={() => setShowOverdueDetails(true)}
+            onClick={() => {
+              setOverdueDetails(true);
+              setOverdueAlertDismissed(true);
+            }}
           >
             {overdueItems.length} Overdue Items
           </button>
