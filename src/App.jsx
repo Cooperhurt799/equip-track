@@ -362,6 +362,14 @@ function App() {
         createdAt: new Date().toISOString(),
       };
 
+      // Find the active checkout record and update its status
+      const activeCheckout = equipmentList.find(
+        item => item.status === "active" && item.unit === checkinUnit
+      );
+      if (activeCheckout) {
+        await airtableService.updateCheckoutStatus(activeCheckout.id, "inactive");
+      }
+
       const record = await airtableService.syncCheckin(checkinData);
       console.log("Checkin synced to Airtable:", record);
 
