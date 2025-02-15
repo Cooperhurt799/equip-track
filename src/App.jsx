@@ -563,6 +563,9 @@ function App() {
               {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
                 <li key={index}>
                   <strong>{checkout.unit}</strong>
+                  <small style={{ display: 'block', color: '#666', fontSize: '0.8em', marginTop: '2px' }}>
+                    {checkout.customerName}
+                  </small>
                 </li>
               ))}
 
