@@ -922,6 +922,15 @@ function App() {
                             setCheckinProjectCode(activeCheckout.projectCode || '');
                             setCheckinDepartmentID(activeCheckout.departmentID || '');
                             setCheckinHoursMiles(activeCheckout.hoursMiles || '');
+                            const currentDate = new Date().toISOString().slice(0, 16);
+                            setCheckinDateTime(currentDate);
+                            //                            // Calculate duration based on checkout date
+                            if (activeCheckout.checkoutDate) {
+                              const checkoutTime = new Date(activeCheckout.checkoutDate);
+                              const now = new Date();
+                              const diffDays = Math.ceil((now - checkoutTime) / (1000 * 60 * 60 * 24));
+                              setCheckinDuration(diffDays > 0 ? diffDays : 0);
+                            }
                           }
                         }}
                         placeholder="Select Equipment"
