@@ -61,22 +61,24 @@ const logError = (errorContext, error) => {
 // Create (Checkout)
 export const syncCheckout = async (checkoutData) => {
   try {
-    const record = await base(CHECKOUT_TABLE).create({
-      fields: {
-        unit: checkoutData.unit,
-        hoursMiles: checkoutData.hoursMiles,
-        checkoutDate: checkoutData.checkoutDate,
-        returnDate: checkoutData.returnDate,
-        customerName: checkoutData.customerName,
-        customerEmail: checkoutData.customerEmail,
-        customerPhone: checkoutData.customerPhone,
-        jobSite: checkoutData.jobSite,
-        projectCode: checkoutData.projectCode,
-        departmentID: checkoutData.departmentID,
-        createdAt: new Date().toISOString(),
-        status: checkoutData.status
+    const record = await base(CHECKOUT_TABLE).create([
+      {
+        fields: {
+          unit: checkoutData.unit,
+          hoursMiles: checkoutData.hoursMiles,
+          checkoutDate: checkoutData.checkoutDate,
+          returnDate: checkoutData.returnDate,
+          customerName: checkoutData.customerName,
+          customerEmail: checkoutData.customerEmail,
+          customerPhone: checkoutData.customerPhone,
+          jobSite: checkoutData.jobSite,
+          projectCode: checkoutData.projectCode,
+          departmentID: checkoutData.departmentID,
+          createdAt: new Date().toISOString(),
+          status: checkoutData.status
+        }
       }
-    });
+    ]);
     console.log('Successfully synced checkout to Airtable:', record.getId());
     return record;
   } catch (error) {
