@@ -93,22 +93,24 @@ export const syncCheckout = async (checkoutData) => {
 // Create (Checkin)
 export const syncCheckin = async (checkinData) => {
   try {
-    const record = await base(CHECKIN_TABLE).create({
-      fields: {
-        unit: checkinData.unit,
-        hoursMiles: checkinData.hoursMiles,
-        dateTimeReturned: checkinData.dateTimeReturned,
-        customerName: checkinData.customerName,
-        customerEmail: checkinData.customerEmail,
-        phone: checkinData.customerPhone,
-        jobSite: checkinData.jobSite,
-        duration: checkinData.duration,
-        inspectionNotes: checkinData.inspectionNotes,
-        projectCode: checkinData.projectCode,
-        departmentID: checkinData.departmentID,
-        createdAt: new Date().toISOString().split('T')[0]
+    const record = await base(CHECKIN_TABLE).create([
+      {
+        fields: {
+          unit: checkinData.unit,
+          hoursMiles: checkinData.hoursMiles,
+          dateTimeReturned: checkinData.dateTimeReturned,
+          customerName: checkinData.customerName,
+          customerEmail: checkinData.customerEmail,
+          phone: checkinData.customerPhone,
+          jobSite: checkinData.jobSite,
+          duration: checkinData.duration,
+          inspectionNotes: checkinData.inspectionNotes,
+          projectCode: checkinData.projectCode,
+          departmentID: checkinData.departmentID,
+          createdAt: new Date().toISOString().split('T')[0]
+        }
       }
-    });
+    ]);
     console.log('Synced checkin to Airtable:', record.id);
     return record;
   } catch (error) {
