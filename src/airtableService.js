@@ -100,7 +100,7 @@ export const syncCheckin = async (checkinData) => {
           hoursMiles: checkinData.hoursMiles,
           checkin: new Date(checkinData.dateTimeReturned).toISOString(),
           customerName: checkinData.customerName,
-          Company: checkinData.company,
+          company: checkinData.company,
           customerEmail: checkinData.customerEmail,
           phone: checkinData.customerPhone,
           jobSite: checkinData.jobSite,
