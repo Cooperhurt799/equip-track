@@ -119,11 +119,53 @@ function AuthWrapper() {
   }
 
   return (
-    <div>
-      <div className="sign-out-container">
-        <button onClick={handleSignOut}>Sign Out</button>
-      </div>
-      <App />
+    <div className="auth-container">
+      {user ? (
+        <>
+          <div className="sign-out-container">
+            <button onClick={handleSignOut}>Sign Out</button>
+          </div>
+          <App />
+        </>
+      ) : (
+        <div className="auth-wrapper">
+          <div className="auth-container">
+            <h2>Sign In</h2>
+            <form onSubmit={handleSubmit}>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                    setLoading(false);
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError("");
+                    setLoading(false);
+                  }}
+                  required
+                />
+              </div>
+              {error && <p className="error">{error}</p>}
+              <button type="submit" disabled={loading}>
+                {loading ? "Signing in..." : "Sign In"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
