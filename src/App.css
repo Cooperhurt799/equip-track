@@ -21,8 +21,9 @@ html, body {
 /* Header Styling */
 .app-header {
   width: 90%;
+  max-width: 800px;
   margin: 20px auto 40px;
-  padding: 30px;
+  padding: 30px 20px;
   background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
   color: #fff;
   text-align: center;
@@ -30,6 +31,18 @@ html, body {
   border-radius: 16px;
   transform: translateY(0);
   transition: transform 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .app-header {
+    width: 85%;
+    margin: 15px auto 30px;
+    padding: 20px 15px;
+  }
+  
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
 }
 
 .app-header:hover {
