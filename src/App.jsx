@@ -23,9 +23,6 @@ const validateForm = (data) => {
   return errors;
 };
 
-// Initialize EmailJS
-initEmailJS("wyfCLJgbJeNcu3092");
-
 // ---------------- EmailJS Configuration ----------------
 const EMAILJS_SERVICE_ID = "service_fimxodg";
 const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
@@ -33,7 +30,7 @@ const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
 const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
 const EMAIL_NOTIFICATIONS_ENABLED = true;
 
-// Initialize EmailJS
+// Initialize EmailJS only once
 emailjs.init(EMAILJS_USER_ID);
 
 // ---------------- Data Arrays ----------------
