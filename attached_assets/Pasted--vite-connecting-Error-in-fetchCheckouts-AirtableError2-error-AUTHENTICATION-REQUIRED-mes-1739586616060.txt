@@ -1,0 +1,31 @@
+[vite] connecting...
+Error in fetchCheckouts: 
+AirtableError2 {error: "AUTHENTICATION_REQUIRED", message: "You should provide valid api key to perform this operation", statusCode: 401}
+error: "AUTHENTICATION_REQUIRED"
+message: "You should provide valid api key to perform this operation"
+statusCode: 401
+[[Prototype]]: Object
+
+Error fetching checkouts: 
+AirtableError2 {error: "AUTHENTICATION_REQUIRED", message: "You should provide valid api key to perform this operation", statusCode: 401}
+error: "AUTHENTICATION_REQUIRED"
+message: "You should provide valid api key to perform this operation"
+statusCode: 401
+[[Prototype]]: Object
+
+[vite] connected.
+Error in fetchCheckouts: 
+AirtableError2 {error: "AUTHENTICATION_REQUIRED", message: "You should provide valid api key to perform this operation", statusCode: 401}
+
+at t.value (https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Error fetching checkouts: 
+AirtableError2 {error: "AUTHENTICATION_REQUIRED", message: "You should provide valid api key to perform this operation", statusCode: 401}
+
+at t.value (https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://897f9e8d-e0c3-4366-b61f-c484ccd16da7-00-2tzovs6hgpmjs.kirk.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+
