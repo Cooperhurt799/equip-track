@@ -19,16 +19,23 @@ const customSelectStyles = {
   control: (provided, state) => ({
     ...provided,
     width: "100%",
-    minHeight: "40px",
-    fontSize: "16px",
-    border: state.isFocused ? "2px solid #7a5d33" : "2px solid #8b6c42",
-    boxShadow: state.isFocused ? "0 0 5px rgba(122, 93, 51, 0.5)" : null,
-    borderRadius: "6px",
-    padding: "2px 5px",
+    minHeight: "45px",
+    fontSize: "15px",
+    border: state.isFocused ? "2px solid #3b82f6" : "2px solid #34495e",
+    boxShadow: state.isFocused ? "0 0 0 3px rgba(59, 130, 246, 0.1)" : null,
+    borderRadius: "10px",
+    padding: "0",
+    backgroundColor: "#f8fafc",
+    "&:hover": {
+      borderColor: "#8b6c42",
+      backgroundColor: "#fff",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+    }
   }),
   menu: (provided) => ({
     ...provided,
     width: "100%",
+    zIndex: 2
   }),
   placeholder: (provided) => ({
     ...provided,
@@ -36,8 +43,16 @@ const customSelectStyles = {
   }),
   singleValue: (provided) => ({
     ...provided,
-    fontSize: "16px",
+    fontSize: "15px",
   }),
+  input: (provided) => ({
+    ...provided,
+    fontSize: "15px",
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    padding: "12px"
+  })
 };
 
 // ---------------- Data Arrays ----------------
