@@ -2,15 +2,15 @@
 import Airtable from 'airtable';
 
 // Configure Airtable client
-const AIRTABLE_API_KEY = import.meta.env.VITE_AIRTABLE_PAT;
+const AIRTABLE_PAT = import.meta.env.VITE_AIRTABLE_PAT;
 const AIRTABLE_BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
 
-if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
+if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
   console.error('Airtable credentials are missing from environment variables');
 }
 
 // Configure Airtable with API key
-const airtable = new Airtable({ apiKey: AIRTABLE_API_KEY });
+const airtable = new Airtable({ apiKey: AIRTABLE_PAT });
 const base = airtable.base(AIRTABLE_BASE_ID);
 
 // Initialize base connection
