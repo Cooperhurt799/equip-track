@@ -98,7 +98,7 @@ export const syncCheckin = async (checkinData) => {
         fields: {
           unit: checkinData.unit,
           hoursMiles: checkinData.hoursMiles,
-          checkInDateTime: checkinData.dateTimeReturned,
+          checkIn: checkinData.dateTimeReturned,
           customerName: checkinData.customerName,
           customerEmail: checkinData.customerEmail,
           phone: checkinData.customerPhone,
