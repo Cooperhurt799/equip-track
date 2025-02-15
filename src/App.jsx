@@ -315,6 +315,7 @@ function App() {
       setCustomerName("");
       setCustomerEmail("");
       setCustomerPhone("");
+      setCompany("");
       setJobSite("");
       setProjectCode("");
       setDepartmentID("");
