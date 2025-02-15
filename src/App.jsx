@@ -152,6 +152,27 @@ function App() {
   // ---------------- Section Navigation and Misc States ----------------
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    if (isLeftSwipe && sidebarOpen) {
+      setSidebarOpen(false);
+    }
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
   const [currentSection, setCurrentSection] = useState(null);
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
@@ -495,7 +516,12 @@ function App() {
             <span></span>
           </div>
         </button>
-        <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <div 
+          className={`sidebar ${sidebarOpen ? "open" : ""}`}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="sidebar-header">
             <button onClick={() => setSidebarOpen(false)}>×</button>
           </div>
