@@ -4,6 +4,8 @@ import Select from "react-select";
 import * as airtableService from './airtableService';
 import emailjs from 'emailjs-com';
 
+// Initialize EmailJS with your user ID
+emailjs.init("wyfCLJgbJeNcu3092");
 
 // Form validation utility
 const validateForm = (data) => {
