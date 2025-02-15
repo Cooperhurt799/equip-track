@@ -467,19 +467,6 @@ function App() {
             </button>
           </div>
           {activeTab === "due-returns" && (
-            <div className="filter-container">
-              <select 
-                className="days-filter"
-                onChange={(e) => setDaysFilter(e.target.value)}
-              >
-                <option value="7">Next 7 Days</option>
-                <option value="14">Next 14 Days</option>
-                <option value="30">Next 30 Days</option>
-                <option value="90">Next 90 Days</option>
-              </select>
-            </div>
-          )}
-          {activeTab === "due-returns" && (
             <div className="days-filter-container">
               <label>Show returns due within:</label>
               <select 
@@ -534,20 +521,7 @@ function App() {
             ))}
           </div>
 
-          {activeTab === "due-returns" && (
-            <div className="filter-container">
-              <input
-                type="number"
-                min="1"
-                max="60"
-                className="days-filter"
-                value={daysFilter}
-                onChange={(e) => setDaysFilter(e.target.value)}
-                placeholder="Enter number of days (1-60)"
-              />
-            </div>
-          )}
-        </div>
+          </div>
       </div>
 
       <header className="app-header">
