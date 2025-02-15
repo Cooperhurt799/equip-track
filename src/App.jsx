@@ -1029,8 +1029,7 @@ function App() {
           </div>
         )}
       </div>
-      </div> {/* Added closing container */}
-    </div>
+    </div> {/* Added closing container */}
   );
 }
 
