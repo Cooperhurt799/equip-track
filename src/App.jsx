@@ -350,7 +350,7 @@ function App() {
       const checkinData = {
         dateTimeReturned: checkinDateTime,
         unit: checkinUnit,
-        hoursMiles: checkinHoursMiles,
+        hoursMiles: parseFloat(checkinHoursMiles) || 0,
         jobSite: checkinJobSite,
         duration: checkinDuration,
         customerName: checkinCustomerName,
