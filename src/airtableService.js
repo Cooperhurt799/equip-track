@@ -63,6 +63,7 @@ export const syncCheckout = async (checkoutData) => {
     // Convert hoursMiles to number
     const hoursMilesNum = parseFloat(checkoutData.hoursMiles) || 0;
 
+    console.log('Syncing checkout data:', checkoutData);
     const record = await base(CHECKOUT_TABLE).create([
       {
         fields: {
@@ -93,6 +94,7 @@ export const syncCheckout = async (checkoutData) => {
 // Create (Checkin)
 export const syncCheckin = async (checkinData) => {
   try {
+    console.log('Syncing checkin data:', checkinData);
     const record = await base(CHECKIN_TABLE).create([
       {
         fields: {
