@@ -149,6 +149,7 @@ function App() {
   const [equipmentList, setEquipmentList] = useState([]);
   const [showOverdueAlert, setShowOverdueAlert] = useState(false);
   const [overdueItems, setOverdueItems] = useState([]);
+  const [showOverdueDetails, setShowOverdueDetails] = useState(false);
 
   // ---------------- Checkout Form States ----------------
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -555,10 +556,31 @@ function App() {
         </header>
 
         {showOverdueAlert && (
-          <div className="overdue-alert">
-            <p>
-              You have {overdueItems.length} overdue items. Please check them in.
-            </p>
+          <button 
+            className="overdue-alert-button" 
+            onClick={() => setShowOverdueDetails(true)}
+          >
+            {overdueItems.length} Overdue Items
+          </button>
+        )}
+
+        {/* Overdue Details Modal */}
+        {showOverdueDetails && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Overdue Items</h2>
+              <div className="overdue-list">
+                {overdueItems.map((item, index) => (
+                  <div key={index} className="overdue-item">
+                    <h3>{item.unit}</h3>
+                    <p>Checked out by: {item.customerName}</p>
+                    <p>Return Date: {new Date(item.returnDate).toLocaleDateString()}</p>
+                    <p>Contact: {item.customerEmail}</p>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => setShowOverdueDetails(false)}>Close</button>
+            </div>
           </div>
         )}
 
