@@ -484,7 +484,7 @@ ul li > span {
 
 /* Hamburger Button Styles */
 .hamburger-button {
-  position: absolute;
+  position: fixed;
   left: 20px;
   top: 20px;
   z-index: 1000;
