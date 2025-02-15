@@ -18,14 +18,30 @@ const base = new Airtable({
 const CHECKOUT_TABLE = 'tblBPe0VIpO38LPP9';
 const CHECKIN_TABLE = 'tbl89yClqdrF1I5Pv';
 
-// Verify tables exist
-base(CHECKOUT_TABLE).select({ maxRecords: 1 }).firstPage()
-  .then(() => console.log('✅ Checkouts table verified'))
-  .catch(err => console.error('❌ Checkouts table error:', err));
+// Verify Airtable connection and permissions
+const verifyAirtableAccess = async () => {
+  try {
+    console.log('Verifying Airtable credentials...');
+    console.log('Base ID:', AIRTABLE_BASE_ID);
+    console.log('PAT Status:', AIRTABLE_PAT ? '✓ Present' : '✗ Missing');
+    
+    const checkoutResult = await base(CHECKOUT_TABLE).select({ maxRecords: 1 }).firstPage();
+    console.log('✅ Checkouts table (tblBPe0VIpO38LPP9) verified');
+    
+    const checkinResult = await base(CHECKIN_TABLE).select({ maxRecords: 1 }).firstPage();
+    console.log('✅ Checkins table verified');
+    
+    return true;
+  } catch (error) {
+    console.error('❌ Airtable verification failed:', error.message);
+    console.error('Error status:', error.statusCode);
+    console.error('Error details:', error.error);
+    return false;
+  }
+};
 
-base(CHECKIN_TABLE).select({ maxRecords: 1 }).firstPage()
-  .then(() => console.log('✅ Checkins table verified'))
-  .catch(err => console.error('❌ Checkins table error:', err));
+// Run verification on init
+verifyAirtableAccess();
 
 // General error logging function
 const logError = (errorContext, error) => {
