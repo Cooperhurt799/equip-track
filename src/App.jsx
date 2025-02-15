@@ -480,7 +480,7 @@ function App() {
               </select>
             </div>
           )}
-          <div className="sidebar-list">
+          {activeTab && <div className="sidebar-list">
             {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
               <li key={index}>
                 <strong>{checkout.unit}</strong>
