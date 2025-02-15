@@ -834,37 +834,7 @@ ul li > span {
   outline: none;
 }
 
-.maintenance-form {
-  margin: 15px 0;
-}
 
-.maintenance-form textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 10px;
-  border: 2px solid #34495e;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-family: inherit;
-}
-
-.maintenance-form button {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.maintenance-log {
-  margin-top: 15px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.maintenance-entry {
-  padding: 10px;
-  border: 1px solid #34495e;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
 
 .sidebar-action-button.equipment-details {
   /*Added new button style*/
