@@ -1,4 +1,4 @@
- import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
 import * as airtableService from "./airtableService";
@@ -487,7 +487,7 @@ function App() {
                 <small>Return Date: {new Date(checkout.returnDate).toLocaleDateString()}</small>
               </li>
             ))}
-            
+
             {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
               .reduce((unique, checkout) => {
                 if (!unique.some(user => user.email === checkout.customerEmail)) {
@@ -507,7 +507,7 @@ function App() {
                   <span>Equipment: {user.units.join(", ")}</span>
                 </li>
               ))}
-            
+
             {activeTab === "due-returns" && equipmentList.filter(item => {
               if (item.status !== "active") return false;
               const returnDate = new Date(item.returnDate);
@@ -549,6 +549,15 @@ function App() {
                     Equipment:
                     <Select
                       options={[
+                        {
+                          label: "Active Checkouts",
+                          options: equipmentList
+                            .filter(item => item.status === "active")
+                            .map(item => ({
+                              value: item.unit,
+                              label: `${item.unit} (${item.customerName})`,
+                            })),
+                        },
                         {
                           label: "Ranch Equipment",
                           options: availableUnits.map((unit) => ({
@@ -695,6 +704,15 @@ function App() {
                     Equipment:
                     <Select
                       options={[
+                        {
+                          label: "Active Checkouts",
+                          options: equipmentList
+                            .filter(item => item.status === "active")
+                            .map(item => ({
+                              value: item.unit,
+                              label: `${item.unit} (${item.customerName})`,
+                            })),
+                        },
                         {
                           label: "Ranch Equipment",
                           options: availableUnits.map((unit) => ({
