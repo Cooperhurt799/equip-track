@@ -670,7 +670,7 @@ function App() {
                     <h3>{item.unit}</h3>
                     <p>Checked out by: {item.customerName}</p>
                     <p>Return Date: {new Date(item.returnDate).toLocaleDateString()}</p>
-                    <p>Contact: {item.customerEmail}</p>
+                    <p><strong>Contact:</strong> {item.customerPhone}</p>
                   </div>
                 ))}
               </div>
