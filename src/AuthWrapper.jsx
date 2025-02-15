@@ -3,65 +3,109 @@ import App from "./App";
 import "./AuthWrapper.css";
 
 function AuthWrapper() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('authUser');
+    const savedTimestamp = localStorage.getItem('authTimestamp');
+
+    if (savedUser && savedTimestamp) {
+      const timeElapsed = (Date.now() - parseInt(savedTimestamp)) / 1000 / 60; // Convert to minutes
+      if (timeElapsed < 20) {
+        return JSON.parse(savedUser);
+      } else {
+        localStorage.removeItem('authUser');
+        localStorage.removeItem('authTimestamp');
+      }
+    }
+    return null;
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const validCredentials = {
-    email: "demo@example.com",
-    password: "password123"
+    'Figure2ranch': 'Figure1902'
   };
 
-  const handleLogin = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    if (email === validCredentials.email && password === validCredentials.password) {
-      setIsAuthenticated(true);
-    } else {
-      setError("Invalid credentials");
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    if (validCredentials[email] === password) {
+      const userObj = { username: email };
+      setUser(userObj);
+      localStorage.setItem('authUser', JSON.stringify(userObj));
+      localStorage.setItem('authTimestamp', Date.now().toString());
+      setError("");
+    } else {
+      setError("Invalid username or password");
+    }
   };
 
-  if (isAuthenticated) {
-    return <App />;
+  const handleSignOut = () => {
+    setUser(null);
+    setEmail("");
+    setPassword("");
+    localStorage.removeItem('authUser');
+    localStorage.removeItem('authTimestamp');
+  };
+
+  if (!user) {
+    return (
+      <div className="auth-wrapper">
+        <div className="auth-container">
+          <h2>Sign In</h2>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <input
+                type="text"
+                placeholder="Username"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError("");
+                  setLoading(false);
+                }}
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                  setLoading(false);
+                }}
+                required
+              />
+            </div>
+            {error && <p className="error">{error}</p>}
+            <button type="submit" disabled={loading}>
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-container">
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError("");
-            }}
-            placeholder="Email"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError("");
-            }}
-            placeholder="Password"
-            required
-          />
-          {error && <div className="error">{error}</div>}
-          <button type="submit" disabled={loading}>
-            {loading ? "Loading..." : "Sign In"}
-          </button>
-        </form>
+    <div>
+      <div className="sign-out-container">
+        <button onClick={handleSignOut}>Sign Out</button>
       </div>
+      <App />
     </div>
   );
 }
