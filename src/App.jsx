@@ -679,11 +679,18 @@ function App() {
                   <div>
                     <label>
                       Company:
-                      <input
-                        type="text"
-                        value={company}
-                        onChange={(e) => setCompany(e.target.value)}
-                        placeholder="Enter company name"
+                      <Select
+                        options={[
+                          { value: "Daugherty", label: "Daugherty" },
+                          { value: "StoneRidge", label: "StoneRidge" },
+                          { value: "Cool Star", label: "Cool Star" },
+                          { value: "KBE", label: "KBE" },
+                          { value: "JRJ", label: "JRJ" }
+                        ]}
+                        value={company ? { value: company, label: company } : null}
+                        onChange={(option) => setCompany(option.value)}
+                        placeholder="Select Company"
+                        styles={customSelectStyles}
                       />
                     </label>
                   </div>
@@ -860,11 +867,18 @@ function App() {
                   <div>
                     <label>
                       Company:
-                      <input
-                        type="text"
-                        value={checkinCompany}
-                        onChange={(e) => setCheckinCompany(e.target.value)}
-                        placeholder="Enter company name"
+                      <Select
+                        options={[
+                          { value: "Daugherty", label: "Daugherty" },
+                          { value: "StoneRidge", label: "StoneRidge" },
+                          { value: "Cool Star", label: "Cool Star" },
+                          { value: "KBE", label: "KBE" },
+                          { value: "JRJ", label: "JRJ" }
+                        ]}
+                        value={checkinCompany ? { value: checkinCompany, label: checkinCompany } : null}
+                        onChange={(option) => setCheckinCompany(option.value)}
+                        placeholder="Select Company"
+                        styles={customSelectStyles}
                       />
                     </label>
                   </div>
