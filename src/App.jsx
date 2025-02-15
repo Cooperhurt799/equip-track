@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
 import * as airtableService from './airtableService';
+import emailjs from 'emailjs-com';
+
 
 // Form validation utility
 const validateForm = (data) => {
@@ -288,27 +290,22 @@ function App() {
       const record = await airtableService.syncCheckin(checkinData);
       console.log('Checkin synced to Airtable:', record);
 
-      if (EMAIL_NOTIFICATIONS_ENABLED) {
-        try {
-          await emailjs.send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_TEMPLATE_ID_CHECKIN,
-            {
-              to_email: checkinCustomerEmail,
-              customer_name: checkinCustomerName,
-              unit: checkinUnit,
-              checkin_date: checkinDateTime,
-              job_site: checkinJobSite,
-              inspection_notes: checkinInspectionNotes,
-              project_code: checkinProjectCode,
-              department_id: checkinDepartmentID,
-            },
-            EMAILJS_USER_ID
-          );
-        } catch (err) {
-          console.error("Failed to send email:", err);
+      // Send confirmation email
+      await emailjs.send(
+        'service_fimxodg',
+        'template_oozid5v',
+        {
+          to_email: checkinCustomerEmail,
+          customer_name: checkinCustomerName,
+          unit: checkinUnit,
+          checkin_date: checkinDateTime,
+          job_site: checkinJobSite,
+          inspection_notes: checkinInspectionNotes,
+          project_code: checkinProjectCode,
+          department_id: checkinDepartmentID,
+          hours_miles: checkinHoursMiles
         }
-      }
+      );
 
       // Clear check-in form fields
       setCheckinDateTime("");
