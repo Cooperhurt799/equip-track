@@ -4,6 +4,10 @@ import Airtable from 'airtable';
 const AIRTABLE_PAT = import.meta.env.VITE_AIRTABLE_PAT;
 const AIRTABLE_BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
 
+if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
+  console.error('Airtable credentials are missing from environment variables');
+}
+
 const base = new Airtable({ apiKey: AIRTABLE_PAT }).base(AIRTABLE_BASE_ID);
 
 // General error logging function
@@ -30,7 +34,6 @@ export const syncCheckout = async (checkoutData) => {
         status: checkoutData.status
       }
     });
-
     console.log('Successfully synced checkout to Airtable:', record.getId());
     return record;
   } catch (error) {
