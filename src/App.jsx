@@ -557,15 +557,20 @@ function App() {
         </header>
 
         {showOverdueAlert && !overdueAlertDismissed && (
-          <button 
-            className="overdue-alert-button" 
-            onClick={() => {
-              setShowOverdueDetails(true);
-              setOverdueAlertDismissed(true);
-            }}
-          >
-            {overdueItems.length} Overdue Items
-          </button>
+          <div className="overdue-alert-container">
+            <button 
+              className="overdue-alert-button" 
+              onClick={() => setShowOverdueDetails(true)}
+            >
+              {overdueItems.length} Overdue Items
+            </button>
+            <button 
+              className="overdue-alert-close" 
+              onClick={() => setOverdueAlertDismissed(true)}
+            >
+              ×
+            </button>
+          </div>
         )}
 
         {/* Overdue Details Modal */}
