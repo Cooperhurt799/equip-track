@@ -6,10 +6,10 @@ import emailjs from "emailjs-com";
 import "./reminderService"; // Import the reminder service, if used
 
 // ---------------- EmailJS Configuration ----------------
-const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID_CHECKOUT = process.env.EMAILJS_TEMPLATE_ID_CHECKOUT;
-const EMAILJS_TEMPLATE_ID_CHECKIN = process.env.EMAILJS_TEMPLATE_ID_CHECKIN;
-const EMAILJS_USER_ID = process.env.EMAILJS_USER_ID;
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID_CHECKOUT = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CHECKOUT;
+const EMAILJS_TEMPLATE_ID_CHECKIN = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CHECKIN;
+const EMAILJS_USER_ID = import.meta.env.VITE_EMAILJS_USER_ID;
 
 // Initialize EmailJS with your user ID
 emailjs.init(EMAILJS_USER_ID);
