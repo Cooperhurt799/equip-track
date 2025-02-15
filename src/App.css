@@ -772,11 +772,13 @@ ul li > span {
   border-radius: 3px;
   font-size: 0.9em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .unit-button:hover {
   background: #2c3e50;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(44, 62, 80, 0.2);
 }
 
 .checkout-details {
