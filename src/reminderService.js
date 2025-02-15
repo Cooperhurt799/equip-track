@@ -1,6 +1,6 @@
 import Airtable from 'airtable';
 
-const base = new Airtable({ apiKey: 'patd7ADu0bzOlkCvn' }).base('appWJ4F5x70p3NMms');
+const base = new Airtable({ apiKey: process.env.AIRTABLE_PAT }).base('appWJ4F5x70p3NMms');
 
 export const checkForDueReturns = async () => {
   try {
