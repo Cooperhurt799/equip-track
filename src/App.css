@@ -620,6 +620,13 @@ ul li > span {
   padding: 0;
 }
 
+.sidebar-list li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
 .sidebar-content li {
   padding: 12px 16px;
   color: #34495e;
@@ -698,4 +705,33 @@ ul li > span {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
+}
+
+.user-checkouts {
+  margin-top: 8px;
+}
+
+.unit-button {
+  background: #34495e;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  margin: 2px;
+  border-radius: 3px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.unit-button:hover {
+  background: #2c3e50;
+}
+
+.checkout-details {
+  text-align: left;
+  margin: 15px 0;
+}
+
+.checkout-details p {
+  margin: 8px 0;
 }

@@ -187,6 +187,8 @@ function App() {
   const [overdueItems, setOverdueItems] = useState([]);
   const [showOverdueDetails, setShowOverdueDetails] = useState(false);
   const [overdueAlertDismissed, setOverdueAlertDismissed] = useState(false);
+  const [selectedCheckout, setSelectedCheckout] = useState(null);
+  const [showCheckoutDetails, setShowCheckoutDetails] = useState(false);
 
   // ---------------- Checkout Form States ----------------
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -572,20 +574,35 @@ function App() {
               {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
                 .reduce((unique, checkout) => {
                   if (!unique.some(user => user.email === checkout.customerEmail)) {
-                    const unitCount = equipmentList.filter(item => 
+                    const userCheckouts = equipmentList.filter(item => 
                       item.status === "active" && 
                       item.customerEmail === checkout.customerEmail
-                    ).length;
+                    );
                     unique.push({
                       name: checkout.customerName,
-                      unitCount
+                      email: checkout.customerEmail,
+                      checkouts: userCheckouts
                     });
                   }
                   return unique;
                 }, []).map((user, index) => (
-                  <li key={index}>
+                  <li key={index} className="user-item">
                     <strong>{user.name}</strong>
-                    <span> ({user.unitCount} units)</span>
+                    <span> ({user.checkouts.length} units)</span>
+                    <div className="user-checkouts">
+                      {user.checkouts.map((checkout, checkoutIndex) => (
+                        <button
+                          key={checkoutIndex}
+                          className="unit-button"
+                          onClick={() => {
+                            setSelectedCheckout(checkout);
+                            setShowCheckoutDetails(true);
+                          }}
+                        >
+                          {checkout.unit}
+                        </button>
+                      ))}
+                    </div>
                   </li>
                 ))}
 
@@ -1027,6 +1044,23 @@ function App() {
                 {checkinMessage && <p className="message">{checkinMessage}</p>}
               </section>
             )}
+            </div>
+          </div>
+        )}
+
+        {/* Checkout Details Modal */}
+        {showCheckoutDetails && selectedCheckout && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Equipment Details</h2>
+              <div className="checkout-details">
+                <p><strong>Unit:</strong> {selectedCheckout.unit}</p>
+                <p><strong>Customer:</strong> {selectedCheckout.customerName}</p>
+                <p><strong>Job Site:</strong> {selectedCheckout.jobSite}</p>
+                <p><strong>Checkout Date:</strong> {new Date(selectedCheckout.checkoutDate).toLocaleDateString()}</p>
+                <p><strong>Return Date:</strong> {new Date(selectedCheckout.returnDate).toLocaleDateString()}</p>
+              </div>
+              <button onClick={() => setShowCheckoutDetails(false)}>Close</button>
             </div>
           </div>
         )}
