@@ -652,10 +652,11 @@ function App() {
           </div>
         ) : (
           <div className="section-container">
-            <button className="back-button" onClick={() => setCurrentSection(null)}>
-              ← Back
-            </button>
-            {currentSection === "checkout" ? (
+            <div style={{ width: '100%', maxWidth: '800px' }}>
+              <button className="back-button" onClick={() => setCurrentSection(null)}>
+                ← Back
+              </button>
+              {currentSection === "checkout" ? (
               <section className="checkout">
                 <h2>Equipment Check-Out</h2>
                 <form id="checkout-form" onSubmit={addEquipment}>
