@@ -26,6 +26,22 @@ function AuthWrapper() {
     'Figure2ranch': 'Figure1902'
   };
 
+  useEffect(() => {
+    // Check for stored auth on mount
+    const savedUser = localStorage.getItem('authUser');
+    const savedTimestamp = localStorage.getItem('authTimestamp');
+    
+    if (savedUser && savedTimestamp) {
+      const timeElapsed = (Date.now() - parseInt(savedTimestamp)) / 1000 / 60;
+      if (timeElapsed < 20) {
+        setUser(JSON.parse(savedUser));
+      } else {
+        localStorage.removeItem('authUser');
+        localStorage.removeItem('authTimestamp');
+      }
+    }
+  }, []);
+
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -45,8 +61,10 @@ function AuthWrapper() {
       localStorage.setItem('authUser', JSON.stringify(userObj));
       localStorage.setItem('authTimestamp', Date.now().toString());
       setError("");
+      setLoading(false);
     } else {
       setError("Invalid username or password");
+      setLoading(false);
     }
   };
 
