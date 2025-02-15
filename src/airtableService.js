@@ -8,7 +8,11 @@ if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
   console.error('Airtable credentials are missing from environment variables');
 }
 
-const base = new Airtable({ apiKey: AIRTABLE_PAT }).base(AIRTABLE_BASE_ID);
+console.log('Initializing Airtable with Base ID:', AIRTABLE_BASE_ID);
+const base = new Airtable({ 
+  apiKey: AIRTABLE_PAT,
+  endpointUrl: 'https://api.airtable.com'
+}).base(AIRTABLE_BASE_ID);
 
 // General error logging function
 const logError = (errorContext, error) => {
