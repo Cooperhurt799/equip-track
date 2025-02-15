@@ -72,6 +72,7 @@ function AuthWrapper() {
                 onChange={(e) => {
                   setEmail(e.target.value);
                   setError("");
+                  setLoading(false);
                 }}
                 required
               />
@@ -84,6 +85,7 @@ function AuthWrapper() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setError("");
+                  setLoading(false);
                 }}
                 required
               />
