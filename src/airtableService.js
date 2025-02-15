@@ -82,7 +82,7 @@ export const syncCheckout = async (checkoutData) => {
         }
       }
     ]);
-    console.log('Successfully synced checkout to Airtable:', record.getId());
+    console.log('Successfully synced checkout to Airtable:', record[0].id);
     return record;
   } catch (error) {
     logError('syncCheckout', error);
@@ -109,7 +109,7 @@ export const syncCheckin = async (checkinData) => {
         createdAt: new Date().toISOString().split('T')[0]
       }
     });
-    console.log('Synced checkin to Airtable:', record.getId());
+    console.log('Synced checkin to Airtable:', record.id);
     return record;
   } catch (error) {
     logError('syncCheckin', error);
