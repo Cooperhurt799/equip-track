@@ -921,6 +921,7 @@ function App() {
                             setCheckinJobSite(activeCheckout.jobSite || '');
                             setCheckinProjectCode(activeCheckout.projectCode || '');
                             setCheckinDepartmentID(activeCheckout.departmentID || '');
+                            setCheckinDuration(activeCheckout.duration || '');
                             setCheckinHoursMiles(activeCheckout.hoursMiles || '');
                             const currentDate = new Date().toISOString().slice(0, 16);
                             setCheckinDateTime(currentDate);
