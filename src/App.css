@@ -674,10 +674,8 @@ ul li > span {
 }
 
 .sidebar-list li {
-  margin-bottom: 10px;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+  border-bottom: 1px solid #2c3e50;
 }
 
 .sidebar-content li {
@@ -789,4 +787,20 @@ ul li > span {
 
 .checkout-details p {
   margin: 8px 0;
+}
+
+.equipment-stats {
+  padding: 15px;
+  background: rgba(52, 73, 94, 0.1);
+  border-radius: 8px;
+  margin: 10px;
+}
+
+.equipment-stats p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.sidebar-action-button.equipment-details {
+  /*Added new button style*/
 }

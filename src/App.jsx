@@ -546,8 +546,23 @@ function App() {
               >
                 Due Returns
               </button>
+              <button
+                className={`sidebar-action-button ${activeTab === "equipment-details" ? "active" : ""}`}
+                onClick={() => setActiveTab("equipment-details")}
+              >
+                Equipment Details
+              </button>
             </div>
-            {activeTab === "due-returns" && (
+            {activeTab === "equipment-details" && (
+                <div className="sidebar-list">
+                  <div className="equipment-stats">
+                    <p><strong>Total Equipment:</strong> {preUploadedUnits.length + rentalEquipmentList.length}</p>
+                    <p><strong>Checked Out:</strong> {equipmentList.filter(item => item.status === "active").length}</p>
+                    <p><strong>Available:</strong> {preUploadedUnits.length + rentalEquipmentList.length - equipmentList.filter(item => item.status === "active").length}</p>
+                  </div>
+                </div>
+              )}
+              {activeTab === "due-returns" && (
               <div className="days-filter-container">
                 <label>Show returns due within:</label>
                 <select 
