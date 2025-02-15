@@ -1,7 +1,10 @@
+
 import Airtable from 'airtable';
 
-const AIRTABLE_PAT = 'patd7ADu0bzOlkCvn';
+// Use a valid Personal Access Token (PAT) from Airtable
+const AIRTABLE_PAT = 'patNRF9e62jFVJEX2.c6843f0c5692cde92c0b6c87c7dce6a45b920d9d92e3ff8ff444d9ce30207f13';
 const AIRTABLE_BASE_ID = 'appWJ4F5x70p3NMms';
+
 const base = new Airtable({ apiKey: AIRTABLE_PAT }).base(AIRTABLE_BASE_ID);
 
 // General error logging function
