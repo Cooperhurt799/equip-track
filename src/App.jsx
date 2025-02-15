@@ -685,15 +685,6 @@ function App() {
                       <Select
                         options={[
                           {
-                            label: "Active Checkouts",
-                            options: equipmentList
-                              .filter(item => item.status === "active")
-                              .map(item => ({
-                                value: item.unit,
-                                label: `${item.unit} (${item.customerName})`,
-                              })),
-                          },
-                          {
                             label: "Ranch Equipment",
                             options: availableUnits.map((unit) => ({
                               value: unit,
