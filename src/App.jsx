@@ -156,6 +156,7 @@ function App() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
+  const [company, setCompany] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [jobSite, setJobSite] = useState("");
@@ -169,6 +170,7 @@ function App() {
   const [checkinUnit, setCheckinUnit] = useState("");
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
+  const [checkinCompany, setCheckinCompany] = useState("");
   const [checkinCustomerEmail, setCheckinCustomerEmail] = useState("");
   const [checkinCustomerPhone, setCheckinCustomerPhone] = useState("");
   const [checkinJobSite, setCheckinJobSite] = useState("");
@@ -676,6 +678,17 @@ function App() {
                   </div>
                   <div>
                     <label>
+                      Company:
+                      <input
+                        type="text"
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        placeholder="Enter company name"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
                       Customer Email:
                       <input
                         type="email"
@@ -841,6 +854,17 @@ function App() {
                         value={checkinCustomerName}
                         onChange={(e) => setCheckinCustomerName(e.target.value)}
                         placeholder="Enter customer name"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Company:
+                      <input
+                        type="text"
+                        value={checkinCompany}
+                        onChange={(e) => setCheckinCompany(e.target.value)}
+                        placeholder="Enter company name"
                       />
                     </label>
                   </div>
