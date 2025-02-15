@@ -147,6 +147,8 @@ function App() {
   const [activeUsers, setActiveUsers] = useState([]);
   const [dueReturns, setDueReturns] = useState([]);
   const [equipmentList, setEquipmentList] = useState([]);
+  const [showOverdueAlert, setShowOverdueAlert] = useState(false);
+  const [overdueItems, setOverdueItems] = useState([]);
 
   // ---------------- Checkout Form States ----------------
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -428,6 +430,29 @@ function App() {
     return activeUnits;
   };
 
+  // Run verification on init
+  //verifyAirtableAccess();
+
+  // Check for overdue items
+  useEffect(() => {
+    const checkOverdue = () => {
+      const today = new Date();
+      const overdue = equipmentList.filter(item => {
+        if (item.status !== 'active') return false;
+        const returnDate = new Date(item.returnDate);
+        return returnDate < today;
+      });
+      setOverdueItems(overdue);
+      setShowOverdueAlert(overdue.length > 0);
+    };
+
+    checkOverdue();
+    // Check every hour
+    const interval = setInterval(checkOverdue, 3600000);
+    return () => clearInterval(interval);
+  }, [equipmentList]);
+
+
   return (
     <div className="App">
       <div className="main-container"> {/* Added container */}
@@ -528,6 +553,14 @@ function App() {
           <h1>Daugherty Ranches Equipment Tracker</h1>
           <p className="tagline">Sanford and Son</p>
         </header>
+
+        {showOverdueAlert && (
+          <div className="overdue-alert">
+            <p>
+              You have {overdueItems.length} overdue items. Please check them in.
+            </p>
+          </div>
+        )}
 
         {currentSection === null ? (
           <div className="landing">
