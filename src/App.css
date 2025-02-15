@@ -342,6 +342,32 @@ form div {
   margin-bottom: 15px;
 }
 
+input[type="date"],
+input[type="datetime-local"] {
+  width: 100%;
+  min-height: 45px;
+  padding: 12px;
+  font-size: 15px;
+  border: 2px solid #34495e;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  color: #4b3f2a;
+}
+
+input[type="date"]:hover,
+input[type="datetime-local"]:hover {
+  border-color: #8b6c42;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input[type="date"]:focus,
+input[type="datetime-local"]:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
 label {
   display: block;
   font-weight: 600;
