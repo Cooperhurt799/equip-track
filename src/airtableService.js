@@ -15,7 +15,6 @@ const base = airtable.base(AIRTABLE_BASE_ID);
 
 // Initialize base connection
 console.log('Initializing Airtable with Base ID:', AIRTABLE_BASE_ID);
-const base = Airtable.base(AIRTABLE_BASE_ID);
 
 // Use table IDs instead of names for more stability
 const CHECKOUT_TABLE = 'tblBPe0VIpO38LPP9';
