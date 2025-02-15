@@ -415,6 +415,27 @@ ul li > span {
 }
 
 .sidebar-action-button {
+  background: #f8fafc;
+  border: 2px solid #34495e;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #34495e;
+}
+
+.sidebar-action-button.active {
+  background: #34495e;
+  color: white;
+  border: 2px solid #34495e;
+}
+
+.sidebar-action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(52, 73, 94, 0.1);
+}
+
+.sidebar-action-button {
   padding: 10px;
   background: white;
   border: 2px solid #34495e;

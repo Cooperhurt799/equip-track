@@ -447,24 +447,21 @@ function App() {
             <button onClick={() => setSidebarOpen(false)}>×</button>
           </div>
           <div className="sidebar-content">
-            <h3 style={{ textAlign: 'center', color: '#34495e', marginTop: '20px', marginBottom: '20px' }}>
-              {activeTab ? 'View Details' : 'Select a View'}
-            </h3>
             <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
               <button
-                className="sidebar-action-button"
+                className={`sidebar-action-button ${activeTab === "active-checkouts" ? "active" : ""}`}
                 onClick={() => setActiveTab("active-checkouts")}
               >
                 Active Checkouts
               </button>
               <button
-                className="sidebar-action-button"
+                className={`sidebar-action-button ${activeTab === "active-users" ? "active" : ""}`}
                 onClick={() => setActiveTab("active-users")}
               >
                 Active Users
               </button>
               <button
-                className="sidebar-action-button"
+                className={`sidebar-action-button ${activeTab === "due-returns" ? "active" : ""}`}
                 onClick={() => setActiveTab("due-returns")}
               >
                 Due Returns
