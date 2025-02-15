@@ -725,7 +725,16 @@ function App() {
                           },
                         ]}
                         value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
-                        onChange={(option) => setSelectedUnit(option.value)}
+                        onChange={(option) => {
+                          setSelectedUnit(option.value);
+                          // Find matching active checkout
+                          const activeCheckout = equipmentList.find(
+                            item => item.status === "active" && item.unit === option.value
+                          );
+                          if (activeCheckout) {
+                            setCompany(activeCheckout.company || '');
+                          }
+                        }}
                         placeholder="Select Equipment"
                         styles={customSelectStyles}
                       />
