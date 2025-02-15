@@ -7,7 +7,7 @@ export const checkForDueReturns = async () => {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
 
-    const records = await base('Checkouts').select({
+    const records = await base('tblBPe0VIpO38LPP9').select({
       filterByFormula: `AND(returnDate <= '${today.toISOString()}', status = 'active')`
     }).all();
 

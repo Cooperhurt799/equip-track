@@ -89,7 +89,7 @@ export const syncCheckin = async (checkinData) => {
 // Read (Get all checkouts)
 export const fetchCheckouts = async () => {
   try {
-    const records = await base('Checkouts').select().all();
+    const records = await base(CHECKOUT_TABLE).select().all();
     return records.map(record => ({ id: record.id, ...record.fields }));
   } catch (error) {
     logError('fetchCheckouts', error);
@@ -100,7 +100,7 @@ export const fetchCheckouts = async () => {
 // Read (Get active checkouts)
 export const fetchActiveCheckouts = async () => {
   try {
-    const records = await base('Checkouts')
+    const records = await base(CHECKOUT_TABLE)
       .select({
         filterByFormula: "{status} = 'active'"
       })
@@ -115,7 +115,7 @@ export const fetchActiveCheckouts = async () => {
 // Update checkout status
 export const updateCheckoutStatus = async (recordId, status) => {
   try {
-    const record = await base('Checkouts').update(recordId, {
+    const record = await base(CHECKOUT_TABLE).update(recordId, {
       status: status
     });
     return record;
@@ -128,7 +128,7 @@ export const updateCheckoutStatus = async (recordId, status) => {
 // Delete checkout
 export const deleteCheckout = async (recordId) => {
   try {
-    const record = await base('Checkouts').destroy(recordId);
+    const record = await base(CHECKOUT_TABLE).destroy(recordId);
     return record;
   } catch (error) {
     logError('deleteCheckout', error);
