@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
-import * as airtableService from './airtableService';
-import emailjs from 'emailjs-com';
+import * as airtableService from "./airtableService";
+import emailjs from "emailjs-com";
+import "./reminderService"; // Import the reminder service, if used
 
 // Initialize EmailJS with your user ID
 emailjs.init("wyfCLJgbJeNcu3092");
 
-// Form validation utility
-const validateForm = (data) => {
-  const errors = {};
-  if (!data.hoursMiles?.match(/^\d+$/)) {
-    errors.hoursMiles = "Hours/Miles must be a positive number";
-  }
-  if (!data.customerPhone?.match(/^\d{10}$/)) {
-    errors.customerPhone = "Phone number must be exactly 10 digits";
-  }
-  if (!data.customerEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-    errors.customerEmail = "Please enter a valid email address";
-  }
-  if (!data.jobSite) {
-    errors.jobSite = "Job site is required";
-  }
-  return errors;
+// ---------------- EmailJS Configuration ----------------
+const EMAILJS_SERVICE_ID = "service_fimxodg";
+const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
+const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
+const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
+
+// ---------------- Custom Styles for react-select ----------------
+const customSelectStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    width: "100%",
+    minHeight: "40px",
+    fontSize: "16px",
+    border: state.isFocused ? "2px solid #7a5d33" : "2px solid #8b6c42",
+    boxShadow: state.isFocused ? "0 0 5px rgba(122, 93, 51, 0.5)" : null,
+    borderRadius: "6px",
+    padding: "2px 5px",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    width: "100%",
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "#4b3f2a",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    fontSize: "16px",
+  }),
 };
-
-
-
 
 // ---------------- Data Arrays ----------------
 const preUploadedUnits = [
@@ -117,13 +129,14 @@ const rentalEquipmentList = [
 ];
 
 function App() {
+  // Set page title on mount.
   useEffect(() => {
     document.title = "Daugherty Ranches Equipment Tracker";
   }, []);
 
-  // ---------------- States ----------------
+  // ---------------- Section Navigation and Misc States ----------------
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('active-checkouts');
+  const [activeTab, setActiveTab] = useState("active-checkouts");
   const [currentSection, setCurrentSection] = useState(null);
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
@@ -134,7 +147,7 @@ function App() {
   const [activeUsers, setActiveUsers] = useState([]);
   const [dueReturns, setDueReturns] = useState([]);
 
-  // Checkout Form States
+  // ---------------- Checkout Form States ----------------
   const [selectedUnit, setSelectedUnit] = useState("");
   const [checkoutHoursMiles, setCheckoutHoursMiles] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -147,7 +160,7 @@ function App() {
   const [departmentID, setDepartmentID] = useState("");
   const [availableUnits, setAvailableUnits] = useState(preUploadedUnits);
 
-  // Check-in Form States
+  // ---------------- Check-In Form States ----------------
   const [checkinUnit, setCheckinUnit] = useState("");
   const [checkinHoursMiles, setCheckinHoursMiles] = useState("");
   const [checkinCustomerName, setCheckinCustomerName] = useState("");
@@ -204,9 +217,8 @@ function App() {
         hoursMiles: checkoutHoursMiles,
         customerPhone,
         customerEmail,
-        jobSite
+        jobSite,
       });
-
       if (Object.keys(formErrors).length > 0) {
         throw new Error(Object.values(formErrors).join("\n"));
       }
@@ -226,24 +238,41 @@ function App() {
         status: "active",
       };
 
+      // Sync checkout data to Airtable
       const airtableRecord = await airtableService.syncCheckout(checkoutData);
-      console.log('Airtable sync successful:', airtableRecord);
+      console.log("Airtable sync successful:", airtableRecord);
 
-      // Clear form fields
-      setSelectedUnit(null);
+      setCheckoutMessage("Checkout successful!");
+      // Send email notification for checkout
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID_CHECKOUT,
+        {
+          to_email: customerEmail,
+          customer_name: customerName,
+          unit: selectedUnit,
+          checkout_date: checkoutDate,
+          return_date: returnDate,
+          job_site: jobSite,
+          project_code: projectCode,
+          department_id: departmentID,
+        },
+        EMAILJS_USER_ID
+      );
+      console.log("Email sent successfully for checkout.");
+
+      // Reset checkout form fields
+      setSelectedUnit("");
       setCheckoutHoursMiles("");
       setCheckoutDate("");
       setReturnDate("");
       setCustomerName("");
       setCustomerEmail("");
       setCustomerPhone("");
-      setJobSite(null);
-      setProjectCode(null);
-      setDepartmentID(null);
-
-      setCheckoutMessage("Checkout successful!");
+      setJobSite("");
+      setProjectCode("");
+      setDepartmentID("");
       setTimeout(() => setCheckoutMessage(""), 3000);
-
     } catch (error) {
       console.error("Error during checkout:", error);
       setCheckoutMessage(error.message || "An error occurred during checkout. Please try again.");
@@ -253,7 +282,47 @@ function App() {
     }
   };
 
-  // ---------------- Check-in Submission ----------------
+  // ---------------- Retrieve Checkout Records ----------------
+  useEffect(() => {
+    const fetchCheckouts = async () => {
+      try {
+        const querySnapshot = await airtableService.fetchCheckouts();
+        // Assume fetchCheckouts returns an array of checkout records
+        console.log("Fetched checkouts:", querySnapshot);
+        // Optionally, update availableUnits or equipmentList here if needed
+      } catch (error) {
+        console.error("Error fetching checkouts:", error);
+      }
+    };
+    fetchCheckouts();
+  }, []);
+
+  // ---------------- Calculate Check-In Duration ----------------
+  // Use checkout records (equipmentList) to compute the duration.
+  useEffect(() => {
+    if (checkinDateTime && checkinUnit) {
+      let latestCheckoutTime = null;
+      equipmentList.forEach((record) => {
+        if (record.unit === checkinUnit) {
+          const time = new Date(record.createdAt);
+          if (!latestCheckoutTime || time > latestCheckoutTime) {
+            latestCheckoutTime = time;
+          }
+        }
+      });
+      if (latestCheckoutTime) {
+        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        setCheckinDuration(diffDays > 0 ? diffDays : 0);
+      } else {
+        setCheckinDuration("");
+      }
+    } else {
+      setCheckinDuration("");
+    }
+  }, [checkinDateTime, checkinUnit, equipmentList]);
+
+  // ---------------- Check-In Submission ----------------
   const addCheckin = async (e) => {
     e.preventDefault();
     if (
@@ -288,14 +357,12 @@ function App() {
         createdAt: new Date().toISOString(),
       };
 
-      // Sync to Airtable
       const record = await airtableService.syncCheckin(checkinData);
-      console.log('Checkin synced to Airtable:', record);
+      console.log("Checkin synced to Airtable:", record);
 
-      // Send confirmation email
       await emailjs.send(
-        'service_fimxodg',
-        'template_oozid5v',
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID_CHECKIN,
         {
           to_email: checkinCustomerEmail,
           customer_name: checkinCustomerName,
@@ -305,11 +372,13 @@ function App() {
           inspection_notes: checkinInspectionNotes,
           project_code: checkinProjectCode,
           department_id: checkinDepartmentID,
-          hours_miles: checkinHoursMiles
-        }
+          hours_miles: checkinHoursMiles,
+        },
+        EMAILJS_USER_ID
       );
+      console.log("Email sent successfully for check-in.");
 
-      // Clear check-in form fields
+      // Reset check-in form fields
       setCheckinDateTime("");
       setCheckinUnit("");
       setCheckinHoursMiles("");
@@ -321,7 +390,6 @@ function App() {
       setCheckinInspectionNotes("");
       setCheckinProjectCode("");
       setCheckinDepartmentID("");
-
       setCheckinMessage("Check-in successful!");
       setTimeout(() => setCheckinMessage(""), 3000);
     } catch (error) {
@@ -330,8 +398,38 @@ function App() {
     }
   };
 
+  // ---------------- Active Checkouts Section ----------------
+  const getActiveUnitNumbers = () => {
+    if (!availableUnits.length || !equipmentList.length) return [];
+    const latestCheckout = {};
+    availableUnits.forEach((unit) => {
+      equipmentList.forEach((checkout) => {
+        if (checkout.unit === unit) {
+          const time = new Date(checkout.createdAt);
+          if (!latestCheckout[unit] || time > latestCheckout[unit]) {
+            latestCheckout[unit] = time;
+          }
+        }
+      });
+    });
+    const activeUnits = [];
+    for (const unit in latestCheckout) {
+      const correspondingRecord = equipmentList.find(
+        (record) =>
+          record.unit === unit &&
+          record.createdAt &&
+          new Date(record.createdAt) > latestCheckout[unit]
+      );
+      if (!correspondingRecord) {
+        activeUnits.push(unit);
+      }
+    }
+    return activeUnits;
+  };
+
   return (
     <div className="App">
+      {/* Hamburger and sidebar */}
       <button 
         className="hamburger-button"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -342,34 +440,32 @@ function App() {
           <span></span>
         </div>
       </button>
-
-      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <button onClick={() => setSidebarOpen(false)}>×</button>
         </div>
         <div className="sidebar-content">
-          <div className="sidebar-buttons" style={{ paddingTop: '20px' }}>
-            <button 
-              className="sidebar-action-button" 
-              onClick={() => setActiveTab('active-checkouts')}
+          <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
+            <button
+              className="sidebar-action-button"
+              onClick={() => setActiveTab("active-checkouts")}
             >
               Active Checkouts
             </button>
-            <button 
-              className="sidebar-action-button" 
-              onClick={() => setActiveTab('active-users')}
+            <button
+              className="sidebar-action-button"
+              onClick={() => setActiveTab("active-users")}
             >
               Active Users
             </button>
-            <button 
-              className="sidebar-action-button" 
-              onClick={() => setActiveTab('due-returns')}
+            <button
+              className="sidebar-action-button"
+              onClick={() => setActiveTab("due-returns")}
             >
               Due Returns
             </button>
           </div>
-
-          {activeTab === 'due-returns' && (
+          {activeTab === "due-returns" && (
             <div className="filter-container">
               <select 
                 className="days-filter"
@@ -382,15 +478,14 @@ function App() {
               </select>
             </div>
           )}
-
           <div className="sidebar-list">
-            {/* Content will be shown here based on selected tab */}
+            {/* Content based on selected tab */}
           </div>
         </div>
       </div>
 
       <header className="app-header">
-        <h1>Ranch Asset Checkout Form</h1>
+        <h1>Daugherty Ranches Equipment Tracker</h1>
         <p className="tagline">Sanford and Son</p>
       </header>
 
@@ -404,7 +499,6 @@ function App() {
           <button className="back-button" onClick={() => setCurrentSection(null)}>
             ← Back
           </button>
-
           {currentSection === "checkout" ? (
             <section className="checkout">
               <h2>Equipment Check-Out</h2>
@@ -432,6 +526,7 @@ function App() {
                       value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
                       onChange={(option) => setSelectedUnit(option.value)}
                       placeholder="Select Equipment"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -490,6 +585,7 @@ function App() {
                       value={jobSite ? { value: jobSite, label: jobSite } : null}
                       onChange={(option) => setJobSite(option.value)}
                       placeholder="Select Job Site"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -504,6 +600,7 @@ function App() {
                       value={projectCode ? { value: projectCode, label: projectCode } : null}
                       onChange={(option) => setProjectCode(option.value)}
                       placeholder="Select Project Code"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -518,6 +615,7 @@ function App() {
                       value={departmentID ? { value: departmentID, label: departmentID } : null}
                       onChange={(option) => setDepartmentID(option.value)}
                       placeholder="Select Department ID"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -574,6 +672,7 @@ function App() {
                       value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
                       onChange={(option) => setCheckinUnit(option.value)}
                       placeholder="Select Equipment"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -632,6 +731,7 @@ function App() {
                       value={checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null}
                       onChange={(option) => setCheckinJobSite(option.value)}
                       placeholder="Select Job Site"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -646,6 +746,7 @@ function App() {
                       value={checkinProjectCode ? { value: checkinProjectCode, label: checkinProjectCode } : null}
                       onChange={(option) => setCheckinProjectCode(option.value)}
                       placeholder="Select Project Code"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -660,6 +761,7 @@ function App() {
                       value={checkinDepartmentID ? { value: checkinDepartmentID, label: checkinDepartmentID } : null}
                       onChange={(option) => setCheckinDepartmentID(option.value)}
                       placeholder="Select Department ID"
+                      styles={customSelectStyles}
                     />
                   </label>
                 </div>
@@ -679,7 +781,7 @@ function App() {
                     <input
                       type="number"
                       value={checkinDuration}
-                      onChange={(e) => setCheckinDuration(e.target.value)}
+                      readOnly
                     />
                   </label>
                 </div>
