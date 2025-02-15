@@ -700,7 +700,7 @@ function App() {
                     <label>
                       Hours/Miles:
                       <input
-                        type:="text"
+                        type="text"
                         value={checkoutHoursMiles}
                         onChange={(e) => setCheckoutHoursMiles(e.target.value)}
                         placeholder="Enter hours or miles"
