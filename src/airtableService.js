@@ -11,15 +11,19 @@ if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
 console.log('Initializing Airtable with Base ID:', AIRTABLE_BASE_ID);
 const base = new Airtable({ 
   apiKey: AIRTABLE_PAT,
-  endpointUrl: 'https://api.airtable.com'
+  endpointUrl: 'https://api.airtable.com/v0'
 }).base(AIRTABLE_BASE_ID);
 
+// Use table IDs instead of names for more stability
+const CHECKOUT_TABLE = 'tblBPe0VIpO38LPP9';
+const CHECKIN_TABLE = 'tbl89yClqdrF1I5Pv';
+
 // Verify tables exist
-base('Checkouts').select({ maxRecords: 1 }).firstPage()
+base(CHECKOUT_TABLE).select({ maxRecords: 1 }).firstPage()
   .then(() => console.log('✅ Checkouts table verified'))
   .catch(err => console.error('❌ Checkouts table error:', err));
 
-base('Checkins').select({ maxRecords: 1 }).firstPage()
+base(CHECKIN_TABLE).select({ maxRecords: 1 }).firstPage()
   .then(() => console.log('✅ Checkins table verified'))
   .catch(err => console.error('❌ Checkins table error:', err));
 
@@ -31,7 +35,7 @@ const logError = (errorContext, error) => {
 // Create (Checkout)
 export const syncCheckout = async (checkoutData) => {
   try {
-    const record = await base('Checkouts').create({
+    const record = await base(CHECKOUT_TABLE).create({
       fields: {
         unit: checkoutData.unit,
         hoursMiles: checkoutData.hoursMiles,
@@ -58,7 +62,7 @@ export const syncCheckout = async (checkoutData) => {
 // Create (Checkin)
 export const syncCheckin = async (checkinData) => {
   try {
-    const record = await base('Checkins').create({
+    const record = await base(CHECKIN_TABLE).create({
       fields: {
         unit: checkinData.unit,
         hoursMiles: checkinData.hoursMiles,
