@@ -523,7 +523,6 @@ function App() {
           onTouchEnd={handleTouchEnd}
         >
           <div className="sidebar-header">
-            <button className="sidebar-close-button" onClick={() => setSidebarOpen(false)}>×</button>
           </div>
           <div className="sidebar-content">
             <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>

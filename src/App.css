@@ -503,8 +503,8 @@ ul li > span {
 }
 
 .sidebar.open ~ .hamburger-button {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .hamburger-button:hover {
@@ -606,26 +606,6 @@ ul li > span {
   position: relative;
   background: linear-gradient(135deg, #34495e, #2c3e50);
   color: white;
-}
-
-.sidebar-close-button {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  background: transparent;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 24px;
-  padding: 0;
-  line-height: 1;
-  transition: transform 0.2s ease;
-}
-
-.sidebar-close-button:hover {
-  transform: scale(1.2);
-  background: transparent;
-  box-shadow: none;
 }
 
 .sidebar-content {
