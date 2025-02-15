@@ -1,6 +1,7 @@
 
 import Airtable from 'airtable';
 
+// Configure Airtable client
 const AIRTABLE_PAT = import.meta.env.VITE_AIRTABLE_PAT;
 const AIRTABLE_BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
 
@@ -8,11 +9,15 @@ if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
   console.error('Airtable credentials are missing from environment variables');
 }
 
+// Configure Airtable with endpoint and API key
+Airtable.configure({
+  endpointUrl: 'https://api.airtable.com',
+  apiKey: AIRTABLE_PAT
+});
+
+// Initialize base connection
 console.log('Initializing Airtable with Base ID:', AIRTABLE_BASE_ID);
-const base = new Airtable({ 
-  apiKey: AIRTABLE_PAT,
-  endpointUrl: 'https://api.airtable.com/v0'
-}).base(AIRTABLE_BASE_ID);
+const base = Airtable.base(AIRTABLE_BASE_ID);
 
 // Use table IDs instead of names for more stability
 const CHECKOUT_TABLE = 'tblBPe0VIpO38LPP9';
