@@ -136,7 +136,7 @@ function App() {
 
   // ---------------- Section Navigation and Misc States ----------------
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("active-checkouts");
+  const [activeTab, setActiveTab] = useState(null);
   const [currentSection, setCurrentSection] = useState(null);
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkinMessage, setCheckinMessage] = useState("");
@@ -447,6 +447,9 @@ function App() {
             <button onClick={() => setSidebarOpen(false)}>×</button>
           </div>
           <div className="sidebar-content">
+            <h3 style={{ textAlign: 'center', color: '#34495e', marginTop: '20px', marginBottom: '20px' }}>
+              {activeTab ? 'View Details' : 'Select a View'}
+            </h3>
             <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
               <button
                 className="sidebar-action-button"
