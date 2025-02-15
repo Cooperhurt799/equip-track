@@ -1,4 +1,3 @@
-
 import Airtable from 'airtable';
 
 // Configure Airtable client
@@ -27,17 +26,17 @@ const verifyAirtableAccess = async () => {
     console.log('Base ID:', AIRTABLE_BASE_ID);
     console.log('PAT Length:', AIRTABLE_PAT ? AIRTABLE_PAT.length : '0 (Missing)');
     console.log('PAT First 4 chars:', AIRTABLE_PAT ? AIRTABLE_PAT.substring(0, 4) : 'None');
-    
+
     if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
       throw new Error('Missing required Airtable credentials');
     }
-    
+
     const checkoutResult = await base(CHECKOUT_TABLE).select({ maxRecords: 1 }).firstPage();
     console.log('✅ Checkouts table (tblBPe0VIpO38LPP9) verified');
-    
+
     const checkinResult = await base(CHECKIN_TABLE).select({ maxRecords: 1 }).firstPage();
     console.log('✅ Checkins table verified');
-    
+
     return true;
   } catch (error) {
     console.error('❌ Airtable verification failed:', error.message);
@@ -63,7 +62,7 @@ export const syncCheckout = async (checkoutData) => {
   try {
     // Convert hoursMiles to number
     const hoursMilesNum = parseFloat(checkoutData.hoursMiles) || 0;
-    
+
     const record = await base(CHECKOUT_TABLE).create([
       {
         fields: {
@@ -99,7 +98,7 @@ export const syncCheckin = async (checkinData) => {
           unit: checkinData.unit,
           hoursMiles: checkinData.hoursMiles,
           checkin: new Date(checkinData.dateTimeReturned).toISOString(),
-          customerName: checkinData.customerName,
+          Customer_Name: checkinData.customerName,
           customerEmail: checkinData.customerEmail,
           phone: checkinData.customerPhone,
           jobSite: checkinData.jobSite,
