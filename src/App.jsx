@@ -183,7 +183,6 @@ function App() {
   const [activeUsers, setActiveUsers] = useState([]);
   const [dueReturns, setDueReturns] = useState([]);
   const [equipmentList, setEquipmentList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [showOverdueAlert, setShowOverdueAlert] = useState(false);
   const [overdueItems, setOverdueItems] = useState([]);
   const [showOverdueDetails, setShowOverdueDetails] = useState(false);
@@ -504,11 +503,6 @@ function App() {
     return () => clearInterval(interval);
   }, [equipmentList]);
 
-  const filteredEquipment = equipmentList.filter(item => 
-    item.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.jobSite?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="App">
@@ -531,12 +525,6 @@ function App() {
           onTouchEnd={handleTouchEnd}
         >
           <div className="sidebar-header">
-            <input
-              type="text"
-              placeholder="Search equipment..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
           </div>
           <div className="sidebar-content">
             <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
@@ -589,7 +577,7 @@ function App() {
               </div>
             )}
             {activeTab && <div className="sidebar-list">
-              {activeTab === "active-checkouts" && filteredEquipment.filter(item => item.status === "active").map((checkout, index) => (
+              {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
                 <li key={index}>
                   <strong>{checkout.unit}</strong>
                   <small style={{ display: 'block', color: '#666', fontSize: '0.8em', marginTop: '2px' }}>
@@ -598,10 +586,10 @@ function App() {
                 </li>
               ))}
 
-              {activeTab === "active-users" && filteredEquipment.filter(item => item.status === "active")
+              {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
                 .reduce((unique, checkout) => {
                   if (!unique.some(user => user.email === checkout.customerEmail)) {
-                    const userCheckouts = filteredEquipment.filter(item => 
+                    const userCheckouts = equipmentList.filter(item => 
                       item.status === "active" && 
                       item.customerEmail === checkout.customerEmail
                     );
@@ -633,7 +621,7 @@ function App() {
                   </li>
                 ))}
 
-              {activeTab === "due-returns" && filteredEquipment.filter(item => {
+              {activeTab === "due-returns" && equipmentList.filter(item => {
                 if (item.status !== "active") return false;
                 const returnDate = new Date(item.returnDate);
                 const today = new Date();
@@ -885,7 +873,7 @@ function App() {
                         options={[
                           {
                             label: "Active Checkouts",
-                            options: filteredEquipment
+                            options: equipmentList
                               .filter(item => item.status === "active")
                               .map(item => ({
                                 value: item.unit,
@@ -894,7 +882,7 @@ function App() {
                           },
                           {
                             label: "Ranch Equipment",
-                            options: preUploadedUnits.map((unit) => ({
+                            options: availableUnits.map((unit) => ({
                               value: unit,
                               label: unit,
                             })),
@@ -911,7 +899,7 @@ function App() {
                         onChange={(option) => {
                           setCheckinUnit(option.value);
                           // Find matching active checkout
-                          const activeCheckout = filteredEquipment.find(
+                          const activeCheckout = equipmentList.find(
                             item => item.status === "active" && item.unit === option.value
                           );
                           if (activeCheckout) {

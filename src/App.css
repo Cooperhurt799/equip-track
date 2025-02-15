@@ -814,58 +814,6 @@ ul li > span {
   font-size: 14px;
 }
 
-.search-box {
-  margin: 10px;
-  padding: 10px;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 2px solid #34495e;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.search-box input:focus {
-  border-color: #2c3e50;
-  box-shadow: 0 0 5px rgba(44, 62, 80, 0.2);
-  outline: none;
-}
-
-.maintenance-form {
-  margin: 15px 0;
-}
-
-.maintenance-form textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 10px;
-  border: 2px solid #34495e;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-family: inherit;
-}
-
-.maintenance-form button {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.maintenance-log {
-  margin-top: 15px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.maintenance-entry {
-  padding: 10px;
-  border: 1px solid #34495e;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-
 .sidebar-action-button.equipment-details {
   /*Added new button style*/
 }

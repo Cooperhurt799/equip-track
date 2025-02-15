@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import App from "./App";
 import "./AuthWrapper.css";
 
@@ -26,22 +26,6 @@ function AuthWrapper() {
     'Figure2ranch': 'Figure1902'
   };
 
-  useEffect(() => {
-    // Check for stored auth on mount
-    const savedUser = localStorage.getItem('authUser');
-    const savedTimestamp = localStorage.getItem('authTimestamp');
-    
-    if (savedUser && savedTimestamp) {
-      const timeElapsed = (Date.now() - parseInt(savedTimestamp)) / 1000 / 60;
-      if (timeElapsed < 20) {
-        setUser(JSON.parse(savedUser));
-      } else {
-        localStorage.removeItem('authUser');
-        localStorage.removeItem('authTimestamp');
-      }
-    }
-  }, []);
-
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -61,10 +45,8 @@ function AuthWrapper() {
       localStorage.setItem('authUser', JSON.stringify(userObj));
       localStorage.setItem('authTimestamp', Date.now().toString());
       setError("");
-      setLoading(false);
     } else {
       setError("Invalid username or password");
-      setLoading(false);
     }
   };
 
@@ -119,53 +101,11 @@ function AuthWrapper() {
   }
 
   return (
-    <div className="auth-container">
-      {user ? (
-        <>
-          <div className="sign-out-container">
-            <button onClick={handleSignOut}>Sign Out</button>
-          </div>
-          <App />
-        </>
-      ) : (
-        <div className="auth-wrapper">
-          <div className="auth-container">
-            <h2>Sign In</h2>
-            <form onSubmit={handleSubmit}>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Username"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setError("");
-                    setLoading(false);
-                  }}
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError("");
-                    setLoading(false);
-                  }}
-                  required
-                />
-              </div>
-              {error && <p className="error">{error}</p>}
-              <button type="submit" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+    <div>
+      <div className="sign-out-container">
+        <button onClick={handleSignOut}>Sign Out</button>
+      </div>
+      <App />
     </div>
   );
 }
