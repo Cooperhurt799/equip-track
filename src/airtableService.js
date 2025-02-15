@@ -61,11 +61,14 @@ const logError = (errorContext, error) => {
 // Create (Checkout)
 export const syncCheckout = async (checkoutData) => {
   try {
+    // Convert hoursMiles to number
+    const hoursMilesNum = parseFloat(checkoutData.hoursMiles) || 0;
+    
     const record = await base(CHECKOUT_TABLE).create([
       {
         fields: {
           unit: checkoutData.unit,
-          hoursMiles: checkoutData.hoursMiles,
+          hoursMiles: hoursMilesNum,
           checkoutDate: checkoutData.checkoutDate,
           returnDate: checkoutData.returnDate,
           customerName: checkoutData.customerName,
