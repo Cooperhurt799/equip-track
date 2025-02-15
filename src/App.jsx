@@ -430,435 +430,437 @@ function App() {
 
   return (
     <div className="App">
-      {/* Hamburger and sidebar */}
-      <button 
-        className="hamburger-button"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        <div className="hamburger-icon">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
-      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-        <div className="sidebar-header">
-          <button onClick={() => setSidebarOpen(false)}>×</button>
-        </div>
-        <div className="sidebar-content">
-          <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
-            <button
-              className="sidebar-action-button"
-              onClick={() => setActiveTab("active-checkouts")}
-            >
-              Active Checkouts
-            </button>
-            <button
-              className="sidebar-action-button"
-              onClick={() => setActiveTab("active-users")}
-            >
-              Active Users
-            </button>
-            <button
-              className="sidebar-action-button"
-              onClick={() => setActiveTab("due-returns")}
-            >
-              Due Returns
-            </button>
+      <div className="main-container"> {/* Added container */}
+        {/* Hamburger and sidebar */}
+        <button 
+          className="hamburger-button"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          <div className="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
-          {activeTab === "due-returns" && (
-            <div className="days-filter-container">
-              <label>Show returns due within:</label>
-              <select 
-                className="days-filter-select"
-                value={daysFilter}
-                onChange={(e) => setDaysFilter(e.target.value)}
+        </button>
+        <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+          <div className="sidebar-header">
+            <button onClick={() => setSidebarOpen(false)}>×</button>
+          </div>
+          <div className="sidebar-content">
+            <div className="sidebar-buttons" style={{ paddingTop: "20px" }}>
+              <button
+                className="sidebar-action-button"
+                onClick={() => setActiveTab("active-checkouts")}
               >
-                {[1,2,3,4,5,7,10,14,21,30,45,60].map(days => (
-                  <option key={days} value={days}>{days} days</option>
-                ))}
-              </select>
+                Active Checkouts
+              </button>
+              <button
+                className="sidebar-action-button"
+                onClick={() => setActiveTab("active-users")}
+              >
+                Active Users
+              </button>
+              <button
+                className="sidebar-action-button"
+                onClick={() => setActiveTab("due-returns")}
+              >
+                Due Returns
+              </button>
             </div>
-          )}
-          {activeTab && <div className="sidebar-list">
-            {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
-              <li key={index}>
-                <strong>{checkout.unit}</strong>
-              </li>
-            ))}
-
-            {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
-              .reduce((unique, checkout) => {
-                if (!unique.some(user => user.email === checkout.customerEmail)) {
-                  const unitCount = equipmentList.filter(item => 
-                    item.status === "active" && 
-                    item.customerEmail === checkout.customerEmail
-                  ).length;
-                  unique.push({
-                    name: checkout.customerName,
-                    unitCount
-                  });
-                }
-                return unique;
-              }, []).map((user, index) => (
+            {activeTab === "due-returns" && (
+              <div className="days-filter-container">
+                <label>Show returns due within:</label>
+                <select 
+                  className="days-filter-select"
+                  value={daysFilter}
+                  onChange={(e) => setDaysFilter(e.target.value)}
+                >
+                  {[1,2,3,4,5,7,10,14,21,30,45,60].map(days => (
+                    <option key={days} value={days}>{days} days</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {activeTab && <div className="sidebar-list">
+              {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
                 <li key={index}>
-                  <strong>{user.name}</strong>
-                  <span> ({user.unitCount} units)</span>
+                  <strong>{checkout.unit}</strong>
                 </li>
               ))}
 
-            {activeTab === "due-returns" && equipmentList.filter(item => {
-              if (item.status !== "active") return false;
-              const returnDate = new Date(item.returnDate);
-              const today = new Date();
-              const diffDays = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
-              return diffDays <= parseInt(daysFilter || "7", 10);
-            }).map((checkout, index) => (
-              <li key={index}>
-                <strong>{checkout.unit}</strong>
-                <small>Due: {new Date(checkout.returnDate).toLocaleDateString()}</small>
-              </li>
-            ))}
+              {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
+                .reduce((unique, checkout) => {
+                  if (!unique.some(user => user.email === checkout.customerEmail)) {
+                    const unitCount = equipmentList.filter(item => 
+                      item.status === "active" && 
+                      item.customerEmail === checkout.customerEmail
+                    ).length;
+                    unique.push({
+                      name: checkout.customerName,
+                      unitCount
+                    });
+                  }
+                  return unique;
+                }, []).map((user, index) => (
+                  <li key={index}>
+                    <strong>{user.name}</strong>
+                    <span> ({user.unitCount} units)</span>
+                  </li>
+                ))}
+
+              {activeTab === "due-returns" && equipmentList.filter(item => {
+                if (item.status !== "active") return false;
+                const returnDate = new Date(item.returnDate);
+                const today = new Date();
+                const diffDays = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
+                return diffDays <= parseInt(daysFilter || "7", 10);
+              }).map((checkout, index) => (
+                <li key={index}>
+                  <strong>{checkout.unit}</strong>
+                  <small>Due: {new Date(checkout.returnDate).toLocaleDateString()}</small>
+                </li>
+              ))}
+            </div>}
           </div>
         </div>
-      </div>
 
-      <header className="app-header">
-        <h1>Daugherty Ranches Equipment Tracker</h1>
-        <p className="tagline">Sanford and Son</p>
-      </header>
+        <header className="app-header">
+          <h1>Daugherty Ranches Equipment Tracker</h1>
+          <p className="tagline">Sanford and Son</p>
+        </header>
 
-      {currentSection === null ? (
-        <div className="landing">
-          <button onClick={() => setCurrentSection("checkout")}>Check-Out</button>
-          <button onClick={() => setCurrentSection("checkin")}>Check-In</button>
-        </div>
-      ) : (
-        <div className="section-container">
-          <button className="back-button" onClick={() => setCurrentSection(null)}>
-            ← Back
-          </button>
-          {currentSection === "checkout" ? (
-            <section className="checkout">
-              <h2>Equipment Check-Out</h2>
-              <form id="checkout-form" onSubmit={addEquipment}>
-                <div>
-                  <label>
-                    Equipment:
-                    <Select
-                      options={[
-                        {
-                          label: "Active Checkouts",
-                          options: equipmentList
-                            .filter(item => item.status === "active")
-                            .map(item => ({
-                              value: item.unit,
-                              label: `${item.unit} (${item.customerName})`,
+        {currentSection === null ? (
+          <div className="landing">
+            <button onClick={() => setCurrentSection("checkout")}>Check-Out</button>
+            <button onClick={() => setCurrentSection("checkin")}>Check-In</button>
+          </div>
+        ) : (
+          <div className="section-container">
+            <button className="back-button" onClick={() => setCurrentSection(null)}>
+              ← Back
+            </button>
+            {currentSection === "checkout" ? (
+              <section className="checkout">
+                <h2>Equipment Check-Out</h2>
+                <form id="checkout-form" onSubmit={addEquipment}>
+                  <div>
+                    <label>
+                      Equipment:
+                      <Select
+                        options={[
+                          {
+                            label: "Active Checkouts",
+                            options: equipmentList
+                              .filter(item => item.status === "active")
+                              .map(item => ({
+                                value: item.unit,
+                                label: `${item.unit} (${item.customerName})`,
+                              })),
+                          },
+                          {
+                            label: "Ranch Equipment",
+                            options: availableUnits.map((unit) => ({
+                              value: unit,
+                              label: unit,
                             })),
-                        },
-                        {
-                          label: "Ranch Equipment",
-                          options: availableUnits.map((unit) => ({
-                            value: unit,
-                            label: unit,
-                          })),
-                        },
-                        {
-                          label: "Rental Equipment",
-                          options: rentalEquipmentList.map((item) => ({
-                            value: item,
-                            label: item,
-                          })),
-                        },
-                      ]}
-                      value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
-                      onChange={(option) => setSelectedUnit(option.value)}
-                      placeholder="Select Equipment"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Hours/Miles:
-                    <input
-                      type="text"
-                      value={checkoutHoursMiles}
-                      onChange={(e) => setCheckoutHoursMiles(e.target.value)}
-                      placeholder="Enter hours or miles"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Customer Name:
-                    <input
-                      type="text"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Enter customer name"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Customer Email:
-                    <input
-                      type="email"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      placeholder="Enter customer email"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Customer Phone #:
-                    <input
-                      type="text"
-                      value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
-                      placeholder="Enter customer phone number"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Job Site:
-                    <Select
-                      options={preProgrammedJobSites.map((site) => ({
-                        value: site,
-                        label: site,
-                      }))}
-                      value={jobSite ? { value: jobSite, label: jobSite } : null}
-                      onChange={(option) => setJobSite(option.value)}
-                      placeholder="Select Job Site"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Project Code:
-                    <Select
-                      options={projectCodes.map((code) => ({
-                        value: code,
-                        label: code,
-                      }))}
-                      value={projectCode ? { value: projectCode, label: projectCode } : null}
-                      onChange={(option) => setProjectCode(option.value)}
-                      placeholder="Select Project Code"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Department ID:
-                    <Select
-                      options={departmentIDs.map((dept) => ({
-                        value: dept,
-                        label: dept,
-                      }))}
-                      value={departmentID ? { value: departmentID, label: departmentID } : null}
-                      onChange={(option) => setDepartmentID(option.value)}
-                      placeholder="Select Department ID"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Checkout Date:
-                    <input
-                      type="date"
-                      value={checkoutDate}
-                      onChange={(e) => setCheckoutDate(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Return Date:
-                    <input
-                      type="date"
-                      value={returnDate}
-                      onChange={(e) => setReturnDate(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <button type="submit" disabled={isLoading}>
-                  {isLoading ? "Processing..." : "Checkout Equipment"}
-                </button>
-              </form>
-              {checkoutMessage && <p className="message">{checkoutMessage}</p>}
-            </section>
-          ) : (
-            <section className="checkin">
-              <h2>Equipment Check-In</h2>
-              <form onSubmit={addCheckin}>
-                <div>
-                  <label>
-                    Equipment:
-                    <Select
-                      options={[
-                        {
-                          label: "Active Checkouts",
-                          options: equipmentList
-                            .filter(item => item.status === "active")
-                            .map(item => ({
-                              value: item.unit,
-                              label: `${item.unit} (${item.customerName})`,
+                          },
+                          {
+                            label: "Rental Equipment",
+                            options: rentalEquipmentList.map((item) => ({
+                              value: item,
+                              label: item,
                             })),
-                        },
-                        {
-                          label: "Ranch Equipment",
-                          options: availableUnits.map((unit) => ({
-                            value: unit,
-                            label: unit,
-                          })),
-                        },
-                        {
-                          label: "Rental Equipment",
-                          options: rentalEquipmentList.map((item) => ({
-                            value: item,
-                            label: item,
-                          })),
-                        },
-                      ]}
-                      value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
-                      onChange={(option) => setCheckinUnit(option.value)}
-                      placeholder="Select Equipment"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Hours/Miles:
-                    <input
-                      type="text"
-                      value={checkinHoursMiles}
-                      onChange={(e) => setCheckinHoursMiles(e.target.value)}
-                      placeholder="Enter hours/miles"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Customer Name:
-                    <input
-                      type="text"
-                      value={checkinCustomerName}
-                      onChange={(e) => setCheckinCustomerName(e.target.value)}
-                      placeholder="Enter customer name"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Customer Email:
-                    <input
-                      type="email"
-                      value={checkinCustomerEmail}
-                      onChange={(e) => setCheckinCustomerEmail(e.target.value)}
-                      placeholder="Enter customer email"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Customer Phone #:
-                    <input
-                      type="text"
-                      value={checkinCustomerPhone}
-                      onChange={(e) => setCheckinCustomerPhone(e.target.value)}
-                      placeholder="Enter customer phone number"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Job Site:
-                    <Select
-                      options={preProgrammedJobSites.map((site) => ({
-                        value: site,
-                        label: site,
-                      }))}
-                      value={checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null}
-                      onChange={(option) => setCheckinJobSite(option.value)}
-                      placeholder="Select Job Site"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Project Code:
-                    <Select
-                      options={projectCodes.map((code) => ({
-                        value: code,
-                        label: code,
-                      }))}
-                      value={checkinProjectCode ? { value: checkinProjectCode, label: checkinProjectCode } : null}
-                      onChange={(option) => setCheckinProjectCode(option.value)}
-                      placeholder="Select Project Code"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Department ID:
-                    <Select
-                      options={departmentIDs.map((dept) => ({
-                        value: dept,
-                        label: dept,
-                      }))}
-                      value={checkinDepartmentID ? { value: checkinDepartmentID, label: checkinDepartmentID } : null}
-                      onChange={(option) => setCheckinDepartmentID(option.value)}
-                      placeholder="Select Department ID"
-                      styles={customSelectStyles}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Date and Time Returned:
-                    <input
-                      type="datetime-local"
-                      value={checkinDateTime}
-                      onChange={(e) => setCheckinDateTime(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Duration (Days checked out):
-                    <input
-                      type="number"
-                      value={checkinDuration}
-                      readOnly
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Inspection Notes:
-                    <textarea
-                      value={checkinInspectionNotes}
-                      onChange={(e) => setCheckinInspectionNotes(e.target.value)}
-                      placeholder="Enter inspection notes"
-                    ></textarea>
-                  </label>
-                </div>
-                <button type="submit">Check-In Equipment</button>
-              </form>
-              {checkinMessage && <p className="message">{checkinMessage}</p>}
-            </section>
-          )}
-        </div>
-      )}
+                          },
+                        ]}
+                        value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
+                        onChange={(option) => setSelectedUnit(option.value)}
+                        placeholder="Select Equipment"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Hours/Miles:
+                      <input
+                        type="text"
+                        value={checkoutHoursMiles}
+                        onChange={(e) => setCheckoutHoursMiles(e.target.value)}
+                        placeholder="Enter hours or miles"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Customer Name:
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Enter customer name"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Customer Email:
+                      <input
+                        type="email"
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        placeholder="Enter customer email"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Customer Phone #:
+                      <input
+                        type="text"
+                        value={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                        placeholder="Enter customer phone number"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Job Site:
+                      <Select
+                        options={preProgrammedJobSites.map((site) => ({
+                          value: site,
+                          label: site,
+                        }))}
+                        value={jobSite ? { value: jobSite, label: jobSite } : null}
+                        onChange={(option) => setJobSite(option.value)}
+                        placeholder="Select Job Site"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Project Code:
+                      <Select
+                        options={projectCodes.map((code) => ({
+                          value: code,
+                          label: code,
+                        }))}
+                        value={projectCode ? { value: projectCode, label: projectCode } : null}
+                        onChange={(option) => setProjectCode(option.value)}
+                        placeholder="Select Project Code"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Department ID:
+                      <Select
+                        options={departmentIDs.map((dept) => ({
+                          value: dept,
+                          label: dept,
+                        }))}
+                        value={departmentID ? { value: departmentID, label: departmentID } : null}
+                        onChange={(option) => setDepartmentID(option.value)}
+                        placeholder="Select Department ID"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Checkout Date:
+                      <input
+                        type="date"
+                        value={checkoutDate}
+                        onChange={(e) => setCheckoutDate(e.target.value)}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Return Date:
+                      <input
+                        type="date"
+                        value={returnDate}
+                        onChange={(e) => setReturnDate(e.target.value)}
+                      />
+                    </label>
+                  </div>
+                  <button type="submit" disabled={isLoading}>
+                    {isLoading ? "Processing..." : "Checkout Equipment"}
+                  </button>
+                </form>
+                {checkoutMessage && <p className="message">{checkoutMessage}</p>}
+              </section>
+            ) : (
+              <section className="checkin">
+                <h2>Equipment Check-In</h2>
+                <form onSubmit={addCheckin}>
+                  <div>
+                    <label>
+                      Equipment:
+                      <Select
+                        options={[
+                          {
+                            label: "Active Checkouts",
+                            options: equipmentList
+                              .filter(item => item.status === "active")
+                              .map(item => ({
+                                value: item.unit,
+                                label: `${item.unit} (${item.customerName})`,
+                              })),
+                          },
+                          {
+                            label: "Ranch Equipment",
+                            options: availableUnits.map((unit) => ({
+                              value: unit,
+                              label: unit,
+                            })),
+                          },
+                          {
+                            label: "Rental Equipment",
+                            options: rentalEquipmentList.map((item) => ({
+                              value: item,
+                              label: item,
+                            })),
+                          },
+                        ]}
+                        value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
+                        onChange={(option) => setCheckinUnit(option.value)}
+                        placeholder="Select Equipment"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Hours/Miles:
+                      <input
+                        type="text"
+                        value={checkinHoursMiles}
+                        onChange={(e) => setCheckinHoursMiles(e.target.value)}
+                        placeholder="Enter hours/miles"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Customer Name:
+                      <input
+                        type="text"
+                        value={checkinCustomerName}
+                        onChange={(e) => setCheckinCustomerName(e.target.value)}
+                        placeholder="Enter customer name"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Customer Email:
+                      <input
+                        type="email"
+                        value={checkinCustomerEmail}
+                        onChange={(e) => setCheckinCustomerEmail(e.target.value)}
+                        placeholder="Enter customer email"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Customer Phone #:
+                      <input
+                        type="text"
+                        value={checkinCustomerPhone}
+                        onChange={(e) => setCheckinCustomerPhone(e.target.value)}
+                        placeholder="Enter customer phone number"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Job Site:
+                      <Select
+                        options={preProgrammedJobSites.map((site) => ({
+                          value: site,
+                          label: site,
+                        }))}
+                        value={checkinJobSite ? { value: checkinJobSite, label: checkinJobSite } : null}
+                        onChange={(option) => setCheckinJobSite(option.value)}
+                        placeholder="Select Job Site"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Project Code:
+                      <Select
+                        options={projectCodes.map((code) => ({
+                          value: code,
+                          label: code,
+                        }))}
+                        value={checkinProjectCode ? { value: checkinProjectCode, label: checkinProjectCode } : null}
+                        onChange={(option) => setCheckinProjectCode(option.value)}
+                        placeholder="Select Project Code"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Department ID:
+                      <Select
+                        options={departmentIDs.map((dept) => ({
+                          value: dept,
+                          label: dept,
+                        }))}
+                        value={checkinDepartmentID ? { value: checkinDepartmentID, label: checkinDepartmentID } : null}
+                        onChange={(option) => setCheckinDepartmentID(option.value)}
+                        placeholder="Select Department ID"
+                        styles={customSelectStyles}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Date and Time Returned:
+                      <input
+                        type="datetime-local"
+                        value={checkinDateTime}
+                        onChange={(e) => setCheckinDateTime(e.target.value)}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Duration (Days checked out):
+                      <input
+                        type="number"
+                        value={checkinDuration}
+                        readOnly
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      Inspection Notes:
+                      <textarea
+                        value={checkinInspectionNotes}
+                        onChange={(e) => setCheckinInspectionNotes(e.target.value)}
+                        placeholder="Enter inspection notes"
+                      ></textarea>
+                    </label>
+                  </div>
+                  <button type="submit">Check-In Equipment</button>
+                </form>
+                {checkinMessage && <p className="message">{checkinMessage}</p>}
+              </section>
+            )}
+          </div>
+        )}
+      </div> {/* Added closing container */}
     </div>
   );
 }
