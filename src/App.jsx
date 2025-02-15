@@ -407,7 +407,8 @@ function App() {
       setTimeout(() => setCheckinMessage(""), 3000);
     } catch (error) {
       console.error("Error during check-in:", error);
-      alert("Error during check-in. Please try again.");
+      setCheckinMessage(`Error during check-in: ${error.message || 'Please try again'}`);
+      setTimeout(() => setCheckinMessage(""), 5000);
     }
   };
 
