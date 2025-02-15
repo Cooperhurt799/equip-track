@@ -6,7 +6,7 @@ function AuthWrapper() {
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('authUser');
     const savedTimestamp = localStorage.getItem('authTimestamp');
-    
+
     if (savedUser && savedTimestamp) {
       const timeElapsed = (Date.now() - parseInt(savedTimestamp)) / 1000 / 60; // Convert to minutes
       if (timeElapsed < 20) {
@@ -27,7 +27,7 @@ function AuthWrapper() {
   };
 
   const [loading, setLoading] = useState(false);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,7 +69,10 @@ function AuthWrapper() {
                 type="text"
                 placeholder="Username"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError("");
+                }}
                 required
               />
             </div>
@@ -78,7 +81,10 @@ function AuthWrapper() {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
                 required
               />
             </div>
