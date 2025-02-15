@@ -5,14 +5,14 @@ import * as airtableService from "./airtableService";
 import emailjs from "emailjs-com";
 import "./reminderService"; // Import the reminder service, if used
 
-// Initialize EmailJS with your user ID
-emailjs.init("wyfCLJgbJeNcu3092");
-
 // ---------------- EmailJS Configuration ----------------
-const EMAILJS_SERVICE_ID = "service_fimxodg";
-const EMAILJS_TEMPLATE_ID_CHECKOUT = "template_bxx6jfh";
-const EMAILJS_TEMPLATE_ID_CHECKIN = "template_oozid5v";
-const EMAILJS_USER_ID = "wyfCLJgbJeNcu3092";
+const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID_CHECKOUT = process.env.EMAILJS_TEMPLATE_ID_CHECKOUT;
+const EMAILJS_TEMPLATE_ID_CHECKIN = process.env.EMAILJS_TEMPLATE_ID_CHECKIN;
+const EMAILJS_USER_ID = process.env.EMAILJS_USER_ID;
+
+// Initialize EmailJS with your user ID
+emailjs.init(EMAILJS_USER_ID);
 
 // ---------------- Custom Styles for react-select ----------------
 const customSelectStyles = {
