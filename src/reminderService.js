@@ -1,13 +1,15 @@
+
 import Airtable from 'airtable';
 
-const base = new Airtable({ apiKey: import.meta.env.VITE_AIRTABLE_PAT }).base(import.meta.env.VITE_AIRTABLE_BASE_ID);
+const airtable = new Airtable({ apiKey: import.meta.env.VITE_AIRTABLE_PAT });
+const reminderBase = airtable.base(import.meta.env.VITE_AIRTABLE_BASE_ID);
 
 export const checkForDueReturns = async () => {
   try {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
 
-    const records = await base('tblBPe0VIpO38LPP9').select({
+    const records = await reminderBase('tblBPe0VIpO38LPP9').select({
       filterByFormula: `AND(returnDate <= '${today.toISOString()}', status = 'active')`
     }).all();
 
