@@ -345,13 +345,23 @@ form div {
 input[type="date"],
 input[type="datetime-local"] {
   width: 100%;
-  min-height: 45px;
-  padding: 12px;
+  height: 45px;
+  padding: 8px 12px;
   font-size: 15px;
   border: 2px solid #34495e;
   border-radius: 10px;
   background-color: #f8fafc;
   color: #4b3f2a;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  background-color: transparent;
+  padding: 8px;
+  cursor: pointer;
 }
 
 input[type="date"]:hover,
@@ -366,6 +376,7 @@ input[type="datetime-local"]:focus {
   border-color: #3b82f6;
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: #fff;
 }
 
 label {
