@@ -560,7 +560,7 @@ function App() {
           <button 
             className="overdue-alert-button" 
             onClick={() => {
-              setOverdueDetails(true);
+              setShowOverdueDetails(true);
               setOverdueAlertDismissed(true);
             }}
           >
