@@ -142,7 +142,7 @@ function App() {
   const [checkinMessage, setCheckinMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [daysFilter, setDaysFilter] = useState("all");
+  const [daysFilter, setDaysFilter] = useState("7");
   const [activeCheckouts, setActiveCheckouts] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
   const [dueReturns, setDueReturns] = useState([]);
@@ -480,7 +480,47 @@ function App() {
             </div>
           )}
           <div className="sidebar-list">
-            {/* Content based on selected tab */}
+            {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
+              <li key={index}>
+                <strong>{checkout.unit}</strong>
+                <span>Customer: {checkout.customerName}</span>
+                <small>Return Date: {new Date(checkout.returnDate).toLocaleDateString()}</small>
+              </li>
+            ))}
+            
+            {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
+              .reduce((unique, checkout) => {
+                if (!unique.some(user => user.email === checkout.customerEmail)) {
+                  unique.push({
+                    name: checkout.customerName,
+                    email: checkout.customerEmail,
+                    units: equipmentList.filter(item => 
+                      item.status === "active" && 
+                      item.customerEmail === checkout.customerEmail
+                    ).map(item => item.unit)
+                  });
+                }
+                return unique;
+              }, []).map((user, index) => (
+                <li key={index}>
+                  <strong>{user.name}</strong>
+                  <span>Equipment: {user.units.join(", ")}</span>
+                </li>
+              ))}
+            
+            {activeTab === "due-returns" && equipmentList.filter(item => {
+              if (item.status !== "active") return false;
+              const returnDate = new Date(item.returnDate);
+              const today = new Date();
+              const diffDays = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
+              return diffDays <= parseInt(daysFilter || "7", 10);
+            }).map((checkout, index) => (
+              <li key={index}>
+                <strong>{checkout.unit}</strong>
+                <span>Customer: {checkout.customerName}</span>
+                <small>Due: {new Date(checkout.returnDate).toLocaleDateString()}</small>
+              </li>
+            ))}
           </div>
         </div>
       </div>
