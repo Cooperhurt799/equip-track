@@ -245,6 +245,10 @@ function App() {
       console.log("Airtable sync successful:", airtableRecord);
       setCheckoutMessage("Checkout successful!");
 
+      // Refresh the active checkouts data
+      const activeCheckouts = await airtableService.fetchActiveCheckouts();
+      setActiveCheckouts(activeCheckouts);
+
       // Reset checkout form fields
       setSelectedUnit("");
       setCheckoutHoursMiles("");
