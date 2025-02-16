@@ -918,8 +918,8 @@ function App() {
                           if (activeCheckout) {
                             setCheckinCustomerName(activeCheckout.customerName || '');
                             setCheckinCustomerEmail(activeCheckout.customerEmail || '');
-                            setCheckinCustomerPhone(activeCheckout.customerPhone || '');
-                            setCheckinCompany(activeCheckout.company || ''); // Ensure company is set
+                            setCheckinCustomerPhone(activeCheckout.phone || ''); // Changed from customerPhone to phone
+                            setCheckinCompany(activeCheckout.company || '');
                             setCheckinJobSite(activeCheckout.jobSite || '');
                             setCheckinProjectCode(activeCheckout.projectCode || '');
                             setCheckinDepartmentID(activeCheckout.departmentID || '');
