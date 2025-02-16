@@ -163,6 +163,19 @@ export const deleteCheckout = async (recordId) => {
   }
 };
 
+// Read (Get all checkouts)
+export const fetchCheckouts = async () => {
+  try {
+    const records = await base(CHECKOUT_TABLE)
+      .select()
+      .all();
+    return records.map(record => ({ id: record.id, ...record.fields }));
+  } catch (error) {
+    logError('fetchCheckouts', error);
+    throw error;
+  }
+};
+
 export default {
   syncCheckout,
   syncCheckin,
