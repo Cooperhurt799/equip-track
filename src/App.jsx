@@ -426,18 +426,11 @@ function App() {
   // Check for overdue items
   useEffect(() => {
     const checkOverdue = async () => {
-      const today = new Date();
-      const activeCheckoutsData = await airtableService.fetchActiveCheckouts();
-      const overdue = activeCheckoutsData.filter(item => {
-        const returnDate = new Date(item.returnDate);
-        return returnDate < today;
-      });
-      setOverdueItems(overdue);
-      setShowOverdueAlert(overdue.length > 0);
+      setOverdueItems([]);
+      setShowOverdueAlert(false);
     };
 
     checkOverdue();
-    // Check every hour
     const interval = setInterval(checkOverdue, 3600000);
     return () => clearInterval(interval);
   }, []);
