@@ -747,11 +747,11 @@ function App() {
                       Company:
                       <CreatableSelect
                         options={[
-                          { value: "Daugherty", label: "Daugherty" },
-                          { value: "StoneRidge", label: "StoneRidge" },
-                          { value: "Cool Star", label: "Cool Star" },
-                          { value: "KBE", label: "KBE" },
-                          { value: "JRJ", label: "JRJ" }
+                          { value: "Company 1", label: "Company 1" },
+                          { value: "Company 2", label: "Company 2" },
+                          { value: "Company 3", label: "Company 3" },
+                          { value: "Company 4", label: "Company 4" },
+                          { value: "Company 5", label: "Company 5" }
                         ]}
                         value={company ? { value: company, label: company } : null}
                         onChange={(option) => setCompany(option?.value || '')}
@@ -959,11 +959,11 @@ function App() {
                       Company:
                       <Select
                         options={[
-                          { value: "Daugherty", label: "Daugherty" },
-                          { value: "StoneRidge", label: "StoneRidge" },
-                          { value: "Cool Star", label: "Cool Star" },
-                          { value: "KBE", label: "KBE" },
-                          { value: "JRJ", label: "JRJ" }
+                          { value: "Company 1", label: "Company 1" },
+                          { value: "Company 2", label: "Company 2" },
+                          { value: "Company 3", label: "Company 3" },
+                          { value: "Company 4", label: "Company 4" },
+                          { value: "Company 5", label: "Company 5" }
                         ]}
                         value={checkinCompany ? { value: checkinCompany, label: checkinCompany } : null}
                         onChange={(option) => setCheckinCompany(option.value)}
