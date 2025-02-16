@@ -122,13 +122,17 @@ export const syncCheckin = async (checkinData) => {
   }
 };
 
-// Read (Get all checkouts)
-export const fetchCheckouts = async () => {
+// Read (Get active checkouts only)
+export const fetchActiveCheckouts = async () => {
   try {
-    const records = await base(CHECKOUT_TABLE).select().all();
+    const records = await base(CHECKOUT_TABLE)
+      .select({
+        filterByFormula: "{status} = 'active'"
+      })
+      .all();
     return records.map(record => ({ id: record.id, ...record.fields }));
   } catch (error) {
-    logError('fetchCheckouts', error);
+    logError('fetchActiveCheckouts', error);
     throw error;
   }
 };

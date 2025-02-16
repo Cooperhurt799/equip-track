@@ -182,7 +182,6 @@ function App() {
   const [activeCheckouts, setActiveCheckouts] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
   const [dueReturns, setDueReturns] = useState([]);
-  const [equipmentList, setEquipmentList] = useState([]);
   const [showOverdueAlert, setShowOverdueAlert] = useState(false);
   const [overdueItems, setOverdueItems] = useState([]);
   const [showOverdueDetails, setShowOverdueDetails] = useState(false);
@@ -329,45 +328,54 @@ function App() {
     }
   };
 
-  // ---------------- Retrieve Checkout Records ----------------
+  // ---------------- Fetch Active Checkouts ----------------
   useEffect(() => {
-    const fetchCheckouts = async () => {
+    const fetchActiveCheckouts = async () => {
       try {
-        const querySnapshot = await airtableService.fetchCheckouts();
-        // Assume fetchCheckouts returns an array of checkout records
-        console.log("Fetched checkouts:", querySnapshot);
-        setEquipmentList(querySnapshot); // Update equipmentList with fetched data
+        const activeCheckouts = await airtableService.fetchActiveCheckouts();
+        setActiveCheckouts(activeCheckouts);
       } catch (error) {
-        console.error("Error fetching checkouts:", error);
+        console.error("Error fetching active checkouts:", error);
       }
     };
-    fetchCheckouts();
+    fetchActiveCheckouts();
   }, []);
+
+  // Function to fetch a single active checkout
+  const fetchActiveCheckout = async (unit) => {
+    try {
+      const checkout = activeCheckouts.find(item => item.unit === unit);
+      return checkout || null;
+    } catch (error) {
+      console.error("Error fetching active checkout:", error);
+      return null;
+    }
+  };
 
   // ---------------- Calculate Check-In Duration ----------------
   // Use checkout records (equipmentList) to compute the duration.
   useEffect(() => {
     if (checkinDateTime && checkinUnit) {
-      let latestCheckoutTime = null;
-      equipmentList.forEach((record) => {
-        if (record.unit === checkinUnit) {
-          const time = new Date(record.createdAt);
-          if (!latestCheckoutTime || time > latestCheckoutTime) {
-            latestCheckoutTime = time;
+      const fetchCheckout = async () => {
+        try {
+          const checkout = await fetchActiveCheckout(checkinUnit);
+          if (checkout) {
+            const diffMs = new Date(checkinDateTime) - new Date(checkout.createdAt);
+            const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            setCheckinDuration(diffDays > 0 ? diffDays : 0);
+          } else {
+            setCheckinDuration("");
           }
+        } catch (error) {
+          console.error("Error fetching checkout for duration calculation:", error);
+          setCheckinDuration("");
         }
-      });
-      if (latestCheckoutTime) {
-        const diffMs = new Date(checkinDateTime) - latestCheckoutTime;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        setCheckinDuration(diffDays > 0 ? diffDays : 0);
-      } else {
-        setCheckinDuration("");
-      }
+      };
+      fetchCheckout();
     } else {
       setCheckinDuration("");
     }
-  }, [checkinDateTime, checkinUnit, equipmentList]);
+  }, [checkinDateTime, checkinUnit]);
 
   // ---------------- Check-In Submission ----------------
   const addCheckin = async (e) => {
@@ -406,7 +414,7 @@ function App() {
       };
 
       // Find the active checkout record and update its status
-      const activeCheckout = equipmentList.find(
+      const activeCheckout = activeCheckouts.find(
         item => item.status === "active" && item.unit === checkinUnit
       );
       if (activeCheckout) {
@@ -458,10 +466,10 @@ function App() {
 
   // ---------------- Active Checkouts Section ----------------
   const getActiveUnitNumbers = () => {
-    if (!availableUnits.length || !equipmentList.length) return [];
+    if (!availableUnits.length || !activeCheckouts.length) return [];
     const latestCheckout = {};
     availableUnits.forEach((unit) => {
-      equipmentList.forEach((checkout) => {
+      activeCheckouts.forEach((checkout) => {
         if (checkout.unit === unit) {
           const time = new Date(checkout.createdAt);
           if (!latestCheckout[unit] || time > latestCheckout[unit]) {
@@ -472,7 +480,7 @@ function App() {
     });
     const activeUnits = [];
     for (const unit in latestCheckout) {
-      const correspondingRecord = equipmentList.find(
+      const correspondingRecord = activeCheckouts.find(
         (record) =>
           record.unit === unit &&
           record.createdAt &&
@@ -490,10 +498,10 @@ function App() {
 
   // Check for overdue items
   useEffect(() => {
-    const checkOverdue = () => {
+    const checkOverdue = async () => {
       const today = new Date();
-      const overdue = equipmentList.filter(item => {
-        if (item.status !== 'active') return false;
+      const activeCheckoutsData = await airtableService.fetchActiveCheckouts();
+      const overdue = activeCheckoutsData.filter(item => {
         const returnDate = new Date(item.returnDate);
         return returnDate < today;
       });
@@ -505,7 +513,7 @@ function App() {
     // Check every hour
     const interval = setInterval(checkOverdue, 3600000);
     return () => clearInterval(interval);
-  }, [equipmentList]);
+  }, []);
 
 
   return (
@@ -561,8 +569,8 @@ function App() {
                 <div className="sidebar-list">
                   <div className="equipment-stats">
                     <p><strong>Total Equipment:</strong> {preUploadedUnits.length + rentalEquipmentList.length}</p>
-                    <p><strong>Checked Out:</strong> {equipmentList.filter(item => item.status === "active").length}</p>
-                    <p><strong>Available:</strong> {preUploadedUnits.length + rentalEquipmentList.length - equipmentList.filter(item => item.status === "active").length}</p>
+                    <p><strong>Checked Out:</strong> {activeCheckouts.length}</p>
+                    <p><strong>Available:</strong> {preUploadedUnits.length + rentalEquipmentList.length - activeCheckouts.length}</p>
                   </div>
                 </div>
               )}
@@ -581,7 +589,7 @@ function App() {
               </div>
             )}
             {activeTab && <div className="sidebar-list">
-              {activeTab === "active-checkouts" && equipmentList.filter(item => item.status === "active").map((checkout, index) => (
+              {activeTab === "active-checkouts" && activeCheckouts.map((checkout, index) => (
                 <li key={index}>
                   <strong>{checkout.unit}</strong>
                   <small style={{ display: 'block', color: '#666', fontSize: '0.8em', marginTop: '2px' }}>
@@ -590,10 +598,10 @@ function App() {
                 </li>
               ))}
 
-              {activeTab === "active-users" && equipmentList.filter(item => item.status === "active")
+              {activeTab === "active-users" && activeCheckouts
                 .reduce((unique, checkout) => {
                   if (!unique.some(user => user.email === checkout.customerEmail)) {
-                    const userCheckouts = equipmentList.filter(item => 
+                    const userCheckouts = activeCheckouts.filter(item => 
                       item.status === "active" && 
                       item.customerEmail === checkout.customerEmail
                     );
@@ -625,8 +633,7 @@ function App() {
                   </li>
                 ))}
 
-              {activeTab === "due-returns" && equipmentList.filter(item => {
-                if (item.status !== "active") return false;
+              {activeTab === "due-returns" && activeCheckouts.filter(item => {
                 const returnDate = new Date(item.returnDate);
                 const today = new Date();
                 const diffDays = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
@@ -705,9 +712,9 @@ function App() {
                         options={[
                           {
                             label: "Available Equipment",
-                            options: availableUnits
-                              .filter(unit => !equipmentList.some(item => 
-                                item.status === "active" && item.unit === unit
+                            options: preUploadedUnits
+                              .filter(unit => !activeCheckouts.some(item => 
+                                item.unit === unit
                               ))
                               .map((unit) => ({
                                 value: unit,
@@ -717,8 +724,8 @@ function App() {
                           {
                             label: "Rental Equipment",
                             options: rentalEquipmentList
-                              .filter(unit => !equipmentList.some(item => 
-                                item.status === "active" && item.unit === unit
+                              .filter(unit => !activeCheckouts.some(item => 
+                                item.unit === unit
                               ))
                               .map((item) => ({
                                 value: item,
@@ -727,12 +734,9 @@ function App() {
                           },
                         ]}
                         value={selectedUnit ? { value: selectedUnit, label: selectedUnit } : null}
-                        onChange={(option) => {
+                        onChange={async (option) => {
                           setSelectedUnit(option.value);
-                          // Find matching active checkout
-                          const activeCheckout = equipmentList.find(
-                            item => item.status === "active" && item.unit === option.value
-                          );
+                          const activeCheckout = await fetchActiveCheckout(option.value);
                           if (activeCheckout) {
                             setCompany(activeCheckout.company || '');
                           }
@@ -886,8 +890,7 @@ function App() {
                         options={[
                           {
                             label: "Active Checkouts",
-                            options: equipmentList
-                              .filter(item => item.status === "active")
+                            options: activeCheckouts
                               .map(item => ({
                                 value: item.unit,
                                 label: `${item.unit} (${item.customerName})`,
@@ -895,7 +898,7 @@ function App() {
                           },
                           {
                             label: "Ranch Equipment",
-                            options: availableUnits.map((unit) => ({
+                            options: preUploadedUnits.map((unit) => ({
                               value: unit,
                               label: unit,
                             })),
@@ -909,12 +912,9 @@ function App() {
                           },
                         ]}
                         value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
-                        onChange={(option) => {
+                        onChange={async (option) => {
                           setCheckinUnit(option.value);
-                          // Find matching active checkout
-                          const activeCheckout = equipmentList.find(
-                            item => item.status === "active" && item.unit === option.value
-                          );
+                          const activeCheckout = await fetchActiveCheckout(option.value);
                           if (activeCheckout) {
                             setCheckinCustomerName(activeCheckout.customerName || '');
                             setCheckinCustomerEmail(activeCheckout.customerEmail || '');
