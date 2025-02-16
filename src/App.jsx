@@ -3,17 +3,7 @@ import "./App.css";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import * as airtableService from "./airtableService";
-import emailjs from "emailjs-com";
 import "./reminderService"; // Import the reminder service, if used
-
-// ---------------- EmailJS Configuration ----------------
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID_CHECKOUT = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CHECKOUT;
-const EMAILJS_TEMPLATE_ID_CHECKIN = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CHECKIN;
-const EMAILJS_USER_ID = import.meta.env.VITE_EMAILJS_USER_ID;
-
-// Initialize EmailJS with your user ID
-emailjs.init(EMAILJS_USER_ID);
 
 // ---------------- Custom Styles for react-select ----------------
 const customSelectStyles = {
@@ -288,25 +278,7 @@ function App() {
       // Sync checkout data to Airtable
       const airtableRecord = await airtableService.syncCheckout(checkoutData);
       console.log("Airtable sync successful:", airtableRecord);
-
       setCheckoutMessage("Checkout successful!");
-      // Send email notification for checkout
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID_CHECKOUT,
-        {
-          to_email: customerEmail,
-          customer_name: customerName,
-          unit: selectedUnit,
-          checkout_date: checkoutDate,
-          return_date: returnDate,
-          job_site: jobSite,
-          project_code: projectCode,
-          department_id: departmentID,
-        },
-        EMAILJS_USER_ID
-      );
-      console.log("Email sent successfully for checkout.");
 
       // Reset checkout form fields
       setSelectedUnit("");
@@ -455,23 +427,7 @@ function App() {
       const record = await airtableService.syncCheckin(checkinData);
       console.log("Checkin synced to Airtable:", record);
 
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID_CHECKIN,
-        {
-          to_email: checkinCustomerEmail,
-          customer_name: checkinCustomerName,
-          unit: checkinUnit,
-          checkin_date: checkinDateTime,
-          job_site: checkinJobSite,
-          inspection_notes: checkinInspectionNotes,
-          project_code: checkinProjectCode,
-          department_id: checkinDepartmentID,
-          hours_miles: checkinHoursMiles,
-        },
-        EMAILJS_USER_ID
-      );
-      console.log("Email sent successfully for check-in.");
+      
 
       // Reset check-in form fields
       setCheckinDateTime("");
