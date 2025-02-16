@@ -87,19 +87,11 @@ const projectCodes = [
 ];
 
 const departmentIDs = [
-  "General Management",
-  "RM 1100 Administration",
-  "RM 1200 Equine Program",
-  "RM 1400 Construction",
-  "RM 1500 Delaware basin",
-  "RM 1600 Electrical",
-  "RM 1700 Fabrication",
-  "RM 1800 Facilities",
-  "RM 1900 Land Management",
-  "RM 2000 Secruity",
-  "RM 2100 Stockyards",
-  "RM 2200 Vehicle Maintinence",
-  "RM 2300 Wildlife",
+  "Department 1",
+  "Department 2",
+  "Department 3",
+  "Department 4",
+  "Department 5"
 ];
 
 const rentalEquipmentList = [
