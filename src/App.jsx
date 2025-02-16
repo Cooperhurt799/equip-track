@@ -398,6 +398,7 @@ function App() {
         customerName: checkinCustomerName,
         customerEmail: checkinCustomerEmail,
         customerPhone: checkinCustomerPhone,
+        checkinCompany: checkinCompany, // Added this line
         inspectionNotes: checkinInspectionNotes,
         projectCode: checkinProjectCode,
         departmentID: checkinDepartmentID,
