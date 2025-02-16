@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Select from "react-select";
+import Select, { CreatableSelect } from "react-select";
 import * as airtableService from "./airtableService";
 import emailjs from "emailjs-com";
 import "./reminderService"; // Import the reminder service, if used
@@ -800,7 +800,7 @@ function App() {
                   <div>
                     <label>
                       Company:
-                      <Select
+                      <CreatableSelect
                         options={[
                           { value: "Daugherty", label: "Daugherty" },
                           { value: "StoneRidge", label: "StoneRidge" },
@@ -810,11 +810,10 @@ function App() {
                         ]}
                         value={company ? { value: company, label: company } : null}
                         onChange={(option) => setCompany(option?.value || '')}
+                        onCreateOption={(inputValue) => setCompany(inputValue)}
                         placeholder="Select or type company name"
                         styles={customSelectStyles}
-                        isCreatable={true}
-                        formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
-                        onCreateOption={(inputValue) => setCompany(inputValue)}
+                        formatCreateLabel={(inputValue) => `Add "${inputValue}"`}
                       />
                     </label>
                   </div>
