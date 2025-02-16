@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Select from "react-select";
-import CreatableSelect from 'react-select/creatable';
+import CreatableSelect from "react-select/creatable";
 import * as airtableService from "./airtableService";
 import emailjs from "emailjs-com";
 import "./reminderService"; // Import the reminder service, if used
@@ -337,7 +337,7 @@ function App() {
         try {
           const activeCheckouts = await airtableService.fetchActiveCheckouts();
           setActiveCheckouts(activeCheckouts);
-          
+
           // Calculate active users
           const users = activeCheckouts.reduce((unique, checkout) => {
             if (!unique.some(user => user.email === checkout.customerEmail)) {
@@ -354,7 +354,7 @@ function App() {
             return unique;
           }, []);
           setActiveUsers(users);
-          
+
           // Calculate due returns
           const today = new Date();
           const dueItems = activeCheckouts.filter(item => {
@@ -936,7 +936,7 @@ function App() {
                             })),
                           },
                           {
-                            label: "Rental Equipment",
+                            label: "Rental Equipment,
                             options: rentalEquipmentList.map((item) => ({
                               value: item,
                               label: item,
