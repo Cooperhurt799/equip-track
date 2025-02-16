@@ -951,7 +951,7 @@ function App() {
                           if (checkout) {
                             setCheckinCustomerName(checkout.customerName || '');
                             setCheckinCustomerEmail(checkout.customerEmail || '');
-                            setCheckinCustomerPhone(checkout.phone || '');
+                            setCheckinCustomerPhone(checkout.customerPhone || '');
                             setCheckinCompany(checkout.company || '');
                             setCheckinJobSite(checkout.jobSite || '');
                             setCheckinProjectCode(checkout.projectCode || '');
