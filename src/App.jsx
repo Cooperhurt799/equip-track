@@ -120,6 +120,7 @@ const projectCodes = [
   "CORN.TACOPS",
   "PUET.LWRHSRENO",
   "6BAR.WTR",
+  "F2.NA",
 ];
 
 const departmentIDs = [
