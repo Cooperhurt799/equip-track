@@ -809,9 +809,12 @@ function App() {
                           { value: "JRJ", label: "JRJ" }
                         ]}
                         value={company ? { value: company, label: company } : null}
-                        onChange={(option) => setCompany(option.value)}
-                        placeholder="Select Company"
+                        onChange={(option) => setCompany(option?.value || '')}
+                        placeholder="Select or type company name"
                         styles={customSelectStyles}
+                        isCreatable={true}
+                        formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
+                        onCreateOption={(inputValue) => setCompany(inputValue)}
                       />
                     </label>
                   </div>
