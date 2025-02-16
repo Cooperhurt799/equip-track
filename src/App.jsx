@@ -48,29 +48,16 @@ const customSelectStyles = {
 
 // ---------------- Data Arrays ----------------
 const preUploadedUnits = [
-  "374 CAT mini ex",
-  "304 Peterbilt Dump Truck",
-  "306 int. Dump Truck",
-  "326 Cat D6 Dozer",
-  "329 Cat 950 Loader",
-  "335 Cat 950M Loader",
-  "347 Bobcat Skid Steer",
-  "357 Cat 140M3 Blade",
-  "358 Kubota Mini Ex",
-  "359 Kubota Skid Steer",
-  "365 Terex Light Tower",
-  "372 Allmand Light Tower",
-  "375 Amman Roller",
-  "380 JLG Telehandler",
-  "383 Cat 140M3 Blade",
-  "384 Cat 308 Mini Ex",
-  "385 Cat 336 Excavator",
-  "386 Cat Mini Ex",
-  "387 Cat Skid Steer",
-  "388 Cat Skid Steer",
-  "392 Cat Tik Truck",
-  "393 Cat Tik Truck",
-  "394 Cat Mini Ex",
+  "Unit 1",
+  "Unit 2",
+  "Unit 3",
+  "Unit 4",
+  "Unit 5",
+  "Unit 6",
+  "Unit 7",
+  "Unit 8",
+  "Unit 9",
+  "Unit 10"
 ];
 
 const preProgrammedJobSites = [
