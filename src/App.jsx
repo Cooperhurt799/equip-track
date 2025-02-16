@@ -949,9 +949,10 @@ function App() {
                           setCheckinUnit(option.value);
                           const checkout = activeCheckouts.find(item => item.unit === option.value);
                           if (checkout) {
+                            console.log("Found checkout:", checkout);  // Debug log
                             setCheckinCustomerName(checkout.customerName || '');
                             setCheckinCustomerEmail(checkout.customerEmail || '');
-                            setCheckinCustomerPhone(checkout.customerPhone || '');
+                            setCheckinCustomerPhone(checkout.phone || '');
                             setCheckinCompany(checkout.company || '');
                             setCheckinJobSite(checkout.jobSite || '');
                             setCheckinProjectCode(checkout.projectCode || '');
