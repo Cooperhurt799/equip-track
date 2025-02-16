@@ -443,6 +443,7 @@ function App() {
       setCheckinCustomerName("");
       setCheckinCustomerEmail("");
       setCheckinCustomerPhone("");
+      setCheckinCompany(""); // Added this line
       setCheckinInspectionNotes("");
       setCheckinProjectCode("");
       setCheckinDepartmentID("");
