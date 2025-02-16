@@ -951,21 +951,36 @@ function App() {
                           if (activeCheckout) {
                             setCheckinCustomerName(activeCheckout.customerName || '');
                             setCheckinCustomerEmail(activeCheckout.customerEmail || '');
-                            setCheckinCustomerPhone(activeCheckout.phone || ''); // Changed from customerPhone to phone
+                            setCheckinCustomerPhone(activeCheckout.phone || '');
                             setCheckinCompany(activeCheckout.company || '');
                             setCheckinJobSite(activeCheckout.jobSite || '');
                             setCheckinProjectCode(activeCheckout.projectCode || '');
                             setCheckinDepartmentID(activeCheckout.departmentID || '');
                             setCheckinHoursMiles(activeCheckout.hoursMiles || '');
-                            const currentDate = new Date().toISOString().slice(0, 16);
-                            setCheckinDateTime(currentDate);
-                            //                            // Calculate duration based on checkout date
+                            
+                            // Set current date and time for check-in
+                            const now = new Date();
+                            const currentDateTime = now.toISOString().slice(0, 16);
+                            setCheckinDateTime(currentDateTime);
+                            
+                            // Calculate duration based on checkout date
                             if (activeCheckout.checkoutDate) {
                               const checkoutTime = new Date(activeCheckout.checkoutDate);
-                              const now = new Date();
                               const diffDays = Math.ceil((now - checkoutTime) / (1000 * 60 * 60 * 24));
                               setCheckinDuration(diffDays > 0 ? diffDays : 0);
                             }
+                          } else {
+                            // Clear form if no active checkout is found
+                            setCheckinCustomerName('');
+                            setCheckinCustomerEmail('');
+                            setCheckinCustomerPhone('');
+                            setCheckinCompany('');
+                            setCheckinJobSite('');
+                            setCheckinProjectCode('');
+                            setCheckinDepartmentID('');
+                            setCheckinHoursMiles('');
+                            setCheckinDateTime('');
+                            setCheckinDuration(0);
                           }
                         }}
                         placeholder="Select Equipment"
