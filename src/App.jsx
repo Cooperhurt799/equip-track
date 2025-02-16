@@ -74,19 +74,16 @@ const preProgrammedJobSites = [
 ];
 
 const projectCodes = [
-  "F2CP",
-  "VHN.6BAPT",
-  "VHN.ROCK",
-  "VHN.STKADD'24",
-  "VHN.PCKLBRN",
-  "FIG2.SECCAM",
-  "6BAR.MGRHOUS",
-  "VHN.PUCKRENO",
-  "CORN.GOKART",
-  "CORN.TACOPS",
-  "PUET.LWRHSRENO",
-  "6BAR.WTR",
-  "F2.NA",
+  "Project 1",
+  "Project 2",
+  "Project 3",
+  "Project 4",
+  "Project 5",
+  "Project 6",
+  "Project 7",
+  "Project 8",
+  "Project 9",
+  "Project 10"
 ];
 
 const departmentIDs = [
