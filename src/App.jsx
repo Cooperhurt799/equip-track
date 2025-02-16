@@ -61,27 +61,16 @@ const preUploadedUnits = [
 ];
 
 const preProgrammedJobSites = [
-  "18",
-  "6bar",
-  "Apache Canyon Road",
-  "Apache Screen Site",
-  "Babb Canyon Road",
-  "Babb HQ",
-  "Baylor",
-  "Big Tank HQ",
-  "Chico",
-  "Clock",
-  "Delaware Basin",
-  "DOD",
-  "Fenceline East",
-  "Fenceline West",
-  "Figure 2",
-  "Highline Road",
-  "Hogue Canyon",
-  "Honeycutt HQ",
-  "Honeycutt Rim North",
-  "Houge Pump Jack",
-  "James Cook Hanger",
+  "Job site 1",
+  "Job site 2",
+  "Job site 3",
+  "Job site 4",
+  "Job site 5",
+  "Job site 6",
+  "Job site 7",
+  "Job site 8",
+  "Job site 9",
+  "Job site 10"
 ];
 
 const projectCodes = [
