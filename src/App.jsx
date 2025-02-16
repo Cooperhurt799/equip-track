@@ -936,7 +936,7 @@ function App() {
                             })),
                           },
                           {
-                            label: "Rental Equipment,
+                            label: "Rental Equipment",
                             options: rentalEquipmentList.map((item) => ({
                               value: item,
                               label: item,
