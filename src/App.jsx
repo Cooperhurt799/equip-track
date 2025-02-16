@@ -546,10 +546,6 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const formatPhoneNumber = (phoneNumber) => {
-    if (!phoneNumber || phoneNumber.length !== 10) return phoneNumber;
-    return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
-  };
 
   return (
     <div className="App">
@@ -716,7 +712,7 @@ function App() {
                     <h3>{item.unit}</h3>
                     <p>Checked out by: {item.customerName}</p>
                     <p>Return Date: {new Date(item.returnDate).toLocaleDateString()}</p>
-                    <p><strong>Contact:</strong> {formatPhoneNumber(item.customerPhone)}</p>
+                    <p><strong>Contact:</strong> {item.phone}</p>
                   </div>
                 ))}
               </div>
@@ -956,18 +952,18 @@ function App() {
                             console.log("Found checkout:", checkout);  // Debug log
                             setCheckinCustomerName(checkout.customerName || '');
                             setCheckinCustomerEmail(checkout.customerEmail || '');
-                            setCheckinCustomerPhone(checkout.customerPhone || '');
+                            setCheckinCustomerPhone(checkout.phone || '');
                             setCheckinCompany(checkout.company || '');
                             setCheckinJobSite(checkout.jobSite || '');
                             setCheckinProjectCode(checkout.projectCode || '');
                             setCheckinDepartmentID(checkout.departmentID || '');
                             setCheckinHoursMiles(checkout.hoursMiles || '');
-
+                            
                             // Set current date and time for check-in
                             const now = new Date();
                             const currentDateTime = now.toISOString().slice(0, 16);
                             setCheckinDateTime(currentDateTime);
-
+                            
                             // Calculate duration based on checkout date
                             if (checkout.checkoutDate) {
                               const checkoutTime = new Date(checkout.checkoutDate);
@@ -1149,7 +1145,6 @@ function App() {
                 <p><strong>Job Site:</strong> {selectedCheckout.jobSite}</p>
                 <p><strong>Checkout Date:</strong> {new Date(selectedCheckout.checkoutDate).toLocaleDateString()}</p>
                 <p><strong>Return Date:</strong> {new Date(selectedCheckout.returnDate).toLocaleDateString()}</p>
-                <p><strong>Phone:</strong> {formatPhoneNumber(selectedCheckout.customerPhone)}</p>
               </div>
               <button onClick={() => setShowCheckoutDetails(false)}>Close</button>
             </div>
