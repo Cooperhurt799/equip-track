@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Select, { CreatableSelect } from "react-select";
+import Select from "react-select";
+import CreatableSelect from 'react-select/creatable';
 import * as airtableService from "./airtableService";
 import emailjs from "emailjs-com";
 import "./reminderService"; // Import the reminder service, if used
