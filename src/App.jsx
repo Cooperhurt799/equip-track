@@ -947,16 +947,16 @@ function App() {
                         value={checkinUnit ? { value: checkinUnit, label: checkinUnit } : null}
                         onChange={async (option) => {
                           setCheckinUnit(option.value);
-                          const activeCheckout = await fetchActiveCheckout(option.value);
-                          if (activeCheckout) {
-                            setCheckinCustomerName(activeCheckout.customerName || '');
-                            setCheckinCustomerEmail(activeCheckout.customerEmail || '');
-                            setCheckinCustomerPhone(activeCheckout.phone || '');
-                            setCheckinCompany(activeCheckout.company || '');
-                            setCheckinJobSite(activeCheckout.jobSite || '');
-                            setCheckinProjectCode(activeCheckout.projectCode || '');
-                            setCheckinDepartmentID(activeCheckout.departmentID || '');
-                            setCheckinHoursMiles(activeCheckout.hoursMiles || '');
+                          const checkout = activeCheckouts.find(item => item.unit === option.value);
+                          if (checkout) {
+                            setCheckinCustomerName(checkout.customerName || '');
+                            setCheckinCustomerEmail(checkout.customerEmail || '');
+                            setCheckinCustomerPhone(checkout.phone || '');
+                            setCheckinCompany(checkout.company || '');
+                            setCheckinJobSite(checkout.jobSite || '');
+                            setCheckinProjectCode(checkout.projectCode || '');
+                            setCheckinDepartmentID(checkout.departmentID || '');
+                            setCheckinHoursMiles(checkout.hoursMiles || '');
                             
                             // Set current date and time for check-in
                             const now = new Date();
@@ -964,8 +964,8 @@ function App() {
                             setCheckinDateTime(currentDateTime);
                             
                             // Calculate duration based on checkout date
-                            if (activeCheckout.checkoutDate) {
-                              const checkoutTime = new Date(activeCheckout.checkoutDate);
+                            if (checkout.checkoutDate) {
+                              const checkoutTime = new Date(checkout.checkoutDate);
                               const diffDays = Math.ceil((now - checkoutTime) / (1000 * 60 * 60 * 24));
                               setCheckinDuration(diffDays > 0 ? diffDays : 0);
                             }
