@@ -956,7 +956,7 @@ function App() {
                             console.log("Found checkout:", checkout);  // Debug log
                             setCheckinCustomerName(checkout.customerName || '');
                             setCheckinCustomerEmail(checkout.customerEmail || '');
-                            setCheckinCustomerPhone(checkout.phone || '');
+                            setCheckinCustomerPhone(checkout.customerPhone || '');
                             setCheckinCompany(checkout.company || '');
                             setCheckinJobSite(checkout.jobSite || '');
                             setCheckinProjectCode(checkout.projectCode || '');
