@@ -137,20 +137,7 @@ export const fetchActiveCheckouts = async () => {
   }
 };
 
-// Read (Get active checkouts)
-export const fetchActiveCheckouts = async () => {
-  try {
-    const records = await base(CHECKOUT_TABLE)
-      .select({
-        filterByFormula: "{status} = 'active'"
-      })
-      .all();
-    return records.map(record => ({ id: record.id, ...record.fields }));
-  } catch (error) {
-    logError('fetchActiveCheckouts', error);
-    throw error;
-  }
-};
+
 
 // Update checkout status
 export const updateCheckoutStatus = async (recordId, status) => {

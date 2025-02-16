@@ -329,17 +329,46 @@ function App() {
   };
 
   // ---------------- Fetch Active Checkouts ----------------
+  // Fetch active checkouts whenever the sidebar tab changes
   useEffect(() => {
-    const fetchActiveCheckouts = async () => {
-      try {
-        const activeCheckouts = await airtableService.fetchActiveCheckouts();
-        setActiveCheckouts(activeCheckouts);
-      } catch (error) {
-        console.error("Error fetching active checkouts:", error);
+    const fetchData = async () => {
+      if (activeTab) {
+        try {
+          const activeCheckouts = await airtableService.fetchActiveCheckouts();
+          setActiveCheckouts(activeCheckouts);
+          
+          // Calculate active users
+          const users = activeCheckouts.reduce((unique, checkout) => {
+            if (!unique.some(user => user.email === checkout.customerEmail)) {
+              const userCheckouts = activeCheckouts.filter(item => 
+                item.status === "active" && 
+                item.customerEmail === checkout.customerEmail
+              );
+              unique.push({
+                name: checkout.customerName,
+                email: checkout.customerEmail,
+                checkouts: userCheckouts
+              });
+            }
+            return unique;
+          }, []);
+          setActiveUsers(users);
+          
+          // Calculate due returns
+          const today = new Date();
+          const dueItems = activeCheckouts.filter(item => {
+            const returnDate = new Date(item.returnDate);
+            const diffDays = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
+            return diffDays <= parseInt(daysFilter || "7", 10);
+          });
+          setDueReturns(dueItems);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
       }
     };
-    fetchActiveCheckouts();
-  }, []);
+    fetchData();
+  }, [activeTab, daysFilter]);
 
   // Function to fetch a single active checkout
   const fetchActiveCheckout = async (unit) => {
