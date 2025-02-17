@@ -599,7 +599,7 @@ function App() {
 
         <header className="app-header">
           <h1>Ranch Equipment Checkout Form</h1>
-          <p className="tagline">Sanford and Son</p>
+          <p className="tagline">North Yard</p>
         </header>
 
         {showOverdueAlert && !overdueAlertDismissed && (
