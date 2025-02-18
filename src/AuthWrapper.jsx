@@ -23,7 +23,7 @@ function AuthWrapper() {
   const [error, setError] = useState("");
 
   const validCredentials = {
-    'Figure2ranch': 'Figure1902'
+    'Username2025': 'Password123'
   };
 
   const [loading, setLoading] = useState(false);
