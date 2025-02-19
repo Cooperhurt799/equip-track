@@ -1,10 +1,33 @@
 
+# Dependencies
 node_modules/
-dist/
-.env
 .config/
-attached_assets/
+
+# Build outputs
+dist/
+build/
+
+# Environment and config files
+.env
 .breakpoints
 .replit
+replit.nix
+
+# Package manager files
 package-lock.json
+
+# IDE and editor files
+.vscode/
+*.swp
+*.swo
+
+# Local development files
+attached_assets/
+
+# Logs
 *.log
+npm-debug.log*
+
+# Cache
+.cache/
+.npm/
