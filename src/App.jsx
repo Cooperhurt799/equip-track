@@ -103,7 +103,7 @@ const rentalEquipmentList = [
 function App() {
   // Set page title on mount.
   useEffect(() => {
-    document.title = "Daugherty Ranches Equipment Tracker";
+    document.title = "Ranch Equipment Tracker";
   }, []);
 
   // ---------------- Section Navigation and Misc States ----------------
